@@ -1,4 +1,3 @@
-import { axiosInstance } from "../services/config";
 import {
   updateCartStart,
   updateCartSuccess,
@@ -16,13 +15,12 @@ import {
 } from "./userRedux";
 import CartService from "../services/cart.service";
 import UserService from "../services/user.service";
-
-const ROUTE = "auth";
+import AuthService from "../services/auth.service";
 
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
   try {
-    const res = await axiosInstance.post(`${ROUTE}/auth/login`, user);
+    const res = await AuthService.login(user);
     const { accessToken, ...currentUser } = res.data;
     dispatch(loginSuccess({ currentUser, accessToken }));
   } catch (err) {
