@@ -8,7 +8,7 @@ const authRoute = require("./routes").authRoute;
 const productRoute = require("./routes").productRoute;
 const cartRoute = require("./routes").cartRoute;
 const orderRoute = require("./routes").orderRoute;
-const stripeRoute = require("./routes").stripeRoute;
+// const stripeRoute = require("./routes").stripeRoute;
 const cors = require("cors");
 
 mongoose
