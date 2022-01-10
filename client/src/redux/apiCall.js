@@ -1,4 +1,4 @@
-import { axiosInstance } from "./config";
+import { axiosInstance } from "../services/config";
 import {
   updateCartStart,
   updateCartSuccess,
