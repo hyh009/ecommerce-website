@@ -29,7 +29,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/products", productRoute);
 app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
-app.use("/api/stripe", stripeRoute);
+// app.use("/api/stripe", stripeRoute);
 
 app.get("/*", (req, res) => {
   res.status(404).json("404此頁面不存在。");
