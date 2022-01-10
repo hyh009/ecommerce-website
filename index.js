@@ -35,7 +35,7 @@ app.use("/api/orders", orderRoute);
 app.get("/*", (req, res) => {
   res.status(404).json("404此頁面不存在。");
 });
-app.use(express.static(path.join(__dirname), "/client/build"));
+app.use(express.static(path.join(__dirname, "/client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/build", "index.html"));
 });
