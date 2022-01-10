@@ -34,10 +34,6 @@ const CustomArrowLeftOutlined = styled(ArrowLeftOutlined)`
   cursor: pointer;
   z-index: 2;
   color: rgba(255, 255, 255, 0.8);
-  &.css-i4bv87-MuiSvgIcon-root {
-    font-size: 60px;
-    ${mobile({ fontSize: "50px" })}
-  }
 `;
 const CustomArrowRightOutlined = styled(ArrowRightOutlined)`
   position: absolute;
@@ -48,10 +44,6 @@ const CustomArrowRightOutlined = styled(ArrowRightOutlined)`
   cursor: pointer;
   z-index: 2;
   color: rgba(255, 255, 255, 0.8);
-  &.css-i4bv87-MuiSvgIcon-root {
-    font-size: 60px;
-    ${mobile({ fontSize: "50px" })}
-  }
 `;
 
 const Categories = () => {
@@ -95,13 +87,19 @@ const Categories = () => {
   };
   return (
     <Container catColNumber={catColNumber}>
-      <CustomArrowLeftOutlined onClick={() => handleSlide("left")} />
+      <CustomArrowLeftOutlined
+        style={{ fontSize: catColNumber === 2 ? "50px" : "60px" }}
+        onClick={() => handleSlide("left")}
+      />
       <CardContainer index={index}>
         {categories?.map((item) => (
           <CategoryItem key={item.id} item={item} />
         ))}
       </CardContainer>
-      <CustomArrowRightOutlined onClick={() => handleSlide("right")} />
+      <CustomArrowRightOutlined
+        style={{ fontSize: catColNumber === 2 ? "50px" : "60px" }}
+        onClick={() => handleSlide("right")}
+      />
     </Container>
   );
 };

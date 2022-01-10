@@ -104,41 +104,41 @@ const ProductDesc = styled.p`
   font-weight: bold;
   letter-spacing: 1px;
 `;
-
-const CustomArrowLeftOutlined = styled(ArrowLeftOutlined)`
+const IconContainerLeft = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   margin: auto;
   cursor: pointer;
+  height: max-content;
   z-index: 1;
-  color: rgba(0, 0, 0, 0.7);
-  background-color: rgba(122, 122, 122, 0.3);
-  border-radius: 50%;
-
-  &.css-i4bv87-MuiSvgIcon-root {
-    font-size: 35px;
-    display: ${(props) => (props.index <= 0 ? "none" : "inline-block")};
-  }
+  display: ${(props) => (props.index <= 0 ? "none" : "flex")};
+  transform: translateY(50%);
 `;
-const CustomArrowRightOutlined = styled(ArrowRightOutlined)`
+
+const IconContainerRight = styled.div`
   position: absolute;
   top: 0;
   bottom: 0;
   right: 0;
   margin: auto;
   cursor: pointer;
+  height: max-content;
   z-index: 1;
+  display: ${(props) =>
+    props.index >= props.length / 3 - 1 ? "none" : "inline-block"};
+  transform: translateY(50%);
+`;
+const CustomArrowLeftOutlined = styled(ArrowLeftOutlined)`
   color: rgba(0, 0, 0, 0.7);
   background-color: rgba(122, 122, 122, 0.3);
   border-radius: 50%;
-
-  &.css-i4bv87-MuiSvgIcon-root {
-    font-size: 35px;
-    display: ${(props) =>
-      props.index >= props.length / 3 - 1 ? "none" : "inline-block"};
-  }
+`;
+const CustomArrowRightOutlined = styled(ArrowRightOutlined)`
+  color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(122, 122, 122, 0.3);
+  border-radius: 50%;
 `;
 
 const ProfileCart = () => {
@@ -164,10 +164,16 @@ const ProfileCart = () => {
           <ShowMoreBtn to="/cart">顯示全部</ShowMoreBtn>
         )}
       </Header>
-      <CustomArrowLeftOutlined
+      <IconContainerLeft
+        direction="left"
         index={index}
-        onClick={() => handleSlide("left")}
-      />
+        length={cart.products?.length || 0}
+      >
+        <CustomArrowLeftOutlined
+          index={index}
+          onClick={() => handleSlide("left")}
+        />
+      </IconContainerLeft>
       {cart.products?.length > 0 ? (
         <CardContainer index={index} length={cart.products?.length || 0}>
           {cart.products?.map((product, index) => (
@@ -188,11 +194,17 @@ const ProfileCart = () => {
       ) : (
         <EmptyCart place="profile" content="cart" />
       )}
-      <CustomArrowRightOutlined
+      <IconContainerRight
+        direction="right"
         index={index}
         length={cart.products?.length || 0}
-        onClick={() => handleSlide("right")}
-      />
+      >
+        <CustomArrowRightOutlined
+          index={index}
+          length={cart.products?.length || 0}
+          onClick={() => handleSlide("right")}
+        />
+      </IconContainerRight>
     </Container>
   );
 };
