@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Android,
   Mail,
@@ -9,6 +9,8 @@ import {
 } from "@mui/icons-material";
 import styled from "styled-components";
 import { tabletBig, mobile } from "../responsive";
+import { updateUser } from "../redux/apiCall";
+import { useDispatch, useSelector } from "react-redux";
 
 const InfoContainer = styled.div`
   box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
@@ -22,6 +24,7 @@ const InfoContainer = styled.div`
 `;
 const ColorInput = styled.input`
   display: none;
+  cursor: pointer;
 `;
 const CoverImg = styled.div`
   background-color: ${(props) => props.color || "#eee3d4"};
@@ -30,6 +33,7 @@ const CoverImg = styled.div`
   aspect-ratio: 5/1;
   position: absolute;
   top: 0;
+  right: 0;
   z-index: 0;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
@@ -41,9 +45,21 @@ const CoverImg = styled.div`
   &:hover ${ColorInput} {
     display: ${(props) => (props.edit ? "flex" : "none")};
   }
-  &:hover {
-    filter: brightness(90%);
-  }
+`;
+
+const ChangeColorBtn = styled.button`
+  border: none;
+  position: absolute;
+  bottom: 2px;
+  z-index: 0;
+  right: 0;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  color: white;
+  background-color: black;
+  letter-spacing: 1px;
+  padding: 0 5px;
+  cursor: pointer;
 `;
 const Header = styled.div`
   display: flex;
@@ -59,7 +75,6 @@ const EditBtn = styled.button`
   border-radius: 10px;
   letter-spacing: 2px;
   cursor: pointer;
-  display: ${(props) => (props.edit ? "flex" : "none")};
 `;
 const Info = styled.div`
   display: flex;
@@ -86,22 +101,11 @@ const IconContainer = styled.div`
   cursor: pointer;
   display: none;
 `;
-const CustomEdit = styled(Edit)`
-  color: gray;
-  background: #eee;
-  border-radius: 50%;
-  padding: 3px;
-`;
+
 const ImageContainer = styled.div`
   height: 100px;
   width: 100px;
   position: relative;
-  &:hover {
-    filter: brightness(80%);
-  }
-  &:hover ${IconContainer} {
-    display: ${(props) => (props.edit ? "flex" : "none")};
-  }
 `;
 const UserImg = styled.img`
   height: 100%;
@@ -149,34 +153,90 @@ const ListItem = styled.li`
 const Content = styled.span`
   margin-left: 10px;
 `;
-const UserInfo = ({ user, edit }) => {
+const UserInfo = ({ edit, showEditInfo, setShowEditInfo }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.currentUser);
+  const accessToken = useSelector((state) => state.user.accessToken);
   const [coverColor, setCoverColor] = useState(user?.coverColor || "#eee3d4");
-  const handleChangeColor = (e) => {
-    window.confirm("確定更換顏色嗎？") && setCoverColor(e.target.value);
+  const [showChangeBtn, setShowChangeBtn] = useState(false);
+  const colorImgRef = useRef();
+
+  //onChange (track color change)
+  const trackColorChange = (e) => {
+    e.preventDefault();
+    setCoverColor(e.target.value);
+    setShowChangeBtn(true);
   };
+
+  //update database user coverColor
+  const handleChangeColor = async (e) => {
+    if (window.confirm("確定更換顏色嗎？")) {
+      const updateduser = await updateUser(
+        dispatch,
+        { _id: user._id, coverColor: coverColor },
+        accessToken
+      );
+      setCoverColor(updateduser[0].coverColor);
+      setShowChangeBtn(false);
+    } else {
+      setShowChangeBtn(false);
+    }
+  };
+
+  //Click ouside cancel onChange color changed
+  useEffect(() => {
+    const ClickOutsideClose = (e) => {
+      if (!colorImgRef?.current?.contains(e.target)) {
+        setShowChangeBtn(false);
+        setCoverColor(user.coverColor);
+      }
+    };
+    document.addEventListener("mousedown", ClickOutsideClose);
+    return () => {
+      document.removeEventListener("mousedown", ClickOutsideClose);
+    };
+  }, []);
 
   return (
     <InfoContainer edit={edit}>
       <Header>
-        <CoverImg color={coverColor} edit={edit}>
+        <CoverImg ref={colorImgRef} color={coverColor} edit={edit}>
           <ColorInput
             value={coverColor}
             type="color"
-            onChange={handleChangeColor}
+            onChange={trackColorChange}
           />
+          <ChangeColorBtn
+            style={{ display: showChangeBtn ? "block" : "none" }}
+            onClick={handleChangeColor}
+          >
+            確定變更
+          </ChangeColorBtn>
         </CoverImg>
         <ImageContainer edit={edit}>
           <UserImg src={user.img} />
-          <IconContainer>
-            <CustomEdit />
-          </IconContainer>
         </ImageContainer>
         <Info>
           <Detail edit={edit}>
             <UserName>{user.username}</UserName>
             <CreatedDate>加入日期：{user.createdAt.split("T")[0]}</CreatedDate>
           </Detail>
-          <EditBtn edit={edit}>編輯</EditBtn>
+          <EditBtn
+            style={{
+              display: edit ? (showEditInfo ? "none" : "block") : "none",
+            }}
+            onClick={() => setShowEditInfo((prev) => !prev)}
+          >
+            編輯
+          </EditBtn>
+          <EditBtn
+            style={{
+              display: edit ? (showEditInfo ? "block" : "none") : "none",
+            }}
+            onClick={() => setShowEditInfo((prev) => !prev)}
+          >
+            取消編輯
+          </EditBtn>
         </Info>
       </Header>
       <Subtitle>用戶資訊</Subtitle>

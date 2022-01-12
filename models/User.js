@@ -54,6 +54,12 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "#eee3d4",
     },
+    phone: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

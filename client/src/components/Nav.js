@@ -7,7 +7,6 @@ import Badge from "@mui/material/Badge";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import images from "../imgs/image";
 import { userLogout } from "../redux/apiCall";
 
 const Container = styled.div`
@@ -186,7 +185,7 @@ const Nav = ({ position }) => {
     userLogout(dispatch);
     navigate("/login");
   };
-
+  //Click outside close
   let menuRef = useRef();
 
   useEffect(() => {
@@ -236,8 +235,15 @@ const Nav = ({ position }) => {
             <CompanyMenuItem></CompanyMenuItem>
           </CompanySideMenu>
           <CustomLink to="/">
-            <Logo className="img" src={images["pad_logo"]} alt="logo" />
-            <Logo src={images["logo_name"]} alt="name" />
+            <Logo
+              className="img"
+              src="https://res.cloudinary.com/dh2splieo/image/upload/v1640706201/shop_website/imgs/logo/pad_logo_wkibae.png"
+              alt="logo"
+            />
+            <Logo
+              src="https://res.cloudinary.com/dh2splieo/image/upload/v1640706199/shop_website/imgs/logo/name_jzjdfr.jpg"
+              alt="name"
+            />
           </CustomLink>
         </Left>
 

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { tabletBig, tablet, mobile } from "../responsive";
 import { useState } from "react";
-import imgs from "../imgs/image.js";
 import AuthService from "../services/auth.service";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +11,7 @@ const Container = styled.div`
       rgba(255, 255, 255, 0.5),
       rgba(122, 122, 122, 0.5)
     ),
-    url(${imgs.cover4});
+    url("https://res.cloudinary.com/dh2splieo/image/upload/v1640706201/shop_website/imgs/cover/cover4_rgq8mt.jpg");
   background-size: cover;
   display: flex;
   align-items: center;
@@ -96,7 +95,6 @@ const Register = () => {
     });
   };
   const handleRegister = async (e) => {
-    console.log("test");
     e.preventDefault();
     try {
       await AuthService.register(input);

@@ -57,7 +57,7 @@ const loginValidation = (data) => {
   return schema.validate(data);
 };
 
-const updateValidation = (data) => {
+const updateUserValidation = (data) => {
   const schema = Joi.object({
     username: Joi.string().min(2).max(20).messages({
       "string.min": `用戶名稱最少2個字。`,
@@ -75,6 +75,8 @@ const updateValidation = (data) => {
     name: Joi.string(),
     isAdmin: Joi.boolean(),
     like: Joi.array().items(Joi.string()),
+    phone: Joi.string(),
+    address: Joi.string(),
     coupon: Joi.array().items(Joi.string()),
     coverColor: Joi.string(),
     _id: Joi.string(),
@@ -227,7 +229,7 @@ const updateProductValidation = (data) => {
 module.exports = {
   registerValidation,
   loginValidation,
-  updateValidation,
+  updateUserValidation,
   updatePasswordValidation,
   productValidation,
   updateProductValidation,

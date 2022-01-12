@@ -50,6 +50,7 @@ const Categories = () => {
   const [index, setIndex] = useState(0);
   const [catColNumber, setCatColNumber] = useState();
 
+  //check device and decide how many category will show in one page.
   function handleCheckDevice() {
     if (window.innerWidth > 770) {
       setCatColNumber(4);

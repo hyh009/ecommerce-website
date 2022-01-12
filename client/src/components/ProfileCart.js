@@ -67,10 +67,10 @@ const Info = styled.div`
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
-  padding: 10px;
   gap: 10px;
   display: none;
   user-select: none;
+  width: calc(100% - 10px);
   margin: 5px;
 `;
 
@@ -92,7 +92,6 @@ const Image = styled.img`
 const ProductTitle = styled.p`
   font-size: 12px;
   display: block;
-  grid-column: 1/5;
   align-self: center;
   color: white;
   letter-spacing: 2px;
@@ -180,7 +179,10 @@ const ProfileCart = () => {
             <Product key={index}>
               <Image src={product.img} />
               <Info>
-                <ProductTitle>{product.title}</ProductTitle>
+                <ProductTitle>
+                  {product.title.slice(0, 14) +
+                    (product.title.length > 15 ? "..." : "")}
+                </ProductTitle>
                 {product?.color?.name && (
                   <ProductDesc>顏色：{product.color.name}</ProductDesc>
                 )}

@@ -18,7 +18,6 @@ import {
 const Container = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
   position: relative;
   overflow-x: hidden;
   ${tabletBig({ overflowX: "visible" })}
@@ -36,7 +35,7 @@ const SideContainer = styled.div`
   top: 60px;
   left: 0;
   background-color: #fffdf6;
-  height: calc(100vh - 60px);
+  min-height: calc(100vh - 60px);
   grid-column: 1/2;
   ${tabletBig({
     position: "absolute",

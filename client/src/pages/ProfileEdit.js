@@ -1,17 +1,12 @@
-import React from "react";
-import { tabletBig, mobile } from "../responsive";
+import { useState } from "react";
+import { tabletBig } from "../responsive";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import UserInfo from "../components/UserInfo";
 import { useForm } from "react-hook-form";
-import {
-  Android,
-  Mail,
-  Person,
-  PhoneAndroid,
-  LocationOn,
-  Edit,
-} from "@mui/icons-material";
+import { updateUser } from "../redux/apiCall";
+import UserInfo from "../components/UserInfo";
+import { Upload } from "@mui/icons-material";
+import UserService from "../services/user.service";
 
 const Container = styled.div`
   grid-column: 2/6;
@@ -24,6 +19,53 @@ const EditContainer = styled.div`
   width: 100%;
   height: 100%;
   padding: 10px;
+`;
+
+const EditPicContainer = styled.form`
+  box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
+  border-radius: 5px;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  input[type="file"] {
+    display: none;
+  }
+`;
+const PicTitle = styled.h4`
+  letter-spacing: 2px;
+  border-bottom: 1px solid lightgray;
+  padding: 10px 0;
+`;
+
+const PicMain = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`;
+
+const PicLabel = styled.label`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  letter-spacing: 2px;
+  color: #545454;
+  width: max-content;
+`;
+const PreviewContainer = styled.div`
+  width: 100%;
+  aspect-ration: 1/1;
+  border: 1px solid lightgray;
+  overflow: hidden;
+  margin: 10px 0;
+  border-radius: 10px;
+`;
+
+const Preview = styled.img`
+  width: 100%;
+  object-fit: cover;
 `;
 const EditInfoContainer = styled.form`
   box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
@@ -86,6 +128,13 @@ const Error = styled.span`
   background-color: lightpink;
   padding: 2px;
 `;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-end;
+`;
 const Submit = styled.button`
   background-color: #ffa122;
   height: max-content;
@@ -97,8 +146,47 @@ const Submit = styled.button`
   margin: 10px 0;
   align-self: flex-end;
 `;
+
 const ProfileEdit = () => {
   const user = useSelector((state) => state.user.currentUser);
+  const userIsFetching = useSelector((state) => state.user.isFetching);
+  const accessToken = useSelector((state) => state.user.accessToken);
+  const dispatch = useDispatch();
+
+  const [joiError, setJoiError] = useState("");
+  const [showEditInfo, setShowEditInfo] = useState(false);
+  const [uploadImage, setUploadImage] = useState(null);
+
+  const handlePreview = (e) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.addEventListener("loadend", () => {
+      setUploadImage({
+        name: e.target.files[0].name,
+        type: e.target.files[0].type,
+        size: e.target.files[0].size,
+        src: reader.result,
+      });
+    });
+  };
+
+  const handleUploadPic = async (e) => {
+    e.preventDefault();
+    console.log("a");
+    try {
+      const res = await UserService.uploadImage(
+        uploadImage.src,
+        user._id,
+        accessToken
+      );
+      const newImg = { _id: user._id, img: res.data };
+      await updateUser(dispatch, newImg, accessToken);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // use hook form
   const {
     register,
     handleSubmit,
@@ -106,26 +194,90 @@ const ProfileEdit = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (input) => {
-    reset({
-      username: user.username,
-      name: user.name,
-      gender: user.gender,
-      email: user.email,
-      phone: user.phone,
-      address: user.address,
-    });
+  // submit form => updateduser function return [data, err]
+  const onSubmit = async (input) => {
+    const updateduser = await updateUser(
+      dispatch,
+      { _id: user._id, ...input },
+      accessToken
+    );
+    if (updateduser[0]) {
+      window.alert("用戶資訊更新成功");
+      setJoiError("");
+    } else {
+      if (updateduser[1]) {
+        setJoiError(updateduser[1]);
+      } else {
+        window.alert("資訊尚未更新，請稍後再試");
+        reset();
+        setShowEditInfo(false);
+      }
+    }
   };
 
   return (
     <Container>
-      <UserInfo user={user} edit={true} />
+      <UserInfo
+        edit={true}
+        showEditInfo={showEditInfo}
+        setShowEditInfo={setShowEditInfo}
+      />
       <EditContainer>
-        <EditInfoContainer onSubmit={handleSubmit(onSubmit)}>
+        <EditPicContainer style={{ display: showEditInfo ? "none" : "flex" }}>
+          <PicTitle>上傳用戶照片</PicTitle>
+          <PicMain>
+            {uploadImage ? (
+              <>
+                <PreviewContainer label={uploadImage?.name}>
+                  <Preview src={uploadImage?.src} alt={uploadImage?.name} />
+                </PreviewContainer>
+                <ButtonContainer>
+                  <Submit
+                    disabled={userIsFetching}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setUploadImage(null);
+                    }}
+                  >
+                    取消上傳
+                  </Submit>
+                  <Submit disabled={userIsFetching} onClick={handleUploadPic}>
+                    {userIsFetching ? "上傳中" : "確定上傳"}
+                  </Submit>
+                </ButtonContainer>
+              </>
+            ) : (
+              <PreviewContainer>
+                <Preview
+                  src="https://res.cloudinary.com/dh2splieo/image/upload/v1641917614/shop_website/imgs/undraw_photograph_re_up3b_1_vgvzxk.svg"
+                  alt="上傳變更用戶圖片"
+                />
+              </PreviewContainer>
+            )}
+            <PicLabel
+              style={{ display: uploadImage ? "none" : "flex" }}
+              htmlfor="photo"
+            >
+              <Upload />
+              點擊上傳
+              <input
+                type="file"
+                name="photo"
+                id="photo"
+                onChange={handlePreview}
+              />
+            </PicLabel>
+          </PicMain>
+        </EditPicContainer>
+        <EditInfoContainer
+          style={{ display: showEditInfo ? "flex" : "none" }}
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <Header>
             <EditTitle>編輯</EditTitle>
           </Header>
           <Subtitle>用戶資訊</Subtitle>
+          {joiError && <Error>{joiError}</Error>}
           {errors.username && <Error>{errors.username.message}</Error>}
           <ListItem>
             <Label>用戶名稱：</Label>
@@ -172,7 +324,7 @@ const ProfileEdit = () => {
             <Input
               name="phone"
               defaultValue={user.phone || "未填寫"}
-              placeholder={user.phone || "未填寫"}
+              placeholder="09xx-xxx-xxx"
               {...register("phone")}
             />
           </ListItem>
@@ -197,7 +349,18 @@ const ProfileEdit = () => {
               {...register("address")}
             />
           </ListItem>
-          <Submit type="submit">確定更改</Submit>
+          <ButtonContainer>
+            <Submit
+              type="reset"
+              onClick={() => {
+                setJoiError("");
+                setShowEditInfo(false);
+              }}
+            >
+              取消更改
+            </Submit>
+            <Submit type="submit">確定更改</Submit>
+          </ButtonContainer>
         </EditInfoContainer>
       </EditContainer>
     </Container>

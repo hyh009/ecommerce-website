@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { tabletBig, mobile } from "../responsive";
-import imgs from "../imgs/image.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/apiCall";
@@ -14,7 +13,7 @@ const Container = styled.div`
       rgba(255, 255, 255, 0.5),
       rgba(122, 122, 122, 0.5)
     ),
-    url(${imgs.cover1});
+    url("https://res.cloudinary.com/dh2splieo/image/upload/v1640706201/shop_website/imgs/cover/cover1_j6l2we.jpg");
   background-size: cover;
   display: flex;
   align-items: center;

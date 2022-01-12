@@ -100,6 +100,7 @@ const Profile = () => {
       })),
     []
   );
+  //get User spent every month in current year
   useEffect(() => {
     const getSpent = async () => {
       try {
@@ -183,7 +184,7 @@ const Profile = () => {
           <ProfileCart />
         </MiddleBottom>
       </Middle>
-      <UserInfo user={user} edit={false} />
+      <UserInfo edit={false} />
     </Container>
   );
 };

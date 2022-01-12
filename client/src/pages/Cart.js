@@ -331,7 +331,7 @@ const Cart = () => {
             <TopText>購物車中商品({cart.quantity || 0})</TopText>
             <TopText>
               <Link to="/wish" style={{ color: "black" }}>
-                我的願望清單({user.like.length})
+                我的願望清單({user?.like.length || 0})
               </Link>
             </TopText>
           </TopTextContainer>

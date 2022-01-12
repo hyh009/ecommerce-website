@@ -26,7 +26,7 @@ const App = () => {
     <BrowserRouter>
       <Helmet>
         <title>矽膠產品專家|墊一店</title>
-        <meta name="description" content=""></meta>
+        <meta name="description" content="本網站資訊來源自網路"></meta>
       </Helmet>
       <GlobalStyle />
       <ScrollToTop>

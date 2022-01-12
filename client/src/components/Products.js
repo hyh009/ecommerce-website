@@ -211,6 +211,7 @@ const Product = ({ item }) => {
     return user?.like?.includes(item._id);
   };
   const [like, setLike] = useState(() => checkLike());
+
   // on mounse enter & leave event handler
   const showBlock = (e) => {
     setDisplay(true);
@@ -219,24 +220,31 @@ const Product = ({ item }) => {
     setDisplay(false);
   };
 
+  // handle add wishlist (only for login user)
   const handleWish = (e) => {
-    if (!like) {
-      const newUser = { ...user, like: [...user.like, item._id] };
-      updateUser(dispatch, newUser, accessToken);
+    if (user) {
+      if (!like) {
+        const updatedLike = { _id: user._id, like: [...user.like, item._id] };
+        updateUser(dispatch, updatedLike, accessToken);
+      } else {
+        const removedLike = user.like.filter(
+          (productId) => productId !== item._id
+        );
+        const updatedLike = { _id: user._id, like: removedLike };
+        updateUser(dispatch, updatedLike, accessToken);
+      }
     } else {
-      const removedLike = user.like.filter(
-        (productId) => productId !== item._id
-      );
-      const newUser = { ...user, like: removedLike };
-      updateUser(dispatch, newUser, accessToken);
+      window.alert("請先登入會員");
     }
   };
 
+  // check if heart icon is black or red after every time user updated (like is a column in User schema)
   useEffect(() => {
     if (user) {
       setLike(() => checkLike());
     }
   }, [user]);
+
   return (
     <Container>
       {item.colors.length > 0 && (

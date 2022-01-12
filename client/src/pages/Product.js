@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { tabletBig, mobile } from "../responsive";
 import styled from "styled-components";
@@ -301,6 +301,7 @@ const Product = () => {
   const [pattern, setPattern] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const colorRef = useRef([]);
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.currentUser);
@@ -308,6 +309,7 @@ const Product = () => {
   const accessToken = useSelector((state) => state.user.accessToken);
 
   useEffect(() => {
+    //get single product information
     const getProduct = async () => {
       try {
         const res = await ProductService.get(productId);
@@ -326,7 +328,7 @@ const Product = () => {
     const pic_Id = parseInt(e.target.id);
     setCurrentImg(currentProduct.imgs[pic_Id]);
   };
-
+  // arrow of slider
   const handleArrow = (direction) => {
     if (currentProduct.imgs) {
       const imgLength = parseInt(currentProduct.imgs.length);
@@ -343,13 +345,10 @@ const Product = () => {
       }
     }
   };
-
-  const handleColorButton = (e) => {
-    let elements = document.getElementsByClassName("color_active");
-    for (let element of elements) {
-      element.classList.remove("color_active");
-    }
-    e.target.classList.add("color_active");
+  // indicate which color is choosed
+  const handleColorButton = (e, index) => {
+    colorRef.current.forEach((ref) => ref.classList.remove("color_active"));
+    colorRef.current[index].classList.add("color_active");
   };
 
   const handleAmount = (method) => {
@@ -379,7 +378,6 @@ const Product = () => {
       pattern,
       subtotal: quantity * currentProduct.price,
     };
-    console.log(newProduct);
     if (cart?.products?.length > 0) {
       const [repeat, newProducts] = checkProductInCart(
         cart.products,
@@ -460,10 +458,11 @@ const Product = () => {
                     {currentProduct.colors.map((color, index) => (
                       <FilterColor
                         key={color._id}
+                        ref={(el) => (colorRef.current[index] = el)}
                         title={color.name}
                         color={color.code}
                         onClick={(e) => {
-                          handleColorButton(e);
+                          handleColorButton(e, index);
                           setColor(color);
                         }}
                       />

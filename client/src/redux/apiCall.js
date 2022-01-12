@@ -75,7 +75,6 @@ export const updateCart = async (dispatch, user, products, TOKEN) => {
           total: newTotal,
         })
       );
-      console.log(res.data);
       return res.data;
     } catch (err) {
       dispatch(updateCartFailure());
@@ -92,14 +91,15 @@ export const updateCart = async (dispatch, user, products, TOKEN) => {
   }
 };
 
-export const updateUser = async (dispatch, user, TOKEN) => {
+export const updateUser = async (dispatch, updateData, TOKEN) => {
   dispatch(updateUserStart());
   try {
-    const res = await UserService.put(user, TOKEN);
+    const res = await UserService.patch(updateData, TOKEN);
     dispatch(updateUserSuccess(res.data));
+    return [res.data, null];
   } catch (err) {
     dispatch(updateUserFailure());
-    console.log(err);
+    return [null, err.response.data];
   }
 };
 

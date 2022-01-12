@@ -1,12 +1,17 @@
 const router = require("express").Router();
 const User = require("../models").userModel;
 const bcrypt = require("bcrypt");
-const { updateValidation, updatePasswordValidation } = require("../validation");
+const {
+  updateUserValidation,
+  updatePasswordValidation,
+} = require("../validation");
 // middleware
 const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } = require("./validation-token");
+
+const { cloudinary } = require("../config/cloudinary");
 
 //Get all user
 router.get("/", verifyTokenAndAdmin, async (req, res) => {
@@ -61,7 +66,7 @@ router.get("/stats", verifyTokenAndAdmin, async (req, res) => {
 
 // Update
 router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
-  const { error } = updateValidation(req.body);
+  const { error } = updateUserValidation(req.body);
   if (error) return res.status(400).json(error.details[0].message);
 
   try {
@@ -80,7 +85,7 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 // Update password
-router.put("/:id/password", verifyTokenAndAuthorization, async (req, res) => {
+router.patch("/:id/password", verifyTokenAndAuthorization, async (req, res) => {
   const { error } = updatePasswordValidation(req.body);
   if (error) return res.status(400).json(error.details[0].message);
 
@@ -101,6 +106,10 @@ router.put("/:id/password", verifyTokenAndAuthorization, async (req, res) => {
 
 // Patch
 router.patch("/:id", verifyTokenAndAuthorization, async (req, res) => {
+  const { error } = updateUserValidation(req.body);
+  if (error) return res.status(400).json(error.details[0].message);
+  const emailExist = await User.findOne({ email: req.body.email });
+  if (emailExist) return res.status(400).json("此Email已註冊帳號。");
   try {
     const updatedUser = await User.findByIdAndUpdate(
       { _id: req.params.id },
@@ -122,6 +131,20 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   } catch (err) {
     res.status(500).json("系統發生錯誤，請稍候再試。");
     console.log(err);
+  }
+});
+
+// Upload image to cloudinary
+router.post("/uploadImage", verifyTokenAndAuthorization, async (req, res) => {
+  try {
+    const { fileString, fileName } = req.body;
+    const data = await cloudinary.uploader.upload(fileString, {
+      public_id: `shop_website/user/${fileName}`,
+    });
+    res.status(200).json(data.secure_url);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json("系統發生問題，請稍候再試");
   }
 });
 

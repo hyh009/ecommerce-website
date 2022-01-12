@@ -220,7 +220,7 @@ const Wish = () => {
 
   const handleRemove = (e) => {
     const updateLike = wishIds.filter((id) => id !== e.target.id);
-    const newUser = { ...user, like: updateLike };
+    const newUser = { _id: user._id, like: updateLike };
     updateUser(dispatch, newUser, accessToken);
     setWishProducts((prev) =>
       prev.filter((product) => updateLike.includes(product._id))
@@ -229,7 +229,7 @@ const Wish = () => {
 
   const handleClearup = (e) => {
     e.preventDefault();
-    const newUser = { ...user, like: [] };
+    const newUser = { _id: user._id, like: [] };
     updateUser(dispatch, newUser, accessToken);
     setWishProducts([]);
   };
