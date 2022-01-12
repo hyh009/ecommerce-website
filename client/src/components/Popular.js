@@ -15,6 +15,28 @@ const Container = styled.div`
   ${mobile({ padding: "20px 0", gridTemplateColumns: "repeat(1, 1fr)" })};
 `;
 
+const NocontentContainer = styled.div`
+  grid-column: 1/5;
+  width: 100%;
+  display: flex;
+  height: 60vh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  gap: 20px;
+  ${tabletBig({ flexDirection: "column", gap: "40px" })};
+`;
+
+const NocontentImg = styled.img`
+  height: 70%;
+  object-fit: cover;
+  ${tabletBig({ height: "50%" })};
+  ${mobile({ height: "40%" })};
+`;
+const NocontentText = styled.span`
+  font-size: 5vmin;
+  letter-spacing: 2px;
+`;
 const Popular = ({ sort, filters }) => {
   const [items, setItems] = useState([]);
   const [filtereditems, setFiltereditems] = useState([]);
@@ -106,9 +128,14 @@ const Popular = ({ sort, filters }) => {
 
   return (
     <Container>
-      {filtereditems.map((item) => (
-        <Products key={item._id} item={item} />
-      ))}
+      {filtereditems.length > 0 ? (
+        filtereditems.map((item) => <Products key={item._id} item={item} />)
+      ) : (
+        <NocontentContainer>
+          <NocontentImg src="https://res.cloudinary.com/dh2splieo/image/upload/v1641970932/shop_website/imgs/undraw_notify_re_65on_q6oigl.svg" />
+          <NocontentText>目前沒有尋找中的商品...</NocontentText>
+        </NocontentContainer>
+      )}
     </Container>
   );
 };

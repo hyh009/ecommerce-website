@@ -72,6 +72,7 @@ const Info = styled.div`
   user-select: none;
   width: calc(100% - 10px);
   margin: 5px;
+  padding: 5px;
 `;
 
 const Product = styled.div`
@@ -102,6 +103,7 @@ const ProductDesc = styled.p`
   color: #ff9b3d;
   font-weight: bold;
   letter-spacing: 1px;
+  text-align: center;
 `;
 const IconContainerLeft = styled.div`
   position: absolute;

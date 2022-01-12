@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { tabletBig } from "../responsive";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -44,6 +44,7 @@ const SideContainer = styled.div`
     zIndex: "3",
     width: "100%",
     height: "max-content",
+    minHeight: "max-content",
   })}
 `;
 
@@ -127,14 +128,18 @@ const ListItem = styled.li`
 const Sidebar = () => {
   const [showList, setShowList] = useState(true);
   const [showUpArrow, setShowUpArrow] = useState(false);
+  const [device, setDevice] = useState("desktop");
   const user = useSelector((state) => state.user.currentUser);
+  const { pathname } = useLocation();
   function handleCheckDevice() {
     if (window.innerWidth > 1024) {
       setShowList(true);
       setShowUpArrow(false);
+      setDevice("desktop");
     } else {
       setShowList(false);
       setShowUpArrow(false);
+      setDevice("tablet");
     }
   }
   useEffect(() => {
@@ -144,6 +149,15 @@ const Sidebar = () => {
       window.removeEventListener("resize", handleCheckDevice);
     };
   }, []);
+
+  //set show to false when path change( only for tablet and mobile)
+  useEffect(() => {
+    if (device === "tablet") {
+      setShowList(false);
+      setShowUpArrow(false);
+    }
+  }, [pathname]);
+
   return (
     <Container>
       <Wrapper>
