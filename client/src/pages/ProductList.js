@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { tablet, mobile } from "../responsive";
 import Popular from "../components/Popular";
+import NotFound from "../pages/NotFound";
 import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet";
+import { categories } from "../data";
 
 const Container = styled.div``;
 const Title = styled.h1`
@@ -50,6 +53,7 @@ const ProductList = () => {
   const cat = decodeURIComponent(location.pathname.split("/")[2]);
   const [filters, setfilters] = useState({ category: cat });
   const [sort, setSort] = useState("newest");
+  const [catExist, setCatExist] = useState(true);
   const handleFilterChange = (e) => {
     const value = e.target.value;
     setfilters({ ...filters, [e.target.name]: value });
@@ -58,12 +62,28 @@ const ProductList = () => {
     setfilters((f) => {
       return { ...f, category: cat };
     });
+    //check if category exist
+    const titles = categories.map((cat) => cat.title);
+    if (!titles.includes(cat) && cat !== "all") {
+      setCatExist(false);
+    }
   }, [cat]);
+
   return (
     <Container>
-      <Title>
-        {cat === "其它" ? "其它款式" : cat === "all" ? "全類商品" : cat}
-      </Title>
+      <Helmet>
+        <title>{`墊一店 | 商品一覽 - ${
+          cat === "all" ? "全部商品" : cat
+        }`}</title>
+        <meta
+          name="description"
+          content={`${
+            categories?.cat?.desc ||
+            "墊一店商品總覽，在這裡可以查看墊一店的所有商品，包括吸管、窗貼、門擋、靠墊、坐墊等。"
+          }`}
+        ></meta>
+      </Helmet>
+      <Title>{cat === "all" ? "全類商品" : cat}</Title>
       <FilterContainer>
         <Filter>
           <FilterText>篩選商品：</FilterText>
@@ -74,7 +94,7 @@ const ProductList = () => {
             <Option>蜂巢坐靠墊</Option>
             <Option>無痕窗貼</Option>
             <Option>不倒翁門擋</Option>
-            <Option>其它</Option>
+            <Option>矽膠鍋墊</Option>
           </Select>
           <Select name="color" onChange={handleFilterChange}>
             <Option value="all">請選擇顏色</Option>
@@ -100,7 +120,11 @@ const ProductList = () => {
           </Select>
         </Filter>
       </FilterContainer>
-      <Popular filters={filters} sort={sort} />
+      {catExist ? (
+        <Popular filters={filters} sort={sort} />
+      ) : (
+        <NotFound content="category" />
+      )}
     </Container>
   );
 };

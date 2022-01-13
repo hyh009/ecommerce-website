@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { tabletBig, mobile } from "../responsive";
+import { Helmet } from "react-helmet";
 
 const NotFoundContainer = styled.div`
   width: 100%;
@@ -55,6 +56,10 @@ const NotFound = ({ content }) => {
   const navigate = useNavigate();
   return (
     <div>
+      <Helmet>
+        <title>墊一店 | 404-查詢的頁面不存在</title>
+        <meta name="description" content="404-查詢的頁面不存在。"></meta>
+      </Helmet>
       <NotFoundContainer>
         <NotFoundImg
           title="此頁面不存在"
@@ -68,6 +73,9 @@ const NotFound = ({ content }) => {
             <NotFoundText>沒有此商品資訊...</NotFoundText>
           )}
           {content === "page" && <NavBtn to="/">返回首頁</NavBtn>}
+          {content === "category" && (
+            <NotFoundText>目前沒有此類商品...</NotFoundText>
+          )}
           {content === "product" && (
             <GoBackBtn
               onClick={(e) => {

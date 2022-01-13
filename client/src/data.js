@@ -4,7 +4,7 @@ export const sliderItems = [
     img: "https://res.cloudinary.com/dh2splieo/image/upload/v1640706199/shop_website/imgs/straw/straw_trans/straw_trans1_hfabou.jpg",
     title: "隨你PAD透明吸管新上市",
     description:
-      "「隨你PAD透明吸管」貼心上市，讓你看見自己、看見乾淨，限量販售中。",
+      "「隨你PAD透明吸管」貼心上市。讓你親眼見證好洗不藏汙納垢、看見乾淨，限量販售中。",
     button: "透明萬歲",
     bg: "F0F4FA",
     product_id: "61a64e6d29b02ac6ca176e1d",
@@ -14,7 +14,7 @@ export const sliderItems = [
     img: "https://res.cloudinary.com/dh2splieo/image/upload/v1640706211/shop_website/imgs/straw/straw_fat/straw_fat3_sgctps.jpg",
     title: "週年慶全店特價中",
     description:
-      "全店滿300打9折，滿500打8折，快趁折扣期間把想買的通通帶回家吧！",
+      "週年慶感恩大回饋~全店滿300打9折，滿500打8折，快趁折扣期間把想買的通通帶回家吧！",
     button: "點我開買",
     bg: "F6F0FA",
     product_id: "61a64b7e29b02ac6ca176e0b",
@@ -22,7 +22,7 @@ export const sliderItems = [
   {
     id: 3,
     img: "https://res.cloudinary.com/dh2splieo/image/upload/v1640706202/shop_website/imgs/spring/spring6_oebomf.jpg",
-    title: "過年快到了，你春聯準備好了嗎？",
+    title: "過年快到了，春聯準備好了嗎？",
     description:
       "過年換春聯殘膠難清又怕貼歪不復返嗎？無痕創意春聯撕貼僅需一秒鐘，輕鬆搞定春聯佈置。",
     button: "告別殘膠",

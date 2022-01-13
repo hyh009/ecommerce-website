@@ -12,11 +12,13 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  updateAccessToken,
 } from "./userRedux";
 import CartService from "../services/cart.service";
 import UserService from "../services/user.service";
 import AuthService from "../services/auth.service";
 
+//AUTH
 export const login = async (dispatch, user) => {
   dispatch(loginStart());
   try {
@@ -34,6 +36,7 @@ export const userLogout = async (dispatch) => {
   dispatch(cleanupCartTemp());
 };
 
+//CART
 export const getCartData = async (dispatch, user, TOKEN) => {
   try {
     dispatch(updateCartStart());
@@ -53,7 +56,7 @@ export const getCartData = async (dispatch, user, TOKEN) => {
 
 export const updateCart = async (dispatch, user, products, TOKEN) => {
   dispatch(updateCartStart());
-
+  //if not login only add to redux cart
   if (user?._id) {
     try {
       let newTotal = 0;
@@ -91,6 +94,7 @@ export const updateCart = async (dispatch, user, products, TOKEN) => {
   }
 };
 
+// USER
 export const updateUser = async (dispatch, updateData, TOKEN) => {
   dispatch(updateUserStart());
   try {
@@ -103,7 +107,20 @@ export const updateUser = async (dispatch, updateData, TOKEN) => {
   }
 };
 
-// useful function
+export const getUser = async (dispatch, userId, TOKEN) => {
+  dispatch(updateUserStart());
+  try {
+    const res = await UserService.get(userId, TOKEN);
+    dispatch(updateUserSuccess(res.data));
+    return res.data;
+  } catch (err) {
+    dispatch(updateUserFailure());
+  }
+};
+
+// for cart
+// check if same product is already in the cart. if yes return products array with new product quantity,
+// if no return same single product
 export const checkProductInCart = (cartProducts, newProduct, quantity) => {
   const uniqueString = `${newProduct._id}${newProduct?.color?.name}${newProduct.pattern}`;
   let repeat = false;
@@ -114,12 +131,14 @@ export const checkProductInCart = (cartProducts, newProduct, quantity) => {
     ) {
       repeat = true;
       const newQuantity = product.quantity + quantity;
+      //retrun repeat product (added quantity)
       return {
         ...product,
         quantity: newQuantity,
         subtotal: newQuantity * product.price,
       };
     } else {
+      //just return origin product;
       return product;
     }
   });

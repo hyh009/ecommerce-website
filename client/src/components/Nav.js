@@ -194,6 +194,7 @@ const Nav = ({ position }) => {
         setShow(false);
       }
     };
+
     document.addEventListener("mousedown", ClickOutsideClose);
     return () => {
       document.removeEventListener("mousedown", ClickOutsideClose);

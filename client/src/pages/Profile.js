@@ -7,6 +7,7 @@ import ProfileCart from "../components/ProfileCart";
 import UserInfo from "../components/UserInfo";
 import OrderService from "../services/order.service";
 import { Stars, AccountCircle } from "@mui/icons-material";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   grid-column: 2/6;
@@ -130,6 +131,10 @@ const Profile = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>{`${user.username}的頁面 | 墊一店`}</title>
+        <meta name="description" content="用戶頁面，查看用戶資訊。"></meta>
+      </Helmet>
       <Middle>
         <MiddleTop>
           <SmallBlock>

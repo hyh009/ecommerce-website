@@ -3,6 +3,7 @@ import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { tabletBig } from "../responsive";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+
 import {
   Home,
   Person,
@@ -166,20 +167,24 @@ const Sidebar = () => {
             <Menu>
               <Title>
                 {user?.name}的頁面
-                <CustomArrowDropDown
-                  onClick={() => {
-                    setShowList(true);
-                    setShowUpArrow(true);
-                  }}
-                  style={{ visibility: showUpArrow ? "hidden" : "visible" }}
-                />
-                <CustomArrowDropUp
-                  onClick={() => {
-                    setShowList(false);
-                    setShowUpArrow(false);
-                  }}
-                  style={{ display: showUpArrow ? "inline-block" : "none" }}
-                />
+                {device != "desktop" && (
+                  <CustomArrowDropDown
+                    onClick={() => {
+                      setShowList(true);
+                      setShowUpArrow(true);
+                    }}
+                    style={{ visibility: showUpArrow ? "hidden" : "visible" }}
+                  />
+                )}
+                {device != "desktop" && (
+                  <CustomArrowDropUp
+                    onClick={() => {
+                      setShowList(false);
+                      setShowUpArrow(false);
+                    }}
+                    style={{ display: showUpArrow ? "inline-block" : "none" }}
+                  />
+                )}
               </Title>
               {showList ? (
                 <ListContainer>

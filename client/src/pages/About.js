@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { categories } from "../data";
 import CategoryInfo from "../components/CategoryInfo";
 import { mobile, tabletBig } from "../responsive";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   display: flex;
@@ -121,6 +122,15 @@ const CategoryGrid = styled.div`
 const About = () => {
   return (
     <Container>
+      <Helmet>
+        <title>關於我們 | 墊一店</title>
+        <meta
+          name="description"
+          content="我們是來自台灣的液態矽膠製造專家 -
+          墊一店。我們擁有30年世界級液態矽膠射出設備的製造經驗，我們所設計出的產品，90%以上為液態矽膠製成。希望透過安全環保又獨特的液態矽膠商品，
+          照顧你的生活，照顧環境，讓我們擁有更好的每一天。"
+        ></meta>
+      </Helmet>
       <Session>
         <AboutImg src="https://res.cloudinary.com/dh2splieo/image/upload/v1640706197/shop_website/imgs/cover/cover2_kqrkda.jpg" />
       </Session>

@@ -16,6 +16,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import NotFound from "./NotFound";
 
+import { Helmet } from "react-helmet";
+
 const Container = styled.div``;
 
 const ProgressContainer = styled.div`
@@ -378,20 +380,25 @@ const Product = () => {
       pattern,
       subtotal: quantity * currentProduct.price,
     };
+    // if cart is not empty
     if (cart?.products?.length > 0) {
       const [repeat, newProducts] = checkProductInCart(
         cart.products,
         newProduct,
         quantity
       );
-
+      console.log(repeat, newProducts);
       if (!repeat) {
+        // if new product is not in the cart, need to push into cart.products
         newProducts.push(newProduct);
         updateCart(dispatch, user, newProducts, accessToken);
       } else {
+        // if new product already in the cart, checkProductInCart already return products with new product quantity
+        // so just update to redux
         updateCart(dispatch, user, newProducts, accessToken);
       }
     } else {
+      //if cart is empty just add new into cart
       updateCart(dispatch, user, [newProduct], accessToken);
     }
     setShowMessage(true);
@@ -399,6 +406,10 @@ const Product = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>{`墊一店 | ${currentProduct.title}`}</title>
+        <meta name="description" content={`${currentProduct.desc}。`}></meta>
+      </Helmet>
       {isFetching ? (
         <ProgressContainer>
           <Box sx={{ display: "flex" }}>
@@ -433,9 +444,14 @@ const Product = () => {
                 </Arrow>
               </PicContainer>
               {currentProduct.imgs && (
-                <ChooserContainer onClick={handleChangePic}>
+                <ChooserContainer>
                   {currentProduct["imgs"].map((img, index) => (
-                    <SmallImg src={img.src} key={index} id={index} />
+                    <SmallImg
+                      src={img.src}
+                      key={index}
+                      id={index}
+                      onClick={handleChangePic}
+                    />
                   ))}
                 </ChooserContainer>
               )}

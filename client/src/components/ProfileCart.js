@@ -182,8 +182,8 @@ const ProfileCart = () => {
               <Image src={product.img} />
               <Info>
                 <ProductTitle>
-                  {product.title.slice(0, 14) +
-                    (product.title.length > 15 ? "..." : "")}
+                  {product.title?.slice(0, 14) +
+                    (product.title?.length > 15 ? "..." : "")}
                 </ProductTitle>
                 {product?.color?.name && (
                   <ProductDesc>顏色：{product.color.name}</ProductDesc>

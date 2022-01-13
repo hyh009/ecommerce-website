@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ProductService from "../services/product.service";
 import { updateUser } from "../redux/apiCall";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -236,9 +237,12 @@ const Wish = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>我的願望清單|墊一店</title>
+        <meta name="description" content="願望清單中的商品。"></meta>
+      </Helmet>
       <Wrapper>
         <Title>我的願望清單</Title>
-
         <Top>
           <TopButton>
             <CustomLink to="/products/all">繼續購物</CustomLink>

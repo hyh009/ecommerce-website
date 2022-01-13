@@ -27,7 +27,7 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
 });
 
 //Get user
-router.get("/find/:id", verifyTokenAndAdmin, async (req, res) => {
+router.get("/find/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const { password, ...others } = user._doc;
@@ -108,8 +108,11 @@ router.patch("/:id/password", verifyTokenAndAuthorization, async (req, res) => {
 router.patch("/:id", verifyTokenAndAuthorization, async (req, res) => {
   const { error } = updateUserValidation(req.body);
   if (error) return res.status(400).json(error.details[0].message);
-  const emailExist = await User.findOne({ email: req.body.email });
-  if (emailExist) return res.status(400).json("此Email已註冊帳號。");
+  if (req.body.email) {
+    const emailExist = await User.findOne({ email: req.body.email });
+    if (!emailExist._id.equals(req.params.id))
+      return res.status(400).json("此Email已註冊帳號。");
+  }
   try {
     const updatedUser = await User.findByIdAndUpdate(
       { _id: req.params.id },

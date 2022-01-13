@@ -8,6 +8,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { updateCart } from "../redux/apiCall";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div``;
 const Wrapper = styled.div`
@@ -320,9 +321,12 @@ const Cart = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>我的購物車|墊一店</title>
+        <meta name="description" content="購物車中的商品。"></meta>
+      </Helmet>
       <Wrapper>
         <Title>我的購物車</Title>
-
         <Top>
           <TopButton>
             <CustomLink to="/products/all">繼續購物</CustomLink>

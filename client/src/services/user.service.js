@@ -2,6 +2,11 @@ import { axiosInstance } from "./config";
 const ROUTE = "users";
 
 class UserService {
+  get(id, TOKEN) {
+    return axiosInstance.get(`${ROUTE}/find/${id}`, {
+      headers: { token: `Bearer ${TOKEN}` },
+    });
+  }
   patch(updateUser, TOKEN) {
     const { accessToken, ...saveUser } = updateUser;
     return axiosInstance.patch(`${ROUTE}/${updateUser._id}`, saveUser, {

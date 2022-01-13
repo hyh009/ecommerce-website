@@ -41,7 +41,7 @@ const ProgressContainer = styled.div`
 const CoverImgContainer = styled.div`
   display: flex;
   width: 100%;
-  height: 100vh;
+  height: ${(props) => (props.isFetching ? "0px" : "100vh")};
   justify-content: center;
   align-items: center;
   position: relative;
@@ -68,9 +68,13 @@ const CoverText = styled.div`
   letter-spacing: 8px;
   position: absolute;
   top: 10%;
+  left: 0;
+  right: 0;
+  margin: auto;
   writing-mode: vertical-rl;
   color: white;
   user-select: none;
+  width: max-content;
 `;
 
 const Click = styled.div`
@@ -117,12 +121,14 @@ const LoadAnimation = ({ showAnimation, setShowAnimation }) => {
           }
           onLoad={() => setIsFetching((prev) => !prev)}
         />
-        <CoverText>
-          <TextAnimation text="墊一店" />
-          <br />
+        {!isFetching && (
+          <CoverText>
+            <TextAnimation text="墊一店" />
+            <br />
 
-          <TextAnimation order="second" text="用液態矽膠照顧你的生活" />
-        </CoverText>
+            <TextAnimation order="second" text="用液態矽膠照顧你的生活" />
+          </CoverText>
+        )}
         <Click
           title="點擊進入"
           onClick={() => setShowAnimation((prev) => !prev)}

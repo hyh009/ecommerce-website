@@ -3,6 +3,7 @@ import { tabletBig, tablet, mobile } from "../responsive";
 import { useState } from "react";
 import AuthService from "../services/auth.service";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   width: 100%;
@@ -106,6 +107,13 @@ const Register = () => {
   };
   return (
     <Container>
+      <Helmet>
+        <title>註冊用戶|墊一店</title>
+        <meta
+          name="description"
+          content="註冊成為墊一店用戶，購買液態矽膠產品。"
+        ></meta>
+      </Helmet>
       <Wrapper>
         <Title>註冊成為會員</Title>
 

@@ -12,8 +12,7 @@ const Container = styled.div`
   display: flex;
   position: relative;
   overflow: hidden;
-  ${tabletBig({ height: "calc(100vh - 90px)" })}
-  ${mobile({ height: "calc(70vh)" })}
+  ${tabletBig({ minHeight: "max-content", height: "auto" })}
 `;
 
 const Wrapper = styled.div`
@@ -29,7 +28,7 @@ const Slide = styled.div`
   width: 100vw;
   height: 100%;
   justify-content: center;
-  background: white;
+  ${tabletBig({ minHeight: "max-content" })}
 `;
 const InnerBlock = styled.div`
   width: 100%;
@@ -46,16 +45,15 @@ const ImgContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  ${tabletBig({ height: "90%", width: "90%" })}
-  ${tablet({ height: "85%", width: "85%" })}
+  overflow: hidden;
+  ${tabletBig({ width: "90%", aspectRatio: "1/1", flex: "auto" })}
+  ${tablet({ width: "85%" })}
 `;
 
 const Image = styled.img`
-  overflow: hidden;
   object-fit: cover;
   height: 100%;
   width: 100%;
-  ${tabletBig({ height: "90%", width: "90%" })}
 `;
 
 const InfoContainer = styled.div`
@@ -68,8 +66,11 @@ const InfoContainer = styled.div`
   width: 100%;
   ${tabletBig({
     alignItems: "center",
-    justifyContent: "space-around",
-    padding: "20px",
+    justifyContent: "flex-start",
+    padding: "40px 20px",
+    gap: "20px",
+    flex: "auto",
+    aspectRatio: "1/0.75",
   })}
 `;
 
@@ -86,19 +87,16 @@ const Title = styled.h1`
 `;
 const Description = styled.p`
   margin: 50px 0px;
-  font-size: 1.25rem;
+  font-size: 4vmin;
   color: black;
   line-height: 35px;
   letter-spacing: 2px;
   ${tabletBig({
     textAlign: "center",
     margin: "20px 10px",
-    fontSize: "3vmin",
-    lineHeight: "4.5vmin",
+    lineHeight: "7vmin",
   })}
   ${mobile({
-    fontSize: "14px",
-    lineHeight: "24px",
     margin: "10px 10px",
   })}
 `;

@@ -138,7 +138,7 @@ const CustomPaletteIcon = styled(PaletteIcon)`
 
 const LogoContainer = styled.div`
   position: absolute;
-  top: 10px;
+  top: 5px;
   right: 5px;
   width: 40px;
   height: 40px;

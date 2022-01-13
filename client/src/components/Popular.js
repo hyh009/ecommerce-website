@@ -4,6 +4,8 @@ import { tabletBig, tablet, mobile } from "../responsive";
 import Products from "./Products";
 import ProductService from "../services/product.service";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const Container = styled.div`
   padding: 20px;
@@ -13,6 +15,19 @@ const Container = styled.div`
   ${tabletBig({ gridTemplateColumns: "repeat(3, 1fr)" })};
   ${tablet({ padding: "20px 0", gridTemplateColumns: "repeat(2, 1fr)" })};
   ${mobile({ padding: "20px 0", gridTemplateColumns: "repeat(1, 1fr)" })};
+`;
+const ProgressContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 70vh;
+  gap: 20px;
+  grid-column: 1/5;
+  ${tabletBig({ height: "50vh", gridColumn: "1/4" })};
+  ${tablet({ gridColumn: "1/3" })}
+  ${mobile({ gridColumn: "1/2" })}
 `;
 
 const NocontentContainer = styled.div`
@@ -40,9 +55,11 @@ const NocontentText = styled.span`
 const Popular = ({ sort, filters }) => {
   const [items, setItems] = useState([]);
   const [filtereditems, setFiltereditems] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsFetching(true);
     const getProducts = async () => {
       try {
         if (typeof filters === "undefined") {
@@ -52,9 +69,11 @@ const Popular = ({ sort, filters }) => {
           const res = await ProductService.getAll(filters.category);
           setItems(res.data);
           navigate(`/products/${filters.category}`, { replace: true });
+          setIsFetching(false);
         }
       } catch (err) {
         console.log(err);
+        setIsFetching(false);
       }
     };
     getProducts();
@@ -128,7 +147,16 @@ const Popular = ({ sort, filters }) => {
 
   return (
     <Container>
-      {filtereditems.length > 0 ? (
+      {isFetching ? (
+        <ProgressContainer>
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
+          <span style={{ textAlign: "center", width: "100%" }}>
+            資料讀取中...
+          </span>
+        </ProgressContainer>
+      ) : filtereditems.length > 0 ? (
         filtereditems.map((item) => <Products key={item._id} item={item} />)
       ) : (
         <NocontentContainer>

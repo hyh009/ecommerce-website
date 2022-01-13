@@ -1,6 +1,6 @@
-import React from "react";
+import { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import GlobalStyle from "./GlobalStyle";
 import { BrowserRouter } from "react-router-dom";
 import PageTop from "./components/PageTop";
@@ -16,18 +16,25 @@ import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./ScrollToTop";
-import { Helmet } from "react-helmet";
 import PrivateRoute from "./PrivateRoute";
+import { getUser } from "./redux/apiCall";
 
 const App = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.currentUser);
-
+  const accessToken = useSelector((state) => state.user.accessToken);
+  useEffect(() => {
+    // when refresh, get and update redux user data from db
+    // to prevent different user information in different device (or browser) after update user info
+    if (user) {
+      const getUserData = () => {
+        getUser(dispatch, user._id, accessToken);
+      };
+      getUserData();
+    }
+  }, []);
   return (
     <BrowserRouter>
-      <Helmet>
-        <title>矽膠產品專家|墊一店</title>
-        <meta name="description" content="本網站資訊來源自網路"></meta>
-      </Helmet>
       <GlobalStyle />
       <ScrollToTop>
         <Routes>
@@ -51,6 +58,7 @@ const App = () => {
               path="/wish"
               element={(!user && <Navigate replace to="/login" />) || <Wish />}
             />
+            <Route path="/404" element={<NotFound content="page" />} />
             <Route path="*" element={<NotFound content="page" />} />
           </Route>
         </Routes>

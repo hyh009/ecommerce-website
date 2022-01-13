@@ -9,6 +9,7 @@ import Nav from "../components/Nav";
 import Newsletter from "../components/Newsletter";
 import Footer from "../components/Footer";
 import ScrollToTopBtn from "../components/ScrollToTopBtn";
+import { Helmet } from "react-helmet";
 
 const SubTitle = styled.h2`
   padding: 50px 0px 10px 25px;
@@ -28,6 +29,10 @@ const Home = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>矽膠產品專家|墊一店</title>
+        <meta name="description" content="本網站資訊來源自網路。"></meta>
+      </Helmet>
       <LoadAnimation
         showAnimation={showAnimation}
         setShowAnimation={setShowAnimation}

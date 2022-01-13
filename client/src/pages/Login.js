@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/apiCall";
 import { getCartData, updateCart, checkProductInCart } from "../redux/apiCall";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   width: 100%;
@@ -123,6 +124,7 @@ const Login = () => {
             newProduct,
             newProduct.quantity
           );
+          console.log(repeat, "repeat");
           if (!repeat) {
             //new items not in the cart
             newProducts.push(newProduct);
@@ -153,6 +155,10 @@ const Login = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>用戶登入|墊一店</title>
+        <meta name="description" content="登入墊一店會員。"></meta>
+      </Helmet>
       <Wrapper>
         <Title>登入帳號</Title>
         {error && <Error>{errMessage ? errMessage : "發生錯誤！"}</Error>}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { tabletBig } from "../responsive";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,6 +7,7 @@ import { updateUser } from "../redux/apiCall";
 import UserInfo from "../components/UserInfo";
 import { Upload } from "@mui/icons-material";
 import UserService from "../services/user.service";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   grid-column: 2/6;
@@ -153,26 +154,35 @@ const ProfileEdit = () => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const dispatch = useDispatch();
 
+  const editRef = useRef(null);
+
   const [joiError, setJoiError] = useState("");
   const [showEditInfo, setShowEditInfo] = useState(false);
   const [uploadImage, setUploadImage] = useState(null);
+  const [updatingPic, setUpdatingPic] = useState(false);
 
   const handlePreview = (e) => {
     let reader = new FileReader();
     reader.readAsDataURL(e.target.files[0]);
     reader.addEventListener("loadend", () => {
-      setUploadImage({
-        name: e.target.files[0].name,
-        type: e.target.files[0].type,
-        size: e.target.files[0].size,
-        src: reader.result,
-      });
+      const fileSize = (e.target.files[0].size / (1024 * 1024)).toFixed(4);
+      console.log(fileSize, e.target.files[0].size);
+      if (fileSize > 10) {
+        console.log("over10");
+      } else {
+        setUploadImage({
+          name: e.target.files[0].name,
+          type: e.target.files[0].type,
+          size: e.target.files[0].size,
+          src: reader.result,
+        });
+      }
     });
   };
 
   const handleUploadPic = async (e) => {
     e.preventDefault();
-    console.log("a");
+    setUpdatingPic(true);
     try {
       const res = await UserService.uploadImage(
         uploadImage.src,
@@ -180,11 +190,27 @@ const ProfileEdit = () => {
         accessToken
       );
       const newImg = { _id: user._id, img: res.data };
-      await updateUser(dispatch, newImg, accessToken);
+      const newUser = await updateUser(dispatch, newImg, accessToken);
+      if (newUser[0]) {
+        setUpdatingPic(false);
+        setUploadImage(null);
+        window.scrollTo(0, 0);
+        window.alert("照片更新成功");
+      }
     } catch (err) {
+      setUploadImage(null);
+      setUpdatingPic(false);
+      window.alert("照片上傳失敗，請稍後再試");
       console.log(err);
     }
   };
+  useEffect(() => {
+    if (showEditInfo && editRef?.current) {
+      editRef.current.scrollIntoView();
+    } else if (!showEditInfo) {
+      window.scrollTo(0, 0);
+    }
+  }, [showEditInfo]);
 
   // use hook form
   const {
@@ -204,6 +230,8 @@ const ProfileEdit = () => {
     if (updateduser[0]) {
       window.alert("用戶資訊更新成功");
       setJoiError("");
+      window.scrollTo(0, 0);
+      setShowEditInfo(false);
     } else {
       if (updateduser[1]) {
         setJoiError(updateduser[1]);
@@ -217,6 +245,10 @@ const ProfileEdit = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>{`編輯用戶資訊 | 墊一店`}</title>
+        <meta name="description" content="用戶頁面，查看用戶資訊。"></meta>
+      </Helmet>
       <UserInfo
         edit={true}
         showEditInfo={showEditInfo}
@@ -228,7 +260,10 @@ const ProfileEdit = () => {
           <PicMain>
             {uploadImage ? (
               <>
-                <PreviewContainer label={uploadImage?.name}>
+                <PreviewContainer
+                  label={uploadImage?.name}
+                  style={{ filter: updatingPic ? "brightness(80%)" : "" }}
+                >
                   <Preview src={uploadImage?.src} alt={uploadImage?.name} />
                 </PreviewContainer>
                 <ButtonContainer>
@@ -264,6 +299,7 @@ const ProfileEdit = () => {
                 type="file"
                 name="photo"
                 id="photo"
+                accept=".jpg, .jpeg, .png"
                 onChange={handlePreview}
               />
             </PicLabel>
@@ -272,6 +308,7 @@ const ProfileEdit = () => {
         <EditInfoContainer
           style={{ display: showEditInfo ? "flex" : "none" }}
           onSubmit={handleSubmit(onSubmit)}
+          ref={editRef}
         >
           <Header>
             <EditTitle>編輯</EditTitle>
@@ -352,7 +389,7 @@ const ProfileEdit = () => {
           <ButtonContainer>
             <Submit
               type="reset"
-              onClick={() => {
+              onClick={(e) => {
                 setJoiError("");
                 setShowEditInfo(false);
               }}
