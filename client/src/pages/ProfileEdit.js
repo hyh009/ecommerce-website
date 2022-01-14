@@ -57,11 +57,27 @@ const PicLabel = styled.label`
 `;
 const PreviewContainer = styled.div`
   width: 100%;
-  aspect-ration: 1/1;
   border: 1px solid lightgray;
   overflow: hidden;
   margin: 10px 0;
   border-radius: 10px;
+  position: relative;
+  &::after {
+    content: "請稍候";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    color: white;
+    display: ${(props) => (props.updatingPic ? "flex" : "none")};
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 2px;
+    font-size: 5vmin;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const Preview = styled.img`
@@ -162,6 +178,11 @@ const ProfileEdit = () => {
   const [updatingPic, setUpdatingPic] = useState(false);
 
   const handlePreview = (e) => {
+    const acceptFileTypes = ["image/jpg", "image/jpeg", "image/png"];
+
+    if (!acceptFileTypes.includes(e.target.files[0].type)) {
+      return window.alert("不支援此檔案格式。(可上傳.png .jpg .jepg檔)");
+    }
     let reader = new FileReader();
     reader.readAsDataURL(e.target.files[0]);
     reader.addEventListener("loadend", () => {
@@ -184,7 +205,6 @@ const ProfileEdit = () => {
   const handleUploadPic = async (e) => {
     e.preventDefault();
     setUpdatingPic(true);
-    setShowEditInfo(true);
     try {
       const res = await UserService.uploadImage(
         uploadImage.src,
@@ -262,10 +282,7 @@ const ProfileEdit = () => {
           <PicMain>
             {uploadImage ? (
               <>
-                <PreviewContainer
-                  label={uploadImage?.name}
-                  style={{ filter: updatingPic ? "brightness(80%)" : "" }}
-                >
+                <PreviewContainer updatingPic={updatingPic}>
                   <Preview src={uploadImage?.src} alt={uploadImage?.name} />
                 </PreviewContainer>
                 <ButtonContainer>
@@ -301,7 +318,6 @@ const ProfileEdit = () => {
                 type="file"
                 name="photo"
                 id="photo"
-                accept=".jpg, .jpeg, .png"
                 onChange={handlePreview}
               />
             </PicLabel>
