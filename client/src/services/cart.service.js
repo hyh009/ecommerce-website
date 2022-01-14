@@ -37,22 +37,6 @@ class CartService {
       }
     );
   }
-
-  addNewProduct(user_Id, product) {
-    const TOKEN = getTOKEN();
-    return axiosInstance.post(
-      `${ROUTE}/add/${user_Id}`,
-      {
-        userId: user_Id,
-        product,
-        quantity: 1,
-        total: product.subtotal,
-      },
-      {
-        headers: { token: `Bearer ${TOKEN}` },
-      }
-    );
-  }
 }
 
 export default new CartService();

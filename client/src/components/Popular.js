@@ -65,6 +65,7 @@ const Popular = ({ sort, filters }) => {
         if (typeof filters === "undefined") {
           const res = await ProductService.getAll();
           setFiltereditems(res.data.slice(0, 8));
+          setIsFetching(false);
         } else {
           const res = await ProductService.getAll(filters.category);
           setItems(res.data);

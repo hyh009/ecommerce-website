@@ -166,9 +166,10 @@ const ProfileEdit = () => {
     reader.readAsDataURL(e.target.files[0]);
     reader.addEventListener("loadend", () => {
       const fileSize = (e.target.files[0].size / (1024 * 1024)).toFixed(4);
-      console.log(fileSize, e.target.files[0].size);
+
       if (fileSize > 10) {
-        console.log("over10");
+        return window.alert("照片不能超過100mb");
+        //or resize image
       } else {
         setUploadImage({
           name: e.target.files[0].name,
@@ -183,6 +184,7 @@ const ProfileEdit = () => {
   const handleUploadPic = async (e) => {
     e.preventDefault();
     setUpdatingPic(true);
+    setShowEditInfo(true);
     try {
       const res = await UserService.uploadImage(
         uploadImage.src,

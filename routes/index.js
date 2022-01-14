@@ -4,5 +4,6 @@ module.exports = {
   productRoute: require("./product-route"),
   cartRoute: require("./cart-route"),
   orderRoute: require("./order-route"),
+  mailchimpRoute: require("./mailchimp-route"),
   // stripeRoute: require("./stripe-route"),
 };

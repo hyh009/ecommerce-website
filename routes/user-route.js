@@ -138,17 +138,21 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
 });
 
 // Upload image to cloudinary
-router.post("/uploadImage", verifyTokenAndAuthorization, async (req, res) => {
-  try {
-    const { fileString, fileName } = req.body;
-    const data = await cloudinary.uploader.upload(fileString, {
-      public_id: `shop_website/user/${fileName}`,
-    });
-    res.status(200).json(data.secure_url);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json("系統發生問題，請稍候再試");
+router.post(
+  "/uploadImage/:id",
+  verifyTokenAndAuthorization,
+  async (req, res) => {
+    try {
+      const { fileString, fileName } = req.body;
+      const data = await cloudinary.uploader.upload(fileString, {
+        public_id: `shop_website/user/${fileName}`,
+      });
+      res.status(200).json(data.secure_url);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json("系統發生問題，請稍候再試");
+    }
   }
-});
+);
 
 module.exports = router;

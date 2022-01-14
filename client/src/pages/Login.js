@@ -171,6 +171,7 @@ const Login = () => {
             placeholder="密碼"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
+            autocomplete="on"
           />
 
           <Button onClick={handleClick} disabled={isFetching}>

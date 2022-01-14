@@ -14,12 +14,12 @@ class UserService {
     });
   }
 
-  uploadImage(base64EncodedImage, fileName, TOKEN) {
+  uploadImage(base64EncodedImage, userId, TOKEN) {
     const data = {
       fileString: base64EncodedImage,
-      fileName: fileName,
+      fileName: userId,
     };
-    return axiosInstance.post(`${ROUTE}/uploadImage`, data, {
+    return axiosInstance.post(`${ROUTE}/uploadImage/${userId}`, data, {
       headers: { token: `Bearer ${TOKEN}` },
     });
   }

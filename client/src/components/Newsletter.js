@@ -2,6 +2,7 @@ import styled from "styled-components";
 import SendIcon from "@mui/icons-material/Send";
 import { mobile, tabletBig } from "../responsive";
 import { useState } from "react";
+import MailService from "../services/mail.service";
 
 const Container = styled.div`
   height: 50vh;
@@ -51,20 +52,38 @@ const Button = styled.button`
   align-items: center;
   background-color: #ffa122;
   transition: all 0.5s ease;
+  cursor: pointer;
   &:hover {
     transform: scale(1.05);
   }
 `;
 
 const Newsletter = () => {
-  const [input, setInput] = useState("");
-  const handleInput = (e) => {
-    setInput(e.target.value);
+  const [email, setEmail] = useState("");
+  // check if email is valid by regex
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
   };
-  const handleSubscribe = (e) => {
+
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    if (input) {
-      //add to firebase
+
+    if (validateEmail(email)) {
+      try {
+        await MailService.signup(email);
+        window.alert("成功訂閱電子報");
+        setEmail("");
+      } catch (err) {
+        window.alert(err.response.data);
+        setEmail("");
+      }
+    } else {
+      console.log("not");
+      return window.alert("請輸入正確email");
     }
   };
 
@@ -75,7 +94,11 @@ const Newsletter = () => {
         訂閱我們的電子報，優先掌握最新商品及促銷活動資訊。
       </Description>
       <InputContainer onSubmit={handleSubscribe}>
-        <Input type="email" placeholder="請輸入Email" onChange={handleInput} />
+        <Input
+          type="email"
+          placeholder="請輸入Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
         <Button type="submit">
           <SendIcon style={{ fontSize: 32 }} />
         </Button>
