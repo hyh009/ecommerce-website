@@ -182,20 +182,20 @@ const UserInfo = ({ edit, showEditInfo, setShowEditInfo }) => {
       setShowChangeBtn(false);
     }
   };
+  const ClickOutsideClose = (e) => {
+    if (!colorImgRef?.current?.contains(e.target)) {
+      setShowChangeBtn(false);
+      setCoverColor(user.coverColor);
+    }
+  };
 
   //Click ouside cancel onChange color changed
   useEffect(() => {
-    const ClickOutsideClose = (e) => {
-      if (!colorImgRef?.current?.contains(e.target)) {
-        setShowChangeBtn(false);
-        setCoverColor(user.coverColor);
-      }
-    };
     document.addEventListener("mousedown", ClickOutsideClose);
     return () => {
       document.removeEventListener("mousedown", ClickOutsideClose);
     };
-  }, []);
+  }, [ClickOutsideClose]);
 
   return (
     <InfoContainer edit={edit}>

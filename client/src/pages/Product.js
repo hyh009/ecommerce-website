@@ -387,7 +387,6 @@ const Product = () => {
         newProduct,
         quantity
       );
-      console.log(repeat, newProducts);
       if (!repeat) {
         // if new product is not in the cart, need to push into cart.products
         newProducts.push(newProduct);
