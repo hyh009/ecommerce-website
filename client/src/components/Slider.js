@@ -75,7 +75,7 @@ const InfoContainer = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 2.25rem;
+  font-size: 6vmin;
   color: black;
   letter-spacing: 5px;
   font-weight: 500;
@@ -89,7 +89,7 @@ const Description = styled.p`
   margin: 50px 0px;
   font-size: 4vmin;
   color: black;
-  line-height: 35px;
+  line-height: 6vmin;
   letter-spacing: 2px;
   ${tabletBig({
     textAlign: "center",

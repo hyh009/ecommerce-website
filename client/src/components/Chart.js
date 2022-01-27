@@ -76,7 +76,7 @@ const Chart = ({ data, title, desc, dataKey, gap }) => {
       </Title>
       <Desc>{desc}</Desc>
       {data.length > 0 ? (
-        <ResponsiveContainer width="100%" aspect={4 / 1}>
+        <ResponsiveContainer width="100%" height="75%">
           <BarChart
             margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
             data={data}

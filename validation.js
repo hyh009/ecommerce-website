@@ -79,6 +79,7 @@ const updateUserValidation = (data) => {
     address: Joi.string(),
     coupon: Joi.array().items(Joi.string()),
     coverColor: Joi.string(),
+    lastLogin: Joi.date(),
     _id: Joi.string(),
     createdAt: Joi.date(),
     updatedAt: Joi.date(),

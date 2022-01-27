@@ -6,7 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { updateCart } from "../redux/apiCall";
 import { Helmet } from "react-helmet";
 
@@ -271,6 +271,7 @@ const Cart = () => {
   const user = useSelector((state) => state.user.currentUser);
   const accessToken = useSelector((state) => state.user.accessToken);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleAmount = (mode, product) => {
     if (mode === "add") {
@@ -319,10 +320,20 @@ const Cart = () => {
     updateCart(dispatch, user, newProducts, accessToken);
   };
 
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    if (user) {
+      return navigate("/payment");
+    } else {
+      window.alert("請先登入會員");
+      navigate("/login");
+    }
+  };
+
   return (
     <Container>
       <Helmet>
-        <title>我的購物車|墊一店</title>
+        <title>我的購物車 | 墊一店</title>
         <meta name="description" content="購物車中的商品。"></meta>
       </Helmet>
       <Wrapper>
@@ -402,17 +413,15 @@ const Cart = () => {
                 </SummaryItem>
                 <SummaryItem>
                   <SummaryItemText>折扣</SummaryItemText>
-                  <SummaryItemPrice>
-                    $NT {Math.floor(cart.total * 0.2)}
-                  </SummaryItemPrice>
+                  <SummaryItemPrice>$NT 0</SummaryItemPrice>
                 </SummaryItem>
                 <SummaryItem>
                   <SummaryItemText type="total">總計</SummaryItemText>
                   <SummaryItemPrice type="total">
-                    $NT {cart.total + 60 - Math.floor(cart.total * 0.2)}
+                    $NT {cart.total + 60}
                   </SummaryItemPrice>
                 </SummaryItem>
-                <Button>
+                <Button onClick={handleCheckout}>
                   結帳去
                   <CustomShoppingCartIcon />
                 </Button>

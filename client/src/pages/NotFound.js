@@ -12,11 +12,11 @@ const NotFoundContainer = styled.div`
   justify-content: center;
   gap: 50px;
   ${tabletBig({ flexDirection: "column", height: "calc(100vh - 80px)" })}
-  ${mobile({ height: "60vh" })}
+  ${mobile({ height: "60vh" })};
 `;
 const NotFoundImg = styled.img`
-  height: 70%;
-  ${tabletBig({ height: "auto", width: "60%" })}
+  height: 60%;
+  ${tabletBig({ height: "auto", width: "50%" })}
 `;
 const NotFoundInfo = styled.div`
   display: flex;
@@ -52,12 +52,12 @@ const GoBackBtn = styled.button`
   cursor: pointer;
 `;
 
-const NotFound = ({ content }) => {
+const NotFound = ({ content, grid }) => {
   const navigate = useNavigate();
   return (
-    <div>
+    <div style={{ gridColumn: grid }}>
       <Helmet>
-        <title>墊一店 | 404-查詢的頁面不存在</title>
+        <title>404-查詢的頁面不存在 | 墊一店</title>
         <meta name="description" content="404-查詢的頁面不存在。"></meta>
       </Helmet>
       <NotFoundContainer>
@@ -76,6 +76,9 @@ const NotFound = ({ content }) => {
           {content === "category" && (
             <NotFoundText>目前沒有此類商品...</NotFoundText>
           )}
+          {content === "order" && (
+            <NotFoundText>沒有此筆訂單資料...</NotFoundText>
+          )}
           {content === "product" && (
             <GoBackBtn
               onClick={(e) => {
@@ -84,6 +87,16 @@ const NotFound = ({ content }) => {
               }}
             >
               看其他商品
+            </GoBackBtn>
+          )}
+          {content === "order" && (
+            <GoBackBtn
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/profile/order");
+              }}
+            >
+              回訂單一覽
             </GoBackBtn>
           )}
         </NotFoundInfo>

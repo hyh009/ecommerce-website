@@ -108,7 +108,7 @@ const Register = () => {
   return (
     <Container>
       <Helmet>
-        <title>註冊用戶|墊一店</title>
+        <title>註冊用戶 | 墊一店</title>
         <meta
           name="description"
           content="註冊成為墊一店用戶，購買液態矽膠產品。"

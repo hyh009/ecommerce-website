@@ -55,6 +55,16 @@ router.post("/login", async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "3d" }
           );
+          // call User schema static function to update lastLogin
+          User.newLogin(email, function (err, data) {
+            if (err) {
+              console.log(err);
+            } else {
+              const { password, ...others } = data._doc;
+              console.log("成功更新上次登入時間");
+            }
+          });
+
           res.status(200).json({ ...others, accessToken });
         } else {
           console.log(err);

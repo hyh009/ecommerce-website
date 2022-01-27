@@ -64,13 +64,13 @@ const CompanySideMenu = styled.ul`
     props.show === true ? "translateX(0)" : "translateX(-100%)"};
   ${tabletBig({
     width: "100%",
+    top: "50px",
     paddingBottom: "10%",
     justifyContent: "flex-end",
     gap: "2%",
   })}
   ${mobile({
     padding: "100px 20px",
-    top: "50px",
     height: "calc(100vh - 50px)",
   })}
 `;

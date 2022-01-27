@@ -4,32 +4,32 @@ const ROUTE = "orders";
 
 class OrderService {
   getUserSpent(userId, TOKEN) {
-    return axiosInstance(`${ROUTE}/spent/${userId}`, {
+    return axiosInstance.get(`${ROUTE}/spent/${userId}`, {
       headers: { token: `Bearer ${TOKEN}` },
     });
+  }
+  addOrder(userId, order, TOKEN) {
+    return axiosInstance.post(`${ROUTE}/${userId}`, order, {
+      headers: { token: `Bearer ${TOKEN}` },
+    });
+  }
+  getOrderById(orderId) {
+    return axiosInstance.get(`${ROUTE}/${orderId}`);
+  }
+  getOrdersbyUser(userId, TOKEN) {
+    return axiosInstance.get(`${ROUTE}/find/${userId}`, {
+      headers: { token: `Bearer ${TOKEN}` },
+    });
+  }
+  updateOrder(userId, updateOrder, TOKEN) {
+    return axiosInstance.patch(
+      `${ROUTE}/${userId}/${updateOrder._id}`,
+      updateOrder,
+      {
+        headers: { token: `Bearer ${TOKEN}` },
+      }
+    );
   }
 }
 
 export default new OrderService();
-
-// const order = {
-//   amount: order.amount,
-//   currency: "TWD",
-//   orderId: order._id,
-//   packages: [
-//       {
-//           id: order.products[].category,
-//           amount: ,
-//           name: ,
-//           products: [
-//             name:,
-//             quantity:,
-//             price:,
-//           ]
-//       }
-//   ],
-//   redirectUrls: {
-//     confrimUrl: `${API_URL}/confirm`,
-//     cancelUrl: `${API_URL}/cancel`,
-//   },
-// };

@@ -109,22 +109,23 @@ const Login = () => {
   const user = useSelector((state) => state.user.currentUser);
   const accessToken = useSelector((state) => state.user.accessToken);
 
+  //將未登入時加入購物車的產品儲存至資料庫
   const getSavedCart = async (user) => {
     const productsInTempCart = [...cart.products];
+    // get saved cart from database
     let savedCart = await getCartData(dispatch, user, accessToken);
     if (productsInTempCart.length > 0) {
-      //將未登入時加入購物車的產品儲存至資料庫
+      //if there are some products in the cart before login
       let newProducts;
       let repeat;
       if (savedCart?.products?.length > 0) {
-        //if there are some products in the cart before login
+        //if there are some products in database
         productsInTempCart.forEach((newProduct) => {
           [repeat, newProducts] = checkProductInCart(
             savedCart.products,
             newProduct,
             newProduct.quantity
           );
-          console.log(repeat, "repeat");
           if (!repeat) {
             //new items not in the cart
             newProducts.push(newProduct);
@@ -141,6 +142,7 @@ const Login = () => {
       return updateCart(dispatch, user, productsInTempCart, accessToken);
     }
   };
+  // handle login
   const handleClick = async (e) => {
     e.preventDefault();
     await login(dispatch, { email, password });
@@ -149,14 +151,14 @@ const Login = () => {
   useEffect(() => {
     if (user) {
       getSavedCart(user);
-      navigate("/profile");
+      return navigate("/profile");
     }
   }, [user]);
 
   return (
     <Container>
       <Helmet>
-        <title>用戶登入|墊一店</title>
+        <title>用戶登入 | 墊一店</title>
         <meta name="description" content="登入墊一店會員。"></meta>
       </Helmet>
       <Wrapper>

@@ -5,7 +5,6 @@ import {
   Person,
   PhoneAndroid,
   LocationOn,
-  Edit,
 } from "@mui/icons-material";
 import styled from "styled-components";
 import { tabletBig, mobile } from "../responsive";
@@ -30,7 +29,7 @@ const CoverImg = styled.div`
   background-color: ${(props) => props.color || "#eee3d4"};
   background-image: url(${(props) => props.imgs});
   width: 100%;
-  aspect-ratio: 5/1;
+  aspect-ratio: 6/1;
   position: absolute;
   top: 0;
   right: 0;
@@ -92,14 +91,6 @@ const Detail = styled.div`
   width: ${(props) => (props.edit ? "max-content" : "100%")};
   justify-content: space-between;
   flex-direction: ${(props) => (props.edit ? "column" : "row")};
-`;
-
-const IconContainer = styled.div`
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  cursor: pointer;
-  display: none;
 `;
 
 const ImageContainer = styled.div`

@@ -41,7 +41,6 @@ const SideContainer = styled.div`
   ${tabletBig({
     position: "absolute",
     top: "0",
-    height: "120px",
     zIndex: "3",
     width: "100%",
     height: "max-content",
@@ -167,7 +166,7 @@ const Sidebar = () => {
             <Menu>
               <Title>
                 {user?.name}的頁面
-                {device != "desktop" && (
+                {device !== "desktop" && (
                   <CustomArrowDropDown
                     onClick={() => {
                       setShowList(true);
@@ -176,7 +175,7 @@ const Sidebar = () => {
                     style={{ visibility: showUpArrow ? "hidden" : "visible" }}
                   />
                 )}
-                {device != "desktop" && (
+                {device !== "desktop" && (
                   <CustomArrowDropUp
                     onClick={() => {
                       setShowList(false);
@@ -204,10 +203,12 @@ const Sidebar = () => {
                     <Password />
                     <span>更改密碼</span>
                   </ListItem>
-                  <ListItem>
-                    <PointOfSaleOutlined />
-                    <span>我的訂單</span>
-                  </ListItem>
+                  <CustomLink to="/profile/order">
+                    <ListItem>
+                      <PointOfSaleOutlined />
+                      <span>我的訂單</span>
+                    </ListItem>
+                  </CustomLink>
                   <CustomLink to="/cart">
                     <ListItem>
                       <AddShoppingCart />

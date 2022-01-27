@@ -7,14 +7,57 @@ const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
 } = require("./validation-token");
+//Get order by id
+router.get("/:orderId", async (req, res) => {
+  const orderId = req.params.orderId;
+  try {
+    const order = await Order.findById(orderId).populate("products._id", [
+      "title",
+      "imgs",
+      "price",
+    ]);
+
+    const flatenProduct = order._doc.products.map((product) => {
+      return {
+        ...product._doc,
+        _id: product._id._id,
+        imgUrl: product._id.imgs[0].src,
+        title: product._id.title,
+        price: product._id.price,
+      };
+    });
+    res.status(200).json({ ...order._doc, products: flatenProduct });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json("系統發生問題，請稍候再試");
+  }
+});
 
 //Get user orders
-router.get("/find/:userId", verifyTokenAndAuthorization, async (req, res) => {
+router.get("/find/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.params.userId });
-    res.status(200).json(orders);
+    const orders = await Order.find({ user: req.params.id }).populate(
+      "products._id",
+      ["title", "imgs", "price"]
+    );
+
+    const flatenOrders = orders.map((order) => {
+      const flatenProduct = order.products.map((product) => {
+        return {
+          ...product._doc,
+          _id: product._id._id,
+          imgUrl: product._id.imgs[0].src,
+          title: product._id.title,
+          price: product._id.price,
+        };
+      });
+      return { ...order._doc, products: flatenProduct };
+    });
+
+    res.status(200).json(flatenOrders);
   } catch (err) {
     res.status(500).json("系統發生問題，請稍候再試");
+    console.log(err);
   }
 });
 
@@ -30,7 +73,7 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
 });
 
 //Create
-router.post("/", verifyTokenAndAuthorization, async (req, res) => {
+router.post("/:id", verifyTokenAndAuthorization, async (req, res) => {
   const newOrder = new Order(req.body);
 
   try {
@@ -42,13 +85,11 @@ router.post("/", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 //Update
-router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
+router.patch("/:id/:orderId", verifyTokenAndAuthorization, async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: req.body,
-      },
+      req.params.orderId,
+      req.body,
       { new: true }
     );
     res.status(200).json(updatedOrder);
@@ -81,6 +122,7 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
       {
         $match: {
           createdAt: { $gte: previousMonth },
+          status: { $nin: ["待付款", "訂單取消", "訂單退款"] },
           ...(productId && {
             products: {
               $elemMatch: { productId: mongoose.Types.ObjectId(productId) },
@@ -120,6 +162,7 @@ router.get("/spent/:id", verifyTokenAndAuthorization, async (req, res) => {
         $match: {
           createdAt: { $gte: firstDay },
           user: { $eq: mongoose.Types.ObjectId(userId) },
+          status: { $nin: ["待付款", "訂單取消", "訂單退款"] },
         },
       },
       {

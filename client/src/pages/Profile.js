@@ -81,6 +81,7 @@ const Profile = () => {
   const user = useSelector((state) => state.user.currentUser);
   const accessToken = useSelector((state) => state.user.accessToken);
   const [userSpent, setUserSpent] = useState([]);
+  const [amountToVIP, setAmountToVIP] = useState(5000);
   const MONTHS = useMemo(
     () =>
       [
@@ -120,14 +121,18 @@ const Profile = () => {
         console.log(err);
       }
     };
+    // calculate the amount to become VIP menber
     getSpent();
   }, [user]);
 
-  const getVipAmount = () => {
-    let vipAmount = 5000;
-    userSpent.forEach((monthData) => (vipAmount -= monthData["消費金額"]));
-    return vipAmount;
-  };
+  useEffect(() => {
+    const getVipAmount = () => {
+      let vipAmount = 5000;
+      userSpent.forEach((monthData) => (vipAmount -= monthData["消費金額"]));
+      return vipAmount;
+    };
+    setAmountToVIP(() => getVipAmount());
+  }, [userSpent]);
 
   return (
     <Container>
@@ -150,12 +155,12 @@ const Profile = () => {
                 {user.lank}
               </BadgeContent>
             )}
-            <Calc>消費折扣：{getVipAmount() > 0 ? "無" : "消費享9折優惠"}</Calc>
+            <Calc>消費折扣：{amountToVIP > 0 ? "無" : "消費享9折優惠"}</Calc>
           </SmallBlock>
           <SmallBlock>
             <BadgeTitle>下年度會員分級</BadgeTitle>
 
-            {getVipAmount() > 0 ? (
+            {amountToVIP > 0 ? (
               <BadgeContent>
                 <AccountCircle />
                 普通會員
@@ -167,10 +172,7 @@ const Profile = () => {
               </BadgeContent>
             )}
 
-            <Calc>
-              再消費 NT${getVipAmount()}
-              升級VIP會員
-            </Calc>
+            <Calc>再消費 NT${amountToVIP} 升級VIP會員</Calc>
           </SmallBlock>
           <SmallBlock>
             <BadgeTitle>我的優惠券</BadgeTitle>
@@ -180,10 +182,10 @@ const Profile = () => {
         </MiddleTop>
         <Chart
           title="會員分級達成圖"
-          desc="年累積消費滿NT$5000下年度升級VIP會員，購物享9折優惠。"
+          desc="年累積消費滿NT$5000(不含運費)下年度升級VIP會員，購物享9折優惠。"
           data={userSpent}
           dataKey="消費金額"
-          gap={getVipAmount()}
+          gap={amountToVIP}
         />
         <MiddleBottom>
           <ProfileCart />

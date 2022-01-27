@@ -84,17 +84,16 @@ const CustomArrowIconLeft = styled(ArrowBackIosOutlinedIcon)`
 
 const PicContainer = styled.div`
   position: relative;
-  height: 500px;
-  width: 100%;
-  ${tabletBig({ height: "90vw" })}
+  aspect-ratio: 1/1;
+  overflow: hidden;
   ${tabletBig({ height: "80vw" })}
 `;
 
 const Image = styled.img`
   width: 100%;
   height: 100%;
+  aspect-ratio: 1/1;
   object-fit: cover;
-  overflow: hidden;
   position: relative;
   user-select: none;
   -moz-user-select: none;
@@ -406,7 +405,7 @@ const Product = () => {
   return (
     <Container>
       <Helmet>
-        <title>{`墊一店 | ${currentProduct.title}`}</title>
+        <title>{`${currentProduct.title} | 墊一店`}</title>
         <meta name="description" content={`${currentProduct.desc}。`}></meta>
       </Helmet>
       {isFetching ? (

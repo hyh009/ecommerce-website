@@ -238,7 +238,7 @@ const Wish = () => {
   return (
     <Container>
       <Helmet>
-        <title>我的願望清單|墊一店</title>
+        <title>我的願望清單 | 墊一店</title>
         <meta name="description" content="願望清單中的商品。"></meta>
       </Helmet>
       <Wrapper>

@@ -12,7 +12,6 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
-  updateAccessToken,
 } from "./userRedux";
 import CartService from "../services/cart.service";
 import UserService from "../services/user.service";

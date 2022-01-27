@@ -37,7 +37,8 @@ const UserSchema = new mongoose.Schema(
     },
     img: {
       type: String,
-      default: "https://res.cloudinary.com/dh2splieo/image/upload/v1642260982/shop_website/user/defaultUser_z2hlsg.png",
+      default:
+        "https://res.cloudinary.com/dh2splieo/image/upload/v1642260982/shop_website/user/defaultUser_z2hlsg.png",
     },
     like: {
       type: [String],
@@ -59,6 +60,10 @@ const UserSchema = new mongoose.Schema(
     },
     address: {
       type: String,
+    },
+    lastLogin: {
+      type: Date,
+      default: Date.now,
     },
   },
   { timestamps: true }
@@ -89,13 +94,14 @@ UserSchema.methods.comparePassword = function (password, cb) {
   });
 };
 
-// UserSchema.statics.newLogin = function login(email, cb) {
-//   return this.findOneAndUpdate(
-//     { email: email },
-//     { lastLogin: Date.now() },
-//     { new: true },
-//     cb
-//   );
-// };
+// to track lastlogin time for jwt validation
+UserSchema.statics.newLogin = function login(email, cb) {
+  return this.findOneAndUpdate(
+    { email: email },
+    { lastLogin: Date.now() },
+    { new: true },
+    cb
+  );
+};
 
 module.exports = mongoose.model("User", UserSchema);

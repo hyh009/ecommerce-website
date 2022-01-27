@@ -171,6 +171,7 @@ const Footer = ({ background }) => {
             style={{ textDecoration: "none", color: "black" }}
             href="https://goo.gl/maps/amjBrcRhGJHZHctA9"
             target="_blank"
+            rel="noreferrer noopener"
           >
             33552桃園市大溪區月湖路128號2F
           </a>

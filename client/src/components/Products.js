@@ -157,13 +157,14 @@ const LogoContainer = styled.div`
 `;
 
 const Color = styled.div`
-  height: 30px;
+  height: 25px;
   width: 40px;
   border: 1px solid #eee;
   position: absolute;
-  top: ${(props) => props.index * 30 + 40}px;
+  top: ${(props) => props.index * 25 + 40}px;
   background-color: ${(props) => props.color};
   display: ${(props) => (props.show ? "block" : "none")};
+  z-index: 3;
   &:hover {
     filter: brightness(80%);
   }
@@ -177,11 +178,11 @@ const PatternText = styled.span`
 const Pattern = styled.div`
   background-color: rgba(0, 0, 0, 0.8);
   text-align: center;
-  height: 40px;
+  height: 35px;
   width: 180px;
   position: absolute;
   right: 0;
-  top: ${(props) => props.index * 40 + 40}px;
+  top: ${(props) => props.index * 35 + 40}px;
   border-bottom: 0.5px solid #eee;
   display: ${(props) => (props.show ? "flex" : "none")};
   align-items: center;
@@ -282,7 +283,7 @@ const Product = ({ item }) => {
 
       <Title>{item.name}</Title>
 
-      <Image src={item.imgs[0].src} />
+      <Image src={item.imgs[0].src} alt={item.imgs[0].desc} />
       <Info title={item.name}>
         <Desc
           className={desc ? "scaleUp" : ""}

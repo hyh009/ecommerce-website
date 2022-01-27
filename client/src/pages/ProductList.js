@@ -72,9 +72,9 @@ const ProductList = () => {
   return (
     <Container>
       <Helmet>
-        <title>{`墊一店 | 商品一覽 - ${
+        <title>{`商品一覽 - ${
           cat === "all" ? "全部商品" : cat
-        }`}</title>
+        } | 墊一店`}</title>
         <meta
           name="description"
           content={`${
