@@ -10,8 +10,10 @@ class PaymentService {
       orderId: orderDetail._id,
       packages: packages,
       redirectUrls: {
-        confirmUrl: "http://localhost:3000/payment/confirm",
-        cancelUrl: "http://localhost:3000/payment/cancel",
+        confirmUrl:
+          "https://hsinyaoecommercewebsite.herokuapp.com/payment/confirm",
+        cancelUrl:
+          "https://hsinyaoecommercewebsite.herokuapp.com/payment/cancel",
       },
     };
 
