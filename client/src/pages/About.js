@@ -1,8 +1,6 @@
-import React from "react";
-import Video from "../components/Video";
 import styled from "styled-components";
 import { categories } from "../data";
-import CategoryInfo from "../components/CategoryInfo";
+import { Video, CategoryInfo } from "../components";
 import { mobile, tabletBig } from "../responsive";
 import { Helmet } from "react-helmet";
 

@@ -3,23 +3,26 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import GlobalStyle from "./GlobalStyle";
 import { BrowserRouter } from "react-router-dom";
-import PageTop from "./components/PageTop";
-import Home from "./pages/Home";
-import ProductList from "./pages/ProductList";
-import Product from "./pages/Product";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Cart from "./pages/Cart";
-import About from "./pages/About";
-import Wish from "./pages/Wish";
-import Checkout from "./pages/Checkout";
-import PaymentConfirm from "./pages/PaymentConfirm";
-import Profile from "./pages/Profile";
-import ProfileEdit from "./pages/ProfileEdit";
-import ProfileOrders from "./pages/ProfileOrders";
-import SingleOrder from "./pages/SingleOrder";
-import NotFound from "./pages/NotFound";
-import PaymentCancel from "./pages/PaymentCancel";
+import { PageTop } from "./components";
+import {
+  About,
+  Cart,
+  Checkout,
+  Contact,
+  Home,
+  Login,
+  NotFound,
+  PaymentCancel,
+  PaymentConfirm,
+  Product,
+  ProductList,
+  Profile,
+  ProfileEdit,
+  ProfileOrders,
+  Register,
+  SingleOrder,
+  Wish,
+} from "./pages";
 import ScrollToTop from "./ScrollToTop";
 import PrivateRoute from "./PrivateRoute";
 import { getUser, userLogout, getCartData } from "./redux/apiCall";
@@ -72,6 +75,7 @@ const App = () => {
             <Route path="/About" element={<About />} />
             <Route path="/products/:category" element={<ProductList />} />
             <Route path="/product/:id" element={<Product />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Cart />} />
             <Route
               path="/wish"

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import EmptyCart from "../components/EmptyCart";
+import { EmptyCart } from "../components";
 import styled from "styled-components";
 import { tabletBig, tablet, mobile } from "../responsive";
 import { Link } from "react-router-dom";

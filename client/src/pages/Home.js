@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Slider from "../components/Slider";
-import Categories from "../components/Categories";
-import Popular from "../components/Popular";
-import LoadAnimation from "../components/LoadAnimation";
-import Announcement from "../components/Announcement";
-import Nav from "../components/Nav";
-import Newsletter from "../components/Newsletter";
-import Footer from "../components/Footer";
-import ScrollToTopBtn from "../components/ScrollToTopBtn";
+import {
+  Slider,
+  Categories,
+  Popular,
+  LoadAnimation,
+  Announcement,
+  Newsletter,
+  Nav,
+  Footer,
+  ScrollToTopBtn,
+} from "../components";
+
 import { Helmet } from "react-helmet";
 
 const SubTitle = styled.h2`

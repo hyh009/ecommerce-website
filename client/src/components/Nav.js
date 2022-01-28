@@ -230,7 +230,7 @@ const Nav = ({ position }) => {
             </CompanyMenuItem>
             <CompanyMenuItem>
               <CustomLink to="/contact" className="companyMenu">
-                Comming Soon
+                聯繫我們／Contact
               </CustomLink>
             </CompanyMenuItem>
             <CompanyMenuItem></CompanyMenuItem>

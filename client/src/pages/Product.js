@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { tabletBig, mobile } from "../responsive";
 import styled from "styled-components";
-import SmallProduct from "../components/SmallProduct";
-import Message from "../components/Message";
-
+import { SmallProduct, Message } from "../components";
 import ProductService from "../services/product.service";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";

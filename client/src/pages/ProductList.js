@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { tablet, mobile } from "../responsive";
-import Popular from "../components/Popular";
+import { Popular } from "../components";
 import NotFound from "../pages/NotFound";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
@@ -11,6 +11,7 @@ const Container = styled.div``;
 const Title = styled.h1`
   padding: 20px;
   font-weight: 400;
+  font-size: 5vmin;
 `;
 const FilterContainer = styled.div`
   display: flex;

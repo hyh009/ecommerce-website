@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { updateUser } from "../redux/apiCall";
-import UserInfo from "../components/UserInfo";
+import { UserInfo } from "../components";
 import { Upload } from "@mui/icons-material";
 import UserService from "../services/user.service";
 import { Helmet } from "react-helmet";
