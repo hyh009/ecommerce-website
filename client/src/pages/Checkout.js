@@ -249,7 +249,7 @@ const Checkout = () => {
           },
         };
         await OrderService.updateOrder(user._id, updateOrder, accessToken);
-        window.open(resPay.data.paymentUrl, "_self");
+        window.open(resPay.data.paymentUrl, "_blank");
       } else if (payment === "creditCard") {
         //stripe
       }
