@@ -7,7 +7,7 @@ const {
   verifyTokenAndAdmin,
 } = require("./validation-token");
 
-const baseUrl = "https://sandbox-api-pay.line.me";
+const baseUrl = "http://sandbox-api-pay.line.me";
 const key = process.env.LINEPAY_SECRET;
 
 // Signature = Base64(HMAC-SHA256(Your ChannelSecret, (Your ChannelSecret + URL Path + RequestBody + nonce)))
