@@ -31,32 +31,6 @@ function createRequestConfig(hmacBase64, nonce) {
 }
 
 // payment request
-// router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
-//   // generate object id here
-//   const order = req.body.order;
-//   const nonce = uuid();
-//   const requestUri = "/v3/payments/request";
-//   const hamcBase64 = createSignature(order, nonce, requestUri);
-//   const configs = createRequestConfig(hamcBase64, nonce);
-//   try {
-//     const response = await axios.post(
-//       `${baseUrl}${requestUri}`,
-//       order,
-//       configs
-//     );
-//     res.status(200).json({
-//       paymentUrl: response.data.info.paymentUrl.web,
-//       paymentUrlApp: response.data.info.paymentUrl.app,
-//       transactionId: response.data.info.transactionId,
-//       paymentAccessToken: response.data.info.paymentAccessToken,
-//     });
-//   } catch (err) {
-//     console.log({ err });
-//     res.status(500).json(err);
-//   }
-// });
-
-// for deploy on heroku
 router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
   // generate object id here
   const order = req.body.order;
@@ -65,7 +39,7 @@ router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
   const hamcBase64 = createSignature(order, nonce, requestUri);
   const configs = createRequestConfig(hamcBase64, nonce);
   try {
-    const response = await axiosInstance.post(
+    const response = await axios.post(
       `${baseUrl}${requestUri}`,
       order,
       configs
@@ -82,38 +56,34 @@ router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
   }
 });
 
+// for deploy on heroku
+// router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
+//   // generate object id here
+//   const order = req.body.order;
+//   const nonce = uuid();
+//   const requestUri = "/v3/payments/request";
+//   const hamcBase64 = createSignature(order, nonce, requestUri);
+//   const configs = createRequestConfig(hamcBase64, nonce);
+//   try {
+//     const response = await axiosInstance.post(
+//       `${baseUrl}${requestUri}`,
+//       order,
+//       configs
+//     );
+//     res.status(200).json({
+//       paymentUrl: response.data.info.paymentUrl.web,
+//       paymentUrlApp: response.data.info.paymentUrl.app,
+//       transactionId: response.data.info.transactionId,
+//       paymentAccessToken: response.data.info.paymentAccessToken,
+//     });
+//   } catch (err) {
+//     console.log({ err });
+//     res.status(500).json(err);
+//   }
+// });
+
 // payment confirm
 
-// router.post(
-//   "/linepay/confirm/:id",
-//   verifyTokenAndAuthorization,
-//   async (req, res) => {
-//     const { amountAndCurrency, transactionId } = req.body;
-//     const nonce = uuid();
-//     const confirmUri = `/v3/payments/${transactionId}/confirm`;
-//     const hamcBase64 = createSignature(amountAndCurrency, nonce, confirmUri);
-//     const configs = createRequestConfig(hamcBase64, nonce);
-
-//     try {
-//       const response = await axios.post(
-//         `${baseUrl}${confirmUri}`,
-//         amountAndCurrency,
-//         configs
-//       );
-
-//       if (response.data.returnCode === "0000") {
-//         res.status(200).json("付款成功");
-//         console.log(res);
-//       } else {
-//         res.status(500).json("付款失敗");
-//       }
-//     } catch (err) {
-//       res.status(500).json(err);
-//     }
-//   }
-// );
-
-// for deploy on heroku
 router.post(
   "/linepay/confirm/:id",
   verifyTokenAndAuthorization,
@@ -125,7 +95,7 @@ router.post(
     const configs = createRequestConfig(hamcBase64, nonce);
 
     try {
-      const response = await axiosInstance.post(
+      const response = await axios.post(
         `${baseUrl}${confirmUri}`,
         amountAndCurrency,
         configs
@@ -142,5 +112,35 @@ router.post(
     }
   }
 );
+
+// for deploy on heroku
+// router.post(
+//   "/linepay/confirm/:id",
+//   verifyTokenAndAuthorization,
+//   async (req, res) => {
+//     const { amountAndCurrency, transactionId } = req.body;
+//     const nonce = uuid();
+//     const confirmUri = `/v3/payments/${transactionId}/confirm`;
+//     const hamcBase64 = createSignature(amountAndCurrency, nonce, confirmUri);
+//     const configs = createRequestConfig(hamcBase64, nonce);
+
+//     try {
+//       const response = await axiosInstance.post(
+//         `${baseUrl}${confirmUri}`,
+//         amountAndCurrency,
+//         configs
+//       );
+
+//       if (response.data.returnCode === "0000") {
+//         res.status(200).json("付款成功");
+//         console.log(res);
+//       } else {
+//         res.status(500).json("付款失敗");
+//       }
+//     } catch (err) {
+//       res.status(500).json(err);
+//     }
+//   }
+// );
 
 module.exports = router;
