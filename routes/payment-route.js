@@ -76,6 +76,7 @@ router.post(
 
       if (response.data.returnCode === "0000") {
         res.status(200).json("付款成功");
+        console.log(res);
       } else {
         res.status(500).json("付款失敗");
       }

@@ -245,6 +245,7 @@ const Checkout = () => {
           orderDetail,
           accessToken
         );
+        console.log(resPay);
         // save transactionId and paymentAccessToken to DB
         const updateOrder = {
           ...orderDetail,
