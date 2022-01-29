@@ -170,7 +170,11 @@ const Profile = () => {
               </BadgeContent>
             )}
 
-            <Calc>再消費 NT${amountToVIP} 升級VIP會員</Calc>
+            <Calc>
+              {amountToVIP > 0
+                ? `再消費 NT${amountToVIP} 升級VIP會員`
+                : `恭喜下年度升級VIP會員`}
+            </Calc>
           </SmallBlock>
           <SmallBlock>
             <BadgeTitle>我的優惠券</BadgeTitle>

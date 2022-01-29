@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { tabletBig } from "../responsive";
+import { tabletBig, mobile } from "../responsive";
 import PaymentService from "../services/payment.service";
 import OrderService from "../services/order.service";
 import { Helmet } from "react-helmet";
@@ -51,12 +51,14 @@ const Desc = styled.ul`
 `;
 const List = styled.li`
   font-size: 2.5vmin;
+  ${mobile({ fontSize: "3vmin" })};
 `;
 
 const Subtotal = styled.span`
   text-align: right;
   color: #404040;
   font-size: 2.75vmin;
+  ${mobile({ fontSize: "3.25vmin" })};
 `;
 const Total = styled.span`
   text-align: right;
@@ -64,6 +66,7 @@ const Total = styled.span`
   color: teal;
   padding: 5px 5px;
   background-color: #fafaec;
+  ${mobile({ fontSize: "3.75vmin" })};
 `;
 
 const Shipping = styled.span`
@@ -71,6 +74,7 @@ const Shipping = styled.span`
   text-align: right;
   padding: 5px 5px;
   background-color: #fafaec;
+  ${mobile({ fontSize: "3.25vmin" })};
 `;
 
 const SubProduct = styled.div`
@@ -112,11 +116,13 @@ const Input = styled.input`
   border: none;
   border-bottom: 1px solid gray;
   font-size: 2.75vmin;
+  ${mobile({ fontSize: "3.25vmin" })};
 `;
 
 const Label = styled.label`
   font-size: 2.5vmin;
   color: black;
+  ${mobile({ fontSize: "3vmin" })};
 `;
 const PayArea = styled.div`
   display: flex;
@@ -162,7 +168,8 @@ const Submit = styled.button`
   width: 20%;
   align-self: flex-end;
   font-size: 3vmin;
-  ${tabletBig({ width: "100%" })}
+  ${tabletBig({ width: "100%", marginBottom: "20px" })}
+  ${mobile({ fontSize: "3.5vmin" })};
 `;
 const Checkout = () => {
   const cart = useSelector((state) => state.cart);
@@ -249,7 +256,13 @@ const Checkout = () => {
           },
         };
         await OrderService.updateOrder(user._id, updateOrder, accessToken);
-        window.open(resPay.data.paymentUrl, "_blank");
+
+        navigate("/payment/linepay", {
+          state: {
+            web: resPay.data.paymentUrl,
+            app: resPay.data.paymentUrlApp,
+          },
+        });
       } else if (payment === "creditCard") {
         //stripe
       }

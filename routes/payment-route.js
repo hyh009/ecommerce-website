@@ -31,6 +31,7 @@ function createRequestConfig(hmacBase64, nonce) {
 
 // payment request
 router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
+  // generate object id here
   const order = req.body.order;
   const nonce = uuid();
   const requestUri = "/v3/payments/request";
@@ -44,6 +45,7 @@ router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
     );
     res.status(200).json({
       paymentUrl: response.data.info.paymentUrl.web,
+      paymentUrlApp: response.data.info.paymentUrl.app,
       transactionId: response.data.info.transactionId,
       paymentAccessToken: response.data.info.paymentAccessToken,
     });
@@ -71,16 +73,17 @@ router.post(
         amountAndCurrency,
         configs
       );
-      res.status(200).json("付款成功");
+
+      if (response.data.returnCode === "0000") {
+        res.status(200).json("付款成功");
+      } else {
+        res.status(500).json("付款失敗");
+      }
     } catch (err) {
       res.status(500).json(err);
     }
   }
 );
-
-// //cancel
-// //畫面會導向 cancelUrl+params{transactionId,orderId}
-// //可以做一個頁面讓使用者知道訂單有取消，資料庫也可以註記
 
 // //Refund
 // const key = process.env.LINEPAY_KEY;
@@ -88,22 +91,6 @@ router.post(
 // const requestUrl = `/v3/payments/${transactionId}/refund`;
 // const refundAmount = {
 //   amount: { refundAmount }, //可以部份退款
-// };
-
-// const encrypt = crypto.HmacSHA256(
-//   key + requestUrl + JSON.stringify(refundAmount) + nonce,
-//   key
-// );
-
-// const hmacBase64 = crypto.enc.Base64.stringify(encrypt);
-
-// const config = {
-//   headers: {
-//     "Content-Type": "application/json",
-//     "X-LINE-CHannelId": process.env.LINEPAY_SECRET,
-//     "X-LINE-Authorization-Nonce": nonce,
-//     "X-LINE-Authorization": hmacBase64,
-//   },
 // };
 
 module.exports = router;

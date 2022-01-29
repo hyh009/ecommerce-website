@@ -1,5 +1,5 @@
-import React from "react";
 import styled from "styled-components";
+import emailjs from "@emailjs/browser";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import FacebookIcon from "@mui/icons-material/Facebook";
@@ -10,7 +10,7 @@ import { mobile, tabletBig } from "../responsive";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   width: 100%;
 `;
 
@@ -24,16 +24,18 @@ const Bottom = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
   width: 100%;
+  gap: 20px;
   ${tabletBig({ gridTemplateColumns: "repeat(1,minmax(0, 1fr))" })}
 `;
 
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 20px;
   gap: 10px;
   max-width: 100%;
   width: 100%;
+  ${mobile({ padding: "10px" })}
 `;
 
 const Form = styled.form`
@@ -49,17 +51,25 @@ const Input = styled.input`
   padding: 5px 2px;
   border: none;
   border-bottom: 1px solid gray;
+  ${tabletBig({ fontSize: "3vmin" })}
+  ${mobile({ fontSize: "4vmin" })}
 `;
 
 const Select = styled.select`
   padding: 5px 2px;
   border: none;
   border-bottom: 1px solid gray;
+  background-color: white;
+  ${tabletBig({ fontSize: "3vmin" })}
+  ${mobile({ fontSize: "4vmin" })}
 `;
 
 const TextArea = styled.textarea`
   border: 1px solid gray;
   border-radius: 5px;
+  padding: 2px;
+  ${tabletBig({ fontSize: "3vmin" })}
+  ${mobile({ fontSize: "4vmin" })}
 `;
 const Submit = styled.button`
   cursor: pointer;
@@ -68,18 +78,24 @@ const Submit = styled.button`
   color: white;
   border-radius: 5px;
   padding: 5px 0;
+  ${tabletBig({ fontSize: "3vmin" })}
+  ${mobile({ fontSize: "4vmin" })}
 `;
 const Error = styled.span`
   font-size: 2.5vmin;
   color: red;
   background-color: lightpink;
   padding: 2px;
+  ${tabletBig({ fontSize: "3vmin" })}
+  ${mobile({ fontSize: "4vmin" })}
 `;
 
 const Text = styled.span`
   font-size: 3vmin;
-  padding: 0 10px;
+  padding: 0 20px;
   letter-spacing: 1px;
+  ${tabletBig({ padding: "0 30px" })}
+  ${mobile({ padding: "0 20px", fontSize: "4vmin" })}
 `;
 
 const MapContainer = styled.div`
@@ -128,16 +144,30 @@ const SocailIcon = styled.div`
 `;
 
 const Contact = () => {
-  // use hook form
+  // use hook form for validation
   const {
     register,
-    handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const onSubmit = async (input) => {
-    reset();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await emailjs.sendForm(
+        process.env.REACT_APP_EMAIL_SERVICE_ID,
+        process.env.REACT_APP_EMAIL_TEMPLATE_ID,
+        e.target,
+        process.env.REACT_APP_EMAIL_USER_ID
+      );
+      window.alert("感謝您的填寫，我們會盡快回覆您的訊息。");
+      reset();
+    } catch (err) {
+      window.alert("發生錯誤，請稍候再試。");
+      console.log(err);
+    }
   };
+
   return (
     <Container>
       <Helmet>
@@ -150,7 +180,7 @@ const Contact = () => {
       </Text>
       <Bottom>
         <FormContainer>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form onSubmit={handleSubmit}>
             {errors.name && <Error>{errors.name.message}</Error>}
             <Input
               {...register("name", {
@@ -179,10 +209,10 @@ const Contact = () => {
               })}
             >
               <option value="">訊息主旨</option>
-              <option value="query">產品詢問</option>
-              <option value="purchase">購買產品</option>
-              <option value="corporation">合作洽談</option>
-              <option value="others">其它</option>
+              <option>產品詢問</option>
+              <option>購買產品</option>
+              <option>合作洽談</option>
+              <option>其它</option>
             </Select>
             {errors.message && <Error>{errors.message.message}</Error>}
             <TextArea

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-import { tablet, mobile } from "../responsive";
+import { tabletBig, tablet, mobile } from "../responsive";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -132,7 +132,7 @@ const Title = styled.span`
 const CustomPaletteIcon = styled(PaletteIcon)`
   color: white;
   &.css-i4bv87-MuiSvgIcon-root {
-    ${tablet({ fontSize: "20px" })};
+    ${tablet({ fontSize: "28px" })};
   }
 `;
 
@@ -153,7 +153,8 @@ const LogoContainer = styled.div`
   &:hover ${CustomPaletteIcon} {
     color: lightgray;
   }
-  ${tablet({ width: "28px", height: "28px" })};
+  ${tabletBig({ width: "3.5vmin", height: "3.5vmin" })};
+  ${mobile({ width: "10vmin", height: "10vmin" })};
 `;
 
 const Color = styled.div`
@@ -199,7 +200,7 @@ const Pattern = styled.div`
 const CurstomImageIcon = styled(ImageIcon)`
   color: white;
   &.css-i4bv87-MuiSvgIcon-root {
-    ${tablet({ fontSize: "20px" })};
+    ${tablet({ fontSize: "28px" })};
   }
 `;
 const Product = ({ item }) => {

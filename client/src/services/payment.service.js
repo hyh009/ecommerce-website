@@ -9,6 +9,10 @@ class PaymentService {
       currency: "TWD",
       orderId: orderDetail._id,
       packages: packages,
+      // redirectUrls: {
+      //   confirmUrl: "http://localhost:3000/payment/confirm",
+      //   cancelUrl: "http://localhost:3000/payment/cancel",
+      // },
       redirectUrls: {
         confirmUrl:
           "https://hsinyaoecommercewebsite.herokuapp.com/payment/confirm",

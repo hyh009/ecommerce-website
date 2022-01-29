@@ -15,3 +15,4 @@ export { default as ProfileOrders } from "./ProfileOrders";
 export { default as Register } from "./Register";
 export { default as SingleOrder } from "./SingleOrder";
 export { default as Wish } from "./Wish";
+export { default as LinePay } from "./LinePay";

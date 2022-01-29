@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^3.4.0",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
     "@material-ui/data-grid": "^4.0.0-alpha.37",

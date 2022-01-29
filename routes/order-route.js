@@ -36,10 +36,10 @@ router.get("/:orderId", async (req, res) => {
 //Get user orders
 router.get("/find/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
-    const orders = await Order.find({ user: req.params.id }).populate(
-      "products._id",
-      ["title", "imgs", "price"]
-    );
+    const orders = await Order.find({
+      user: req.params.id,
+      status: { $nin: ["待付款"] },
+    }).populate("products._id", ["title", "imgs", "price"]);
 
     const flatenOrders = orders.map((order) => {
       const flatenProduct = order.products.map((product) => {

@@ -6,6 +6,8 @@ import { Helmet } from "react-helmet";
 import { useSelector } from "react-redux";
 import OrderService from "../services/order.service";
 import NotFound from "./NotFound";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 const Container = styled.div`
   padding: 20px;
@@ -56,6 +58,17 @@ const GoBackBtn = styled.button`
   cursor: pointer;
 `;
 
+const ProgressContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: calc(100vh - 90px);
+  gap: 20px;
+  ${tabletBig({ height: "50vh" })}
+`;
+
 const PaymentCancel = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.currentUser);
@@ -65,8 +78,18 @@ const PaymentCancel = () => {
     searchParams.get("transactionId")
   );
   const orderId = searchParams.get("orderId");
+  const [isFetching, setIsFetching] = useState(false);
   useEffect(() => {
     const updateOrderState = async () => {
+      setIsFetching(true);
+      const res = await OrderService.getOrderById(orderId);
+      // if passthrough this page twice, show 404
+      const order = res.data;
+      if (order.status !== "待付款") {
+        setTransactionId(null);
+        setIsFetching(false);
+        return;
+      }
       const updateOrder = {
         _id: orderId,
         status: "訂單取消",
@@ -75,6 +98,7 @@ const PaymentCancel = () => {
         },
       };
       await OrderService.updateOrder(user._id, updateOrder, accessToken);
+      setIsFetching(false);
     };
 
     if (transactionId && orderId) {
@@ -84,7 +108,16 @@ const PaymentCancel = () => {
   return (
     <Container>
       {!transactionId || !orderId ? (
-        <NotFound />
+        <NotFound content="page" />
+      ) : isFetching ? (
+        <ProgressContainer>
+          <Box sx={{ display: "flex" }}>
+            <CircularProgress />
+          </Box>
+          <span style={{ textAlign: "center", width: "100%" }}>
+            資料讀取中...
+          </span>
+        </ProgressContainer>
       ) : (
         <Block>
           <Helmet>

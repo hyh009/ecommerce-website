@@ -74,15 +74,15 @@ const ProgressContainer = styled.div`
 const PaymentConfirm = () => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const user = useSelector((state) => state.user.currentUser);
-  const [success, setSuccess] = useState(false);
   const [searchParams] = useSearchParams();
-  const [isFetching, setIsFetching] = useState(false);
   const [transactionId, setTransactionId] = useState(
     searchParams.get("transactionId")
   );
   const orderId = searchParams.get("orderId");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isFetching, setIsFetching] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     const getOrder = async () => {
@@ -97,6 +97,7 @@ const PaymentConfirm = () => {
           return;
         }
         await PaymentService.linepayConfirm(transactionId, order, accessToken);
+
         const updateOrder = {
           _id: orderId,
           status: "訂單處理中",
