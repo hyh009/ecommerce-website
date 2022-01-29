@@ -2,7 +2,7 @@ const router = require("express").Router();
 const uuid = require("uuid4");
 const crypto = require("crypto-js");
 const axios = require("axios");
-const axiosInstance = require("../config/axiosConfig");
+const { axiosInstance } = require("../config/axiosConfig");
 const {
   verifyTokenAndAuthorization,
   verifyTokenAndAdmin,
