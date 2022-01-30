@@ -40,6 +40,16 @@ class PaymentService {
       { headers: { token: `Bearer ${TOKEN}` } }
     );
   }
+
+  paypalRequest(userId, order, TOKEN) {
+    return axiosInstance.post(
+      `${ROUTE}/paypal/createOrder/${userId}`,
+      { order },
+      {
+        headers: { token: `Bearer ${TOKEN}` },
+      }
+    );
+  }
 }
 
 export default new PaymentService();

@@ -78,11 +78,13 @@ const PaymentConfirm = () => {
   const [transactionId, setTransactionId] = useState(
     searchParams.get("transactionId")
   );
+  const method = searchParams.get("method");
   const orderId = searchParams.get("orderId");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isFetching, setIsFetching] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(Boolean(searchParams.get("success")));
+  console.log(transactionId, method);
 
   useEffect(() => {
     const getOrder = async () => {
@@ -138,9 +140,7 @@ const PaymentConfirm = () => {
   //清空購物車
   return (
     <Container>
-      {!transactionId || !orderId ? (
-        <NotFound content="page" />
-      ) : isFetching ? (
+      {isFetching ? (
         <ProgressContainer>
           <Box sx={{ display: "flex" }}>
             <CircularProgress />
@@ -149,6 +149,8 @@ const PaymentConfirm = () => {
             資料讀取中...
           </span>
         </ProgressContainer>
+      ) : !transactionId && method !== "paypal" ? (
+        <NotFound content="page" />
       ) : success ? (
         <Block>
           <Helmet>

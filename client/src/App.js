@@ -15,6 +15,7 @@ import {
   NotFound,
   PaymentCancel,
   PaymentConfirm,
+  Paypal,
   Product,
   ProductList,
   Profile,
@@ -90,6 +91,7 @@ const App = () => {
             >
               <Route path="/payment" element={<Checkout />} />
               <Route path="/payment/linepay" element={<LinePay />} />
+              <Route path="/payment/paypal" element={<Paypal />} />
               <Route path="/payment/confirm" element={<PaymentConfirm />} />
               <Route path="/payment/cancel" element={<PaymentCancel />} />
             </Route>

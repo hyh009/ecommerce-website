@@ -7,23 +7,23 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.72",
+    "@paypal/checkout-server-sdk": "^1.0.3",
+    "axios": "^0.25.0",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.27.1",
     "cors": "^2.8.5",
     "crypto-js": "^4.1.1",
     "dotenv": "^10.0.0",
-    "ecpay_logistics_nodejs": "^1.0.2",
     "express": "^4.17.1",
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
-    "line-pay-sdk": "^1.0.3",
     "mongoose": "^6.0.13",
     "nodemon": "^2.0.15",
     "uuid4": "^2.0.2"

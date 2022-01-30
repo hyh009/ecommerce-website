@@ -134,24 +134,40 @@ const MethodContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   margin-top: 10px;
   user-select: none;
+  gap: 10px;
+  ${mobile({ gridTemplateColumns: "repeat(1,1fr)", gap: "15px" })}
 `;
+const PayImg = styled.img`
+  width: 150px;
+  aspect-ratio: 24/9;
+  object-fit: cover;
+`;
+
+const PayName = styled.span`
+  font-size: bold;
+  padding: 2px 5px;
+  width: 100%;
+  text-align: center;
+  background-color: #e3f5e1;
+`;
+
 const Method = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 10px;
-`;
-const PayImg = styled.img`
-  width: 100px;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-`;
-const PayName = styled.span`
-  font-size: bold;
-  background-color: #e3f5e1;
-  padding: 2px 5px;
+  padding-bottom: 10px;
   border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
+  transition: 0.3s all ease;
+  &:hover ${PayImg} {
+    transform: scale(1.05);
+  }
+  &:hover ${PayName} {
+    background-color: #b7f5b0;
+  }
 `;
 
 const Checkbox = styled.input``;
@@ -245,7 +261,6 @@ const Checkout = () => {
           orderDetail,
           accessToken
         );
-        console.log(resPay);
         // save transactionId and paymentAccessToken to DB
         const updateOrder = {
           ...orderDetail,
@@ -264,8 +279,13 @@ const Checkout = () => {
             app: resPay.data.paymentUrlApp,
           },
         });
-      } else if (payment === "creditCard") {
-        //stripe
+      } else if (payment === "paypal") {
+        // credit card
+        navigate("/payment/paypal", {
+          state: {
+            order: orderDetail,
+          },
+        });
       }
     } catch (err) {
       return window.alert("購買失敗，請稍後再嘗試或直接聯繫我們。");
@@ -382,12 +402,12 @@ const Checkout = () => {
             <Title>選擇付款方式</Title>
             <MethodContainer>
               <Method>
-                <PayName>Cridit Card</PayName>
-                <PayImg src="https://res.cloudinary.com/dh2splieo/image/upload/v1643046176/shop_website/imgs/credit-card-methods-v2_yiwdqj.jpg" />
+                <PayName>信用卡 或 PayPal</PayName>
+                <PayImg src="https://res.cloudinary.com/dh2splieo/image/upload/v1643554630/shop_website/imgs/paypal-credit-card_exf5dm.png" />
                 <Checkbox
                   type="radio"
                   name="payment"
-                  value="creditCard"
+                  value="paypal"
                   onChange={(e) => setPayment(e.target.value)}
                 />
               </Method>

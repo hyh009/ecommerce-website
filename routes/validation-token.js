@@ -8,7 +8,7 @@ const verifyToken = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
-        return res.status(403).json("請先登入帳號。Not Match"); //jwt not match
+        return res.status(403).json("請先登入帳號。"); //jwt not match
       } else {
         req.user = user;
         next();
