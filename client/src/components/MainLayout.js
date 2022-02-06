@@ -6,7 +6,7 @@ import Footer from "./Footer";
 import ScrollToTopBtn from "./ScrollToTopBtn";
 import { Outlet } from "react-router-dom";
 
-const PageTop = () => {
+const MainLayout = () => {
   return (
     <div>
       <Nav position="sticky" />
@@ -19,4 +19,4 @@ const PageTop = () => {
   );
 };
 
-export default PageTop;
+export default MainLayout;

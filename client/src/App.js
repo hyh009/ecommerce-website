@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import GlobalStyle from "./GlobalStyle";
 import { BrowserRouter } from "react-router-dom";
-import { PageTop } from "./components";
+import { MainLayout } from "./components";
 import {
   About,
   Cart,
@@ -24,9 +24,20 @@ import {
   Register,
   SingleOrder,
   Wish,
+  AdminLogin,
+  AdminHome,
+  AdminNewProduct,
+  AdminProduct,
+  AdminProductList,
+  AdminUser,
+  AdminUserList,
+  AdminNewUser,
+  AdminOrderList,
+  AdminOrderEdit,
 } from "./pages";
 import ScrollToTop from "./ScrollToTop";
 import PrivateRoute from "./PrivateRoute";
+import AdminRoute from "./AdminRoute";
 import { getUser, userLogout, getCartData } from "./redux/apiCall";
 
 const App = () => {
@@ -71,9 +82,26 @@ const App = () => {
             <Route path="/profile/order" element={<ProfileOrders />} />
             <Route path="/profile/order/:id" element={<SingleOrder />} />
           </Route>
-          <Route path="/" element={<Home />} />
 
-          <Route element={<PageTop />}>
+          {user?.isAdmin && (
+            <Route path="/admin/login" element={<AdminLogin />} />
+          )}
+          {
+            <Route element={<AdminRoute isLogged={Boolean(user?.isAdmin)} />}>
+              <Route path="/admin" element={<AdminHome />} />
+              <Route path="/admin/users" element={<AdminUserList />} />
+              <Route path="/admin/users/:id" element={<AdminUser />} />
+              <Route path="/admin/users/newuser" element={<AdminNewUser />} />
+              <Route path="/admin/products" element={<AdminProductList />} />
+              <Route path="/admin/products/:id" element={<AdminProduct />} />
+              <Route path="/admin/newproduct" element={<AdminNewProduct />} />
+              <Route path="/admin/orders" element={<AdminOrderList />} />
+              <Route path="/admin/orders/:id" element={<AdminOrderEdit />} />
+            </Route>
+          }
+
+          <Route path="/" element={<Home />} />
+          <Route element={<MainLayout />}>
             <Route path="/About" element={<About />} />
             <Route path="/products/:category" element={<ProductList />} />
             <Route path="/product/:id" element={<Product />} />

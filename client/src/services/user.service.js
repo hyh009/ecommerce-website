@@ -23,6 +23,24 @@ class UserService {
       headers: { token: `Bearer ${TOKEN}` },
     });
   }
+
+  get5NewUsers(TOKEN) {
+    return axiosInstance.get(`${ROUTE}/?new=true`, {
+      headers: { token: `Bearer ${TOKEN}` },
+    });
+  }
+
+  getAll(TOKEN) {
+    return axiosInstance.get(`${ROUTE}`, {
+      headers: { token: `Bearer ${TOKEN}` },
+    });
+  }
+
+  getStats(year, TOKEN) {
+    return axiosInstance.get(`${ROUTE}/stats?year=${year}`, {
+      headers: { token: `Bearer ${TOKEN}` },
+    });
+  }
 }
 
 export default new UserService();
