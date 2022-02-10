@@ -9,23 +9,43 @@ import {
   AdminWedgeS,
   AdminWedgeB,
 } from "../components";
-
+import { tabletBig } from "../responsive";
 import { v4 as uuidv4 } from "uuid";
 
 const Container = styled.div`
-  flex: 4;
-  padding: 0 20px;
+  padding: 20px;
+  grid-column: 2/6;
+  width: 100%;
+  ${tabletBig({
+    minHeight: "calc(100vh - 80px)",
+    gridColumn: "1/2",
+    padding: "10px 0",
+    marginTop: "10px",
+  })}
 `;
 
 const FeatureContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  padding: 0 20px;
+  gap: 20px;
+  ${tabletBig({
+    flexDirection: "column",
+  })}
 `;
 
 const WedgeContainer = styled.div`
   display: flex;
   padding: 0 20px;
+  gap: 10px;
+
+  ${tabletBig({
+    flexDirection: "column",
+    gap: "20px",
+    width: "100vw",
+    overflow: "hidden",
+  })}
 `;
 
 const AdminHome = () => {
@@ -79,51 +99,40 @@ const AdminHome = () => {
   useEffect(() => {
     const getIncome = async () => {
       try {
-        const res = await OrderService.getIncome(
-          new Date().getFullYear(),
-          accessToken,
-          new Date().getMonth()
-        );
-        console.log(res.data);
-        // let newData = res.data.map((data) => {
-        //   if (data._id === monthObject.month + 1) {
-        //     return {
-        //       title: monthObject.title,
-        //       amount: data.total,
-        //     };
-        //   }
-        // });
-        // if (!newData[0]) {
-        //   newData = [{ title: monthObject.title, amount: 0 }];
-        // }
-        // setFeatureData((prev) => [...prev, ...newData]);
+        const CurrentYear = new Date().getFullYear();
+        const CurrentMonth = new Date().getMonth();
 
-        // setFeatureData([
-        //   {
-        //     title: "本月成交金額",
-        //     amount: thisYearData.data[]?.total || 0,
-        //     rate:
-        //       Math.floor(
-        //         ((res.data[1]?.total * 100) / res.data[0]?.total - 100) * 100
-        //       ) / 100,
-        //   },
-        // ]);
+        const res = await OrderService.getIncome(
+          CurrentYear,
+          accessToken,
+          CurrentMonth
+        );
+        const newData = res.data.map((data, index) => {
+          return {
+            title: `${data._id}月銷售金額`,
+            amount: data.total,
+            rate:
+              Math.floor(
+                ((res.data[index]?.total * 100) / res.data[index + 1]?.total -
+                  100) *
+                  100
+              ) / 100,
+          };
+        });
+        setFeatureData(newData);
       } catch (err) {
         console.log(err);
       }
     };
-    // getIncome({ month: new Date().getMonth(), title: "本月成交金額" });
-    // getIncome({ month: new Date().getMonth() - 1, title: "上月成交金額" });
     getIncome();
   }, []);
-
-  console.log(featureData);
 
   return (
     <Container>
       <FeatureContainer>
-        <AdminFeatureInfo key={uuidv4()} data={featureData[0]} />
-        <AdminFeatureInfo key={uuidv4()} data={featureData[1]} />
+        {featureData.map((data) => (
+          <AdminFeatureInfo key={uuidv4()} data={data} />
+        ))}
       </FeatureContainer>
       <AdminChart
         data={userStats}

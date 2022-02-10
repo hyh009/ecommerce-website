@@ -43,7 +43,7 @@ router.get("/", async (req, res) => {
     let products;
 
     if (qNew) {
-      products = await Product.find().sort({ createdAt: -1 }).limit(5);
+      products = await Product.find().sort({ createdAt: -1 });
     } else if (qCategory) {
       products = await Product.find({
         categories: qCategory,
@@ -67,7 +67,7 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
     const savedProduct = await newProduct.save();
     res.status(201).json(savedProduct);
   } catch (err) {
-    res.status(500).json("系統發生問題，請稍候再試");
+    res.status(500).json("產品新增失敗，請稍候再試");
   }
 });
 
@@ -122,7 +122,7 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-// Upload image to cloudinary
+// Upload image to cloudinary (single)
 router.post("/uploadImage", verifyTokenAndAdmin, async (req, res) => {
   try {
     const { fileString, filePath, fileName } = req.body;
@@ -132,7 +132,7 @@ router.post("/uploadImage", verifyTokenAndAdmin, async (req, res) => {
     res.status(200).json(data.secure_url);
   } catch (err) {
     console.log(err);
-    res.status(500).json("系統發生問題，請稍候再試");
+    res.status(500).json("上傳圖片失敗，請稍候再試");
   }
 });
 

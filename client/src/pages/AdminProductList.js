@@ -1,15 +1,26 @@
 import styled from "styled-components";
-import React, { useEffect } from "react";
-import { DataGrid } from "@material-ui/data-grid";
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+} from "@material-ui/data-grid";
 import { Delete } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteProduct, getProducts } from "../redux/apiCall";
+import { deleteProduct } from "../redux/apiCall";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { tabletBig } from "../responsive";
 
 const Container = styled.div`
-  flex: 4;
+  grid-column: 2/6;
   height: calc(100vh - 50px);
+
+  ${tabletBig({
+    minHeight: "calc(100vh - 80px)",
+    gridColumn: "1/2",
+    marginTop: "10px",
+  })}
+  position:relative;
 `;
 
 const Product = styled.div`
@@ -43,16 +54,35 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const CreateLink = styled(Link)`
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  letter-spacing: 2px;
+  color: white;
+  background-color: teal;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1;
+  text-decoration: none;
+  font-size: 2.5vmin;
+`;
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarColumnsButton />
+    </GridToolbarContainer>
+  );
+}
 const AdminProductList = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
   const accessToken = useSelector((state) => state.user.accessToken);
   const mobile = useMediaQuery("(max-width:480px)");
   const tablet = useMediaQuery("(max-width:770px)");
-
-  useEffect(() => {
-    getProducts(dispatch);
-  }, [dispatch]);
 
   const handleDelete = (id) => {
     window.confirm("確定刪除此產品嗎？") && deleteProduct(id, dispatch);
@@ -79,6 +109,7 @@ const AdminProductList = () => {
       field: "updatedAd",
       headerName: "上次更新",
       width: 150,
+      hide: tablet,
       renderCell: (params) => {
         return (
           <span>
@@ -92,6 +123,7 @@ const AdminProductList = () => {
       field: "categories",
       headerName: "分類",
       width: 150,
+      hide: mobile,
     },
     {
       field: "subProducts",
@@ -106,6 +138,7 @@ const AdminProductList = () => {
       field: "price",
       headerName: "價格",
       width: 150,
+      hide: tablet,
     },
 
     {
@@ -129,15 +162,18 @@ const AdminProductList = () => {
   ];
   return (
     <Container>
-      <div style={{ height: "calc(100% - 50px)", width: "100%" }}>
+      <CreateLink to="/admin/products/newproduct">新增產品</CreateLink>
+      <div style={{ height: "100%", width: "100%" }}>
         <DataGrid
           rows={products}
           columns={columns}
           getRowId={(row) => row._id}
-          pageSize={6}
-          checkboxSelection
+          pageSize={mobile ? 7 : tablet ? 10 : 5}
           disableSelectionOnClick
           density="comfortable"
+          components={{
+            Toolbar: CustomToolbar,
+          }}
         />
       </div>
     </Container>

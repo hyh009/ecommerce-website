@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
 import {
   Upload,
   ClearTwoTone,
@@ -15,6 +14,8 @@ import {
   ImagesearchRoller,
   Sell,
   SettingsBackupRestoreTwoTone,
+  Inventory2,
+  ImageSearch,
 } from "@mui/icons-material";
 import {
   AdminProductEditA,
@@ -24,10 +25,16 @@ import {
 import OrderService from "../services/order.service.js";
 import ProductService from "../services/product.service.js";
 import { updatePartialProduct } from "../redux/apiCall.js";
+import { tabletBig } from "../responsive";
 
 const Container = styled.div`
-  flex: 4;
+  grid-column: 2/6;
   padding: 20px;
+  ${tabletBig({
+    minHeight: "calc(100vh - 80px)",
+    gridColumn: "1/2",
+    marginTop: "10px",
+  })}
 `;
 
 const TopContainer = styled.div`
@@ -45,13 +52,16 @@ const PageTitle = styled.h3`
 
 const Wrapper = styled.div`
   display: flex;
+  gap: 10px;
+  ${tabletBig({
+    flexDirection: "column",
+  })}
 `;
 const InfoContainer = styled.div`
   flex: 1;
   box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
   padding: 20px;
   border-radius: 5px;
-  margin-right: 10px;
 `;
 
 const ProductInfo = styled.div``;
@@ -150,6 +160,9 @@ const GalleryContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   grid-auto-rows: 1fr;
+  ${tabletBig({
+    gridTemplateColumns: "repeat(2, 1fr)",
+  })}
 `;
 const SingleImgContainer = styled.div`
   background-color: #eee;
@@ -233,14 +246,16 @@ const PreviewImg = styled.img`
 `;
 
 const AdminProduct = () => {
-  const [popA, setPopA] = useState("hide");
-  const [popB, setPopB] = useState("hide");
+  const [popA, setPopA] = useState(false);
+  const [popB, setPopB] = useState(false);
   const [pStats, setPStats] = useState([]);
   const [enableDelImg, setEnableDelImg] = useState(false);
   const [file, setFile] = useState(null);
   const [previewFile, setPreviewFile] = useState();
   const [isFetching, setIsFetching] = useState(false);
   const imgRef = useRef(null);
+  const editARef = useRef(null);
+  const editBRef = useRef(null);
   const location = useLocation();
   const dispatch = useDispatch();
   const [year, setYear] = useState(new Date().getFullYear());
@@ -249,7 +264,7 @@ const AdminProduct = () => {
     state.product.products.find((product) => product._id === productId)
   );
   const accessToken = useSelector((state) => state.user.accessToken);
-
+  const acceptFileTypes = ["image/jpg", "image/jpeg", "image/png"];
   const initTepDel = () => {
     const result = Array(6).fill(false);
     return result;
@@ -317,6 +332,9 @@ const AdminProduct = () => {
     }
   };
   const fileUpload = (e) => {
+    if (!acceptFileTypes.includes(e.target.files[0].type)) {
+      return window.alert("不支援此檔案格式。(可上傳.png .jpg .jepg檔)");
+    }
     if (product.imgs.length >= 6) {
       return window.alert("圖片已達上限");
     } else {
@@ -336,7 +354,8 @@ const AdminProduct = () => {
 
   const handleUploadImg = async (e) => {
     e.preventDefault();
-    const fileName = `${file.name.split(".")[0]}-${new Date().getTime()}`;
+    setIsFetching(true);
+    const fileName = file.name;
     const res = await ProductService.uploadImage(
       previewFile,
       product.imagePath,
@@ -348,14 +367,19 @@ const AdminProduct = () => {
       { src: res.data, desc: fileName.split("-")[0] },
     ];
     updatePartialProduct(productId, { imgs: newImgs }, dispatch, accessToken);
+    setIsFetching(false);
+    setFile();
+    setPreviewFile("");
   };
 
   const handleDeleteImg = () => {
+    setIsFetching(true);
     const newImgs = product.imgs.filter((img) => !delImg.includes(img._id));
     window.confirm("確定要刪除照片嗎？") &&
       updatePartialProduct(productId, { imgs: newImgs }, dispatch, accessToken);
     setEnableDelImg(false);
     setTepDelImg(initTepDel());
+    setIsFetching(false);
   };
 
   return (
@@ -379,7 +403,18 @@ const AdminProduct = () => {
             </Header>
             <Sub>
               <Subtitle>產品資訊</Subtitle>
-              <EditButton onClick={() => setPopA(() => "show")}>
+              <EditButton
+                onClick={() => {
+                  if (popB) {
+                    if (window.confirm("更新尚未儲存，是否關閉？")) {
+                      setPopB(() => false);
+                    } else {
+                      return;
+                    }
+                  }
+                  setPopA(() => true);
+                }}
+              >
                 編輯
               </EditButton>
             </Sub>
@@ -395,10 +430,30 @@ const AdminProduct = () => {
               <Category />
               <Content>{product.categories}</Content>
             </ListItem>
+            <Subtitle>產品管理</Subtitle>
+            <ListItem>
+              <Inventory2 />
+              <Content>{product.inStock ? "有" : "無"}</Content>
+            </ListItem>
+            <ListItem>
+              <ImageSearch />
+              <Content>{product.imagePath}</Content>
+            </ListItem>
 
             <Sub>
               <Subtitle>產品規格</Subtitle>
-              <EditButton onClick={() => setPopB(() => "show")}>
+              <EditButton
+                onClick={() => {
+                  if (popA) {
+                    if (window.confirm("更新尚未儲存，是否關閉？")) {
+                      setPopA(() => false);
+                    } else {
+                      return;
+                    }
+                  }
+                  setPopB(() => true);
+                }}
+              >
                 編輯
               </EditButton>
             </Sub>
@@ -436,16 +491,18 @@ const AdminProduct = () => {
             pop={popA}
             setPop={setPopA}
             productId={productId}
+            editRef={editARef}
           />
           <AdminProductEditB
             product={product}
             pop={popB}
             setPop={setPopB}
             productId={productId}
+            editRef={editBRef}
           />
           <AdminChart
             data={pStats}
-            title="今年度銷售狀況"
+            title="年度銷售狀況"
             dataKey="Sales"
             margin="0"
             year={year}
@@ -474,8 +531,9 @@ const AdminProduct = () => {
                     marginLeft: "10px",
                   }}
                   onClick={handleDeleteImg}
+                  disabled={isFetching}
                 >
-                  確定刪除
+                  {isFetching ? "刪除中" : "確定刪除"}
                 </EditButton>
 
                 <DeleteOutlineTwoTone
@@ -495,7 +553,6 @@ const AdminProduct = () => {
                     onChange={(e) => {
                       fileUpload(e);
                     }}
-                    accept="image/*"
                     disabled={enableDelImg}
                   />
                   <Upload
@@ -529,8 +586,9 @@ const AdminProduct = () => {
                     marginLeft: "10px",
                   }}
                   onClick={handleUploadImg}
+                  disabled={isFetching}
                 >
-                  上傳圖片
+                  {isFetching ? "上傳中" : "上傳圖片"}
                 </EditButton>
               </ImageIconContainer>
             </Sub>

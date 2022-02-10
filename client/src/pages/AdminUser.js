@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
 import {
   Android,
@@ -11,10 +11,17 @@ import {
 } from "@mui/icons-material";
 import UserService from "../services/user.service";
 import { useSelector } from "react-redux";
+import { tabletBig, mobile } from "../responsive";
 
 const Container = styled.div`
-  flex: 4;
+  grid-column: 2/6;
   padding: 20px;
+  position: relative;
+  ${tabletBig({
+    minHeight: "calc(100vh - 80px)",
+    gridColumn: "1/2",
+    marginTop: "10px",
+  })}
 `;
 
 const TopContainer = styled.div`
@@ -22,16 +29,6 @@ const TopContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-`;
-
-const CreateButton = styled.button`
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  letter-spacing: 2px;
-  color: white;
-  background-color: teal;
-  cursor: pointer;
 `;
 
 const PageTitle = styled.h3`
@@ -42,13 +39,16 @@ const PageTitle = styled.h3`
 
 const Wrapper = styled.div`
   display: flex;
+  gap: 10px;
+  ${tabletBig({
+    flexDirection: "column",
+  })}
 `;
 const InfoContainer = styled.div`
   flex: 1;
   box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
   padding: 20px;
   border-radius: 5px;
-  margin-right: 10px;
 `;
 
 const UserInfo = styled.div``;
@@ -69,6 +69,7 @@ const UserImg = styled.img`
   overflow: hidden;
   border-radius: 50%;
   margin: 0 10px;
+  filter: drop-shadow(0 0 2px gray);
 `;
 const UserName = styled.span`
   font-weight: bold;
@@ -115,9 +116,12 @@ const EditTitle = styled.h4`
   letter-spacing: 2px;
   margin-bottom: 20px;
 `;
-
-const EditArea = styled.div`
-  flex: 2;
+const EditWrapper = styled.div`
+  display: flex;
+  ${mobile({ flexDirection: "column", gap: "20px" })}
+`;
+const EditArea = styled.form`
+  flex: 1;
   display: flex;
   flex-direction: column;
 `;
@@ -125,7 +129,8 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: 5px 0;
-  width: 70%;
+  width: 90%;
+  ${mobile({ width: "100%" })}
 `;
 const Label = styled.label`
   font-size: 14px;
@@ -136,22 +141,30 @@ const Input = styled.input`
   border-bottom: 1px solid gray;
   padding: 2px;
   letter-spacing: 1px;
+  &:focus {
+    border: none;
+  }
 `;
 
 const Select = styled.select`
   padding: 2px;
   border: none;
   border-bottom: 1px solid gray;
+  &:focus {
+    border: none;
+  }
 `;
 const RightContainer = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  ${mobile({ gap: "20px" })}
 `;
 const UpdatePicContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   svg {
     margin-left: 15px;
     cursor: pointer;
@@ -163,131 +176,303 @@ const ProfileImg = styled.img`
   object-fit: cover;
   overflow: hidden;
   border-radius: 10px;
+  filter: drop-shadow(0 0 2px gray);
 `;
+
 const UpdateButton = styled.button`
   border: none;
   background-color: teal;
   color: white;
-  width: 60%;
+  width: 40%;
   padding: 7px 0;
   border-radius: 10px;
   box-shadow: 1px 5px 0 lightgray;
   cursor: pointer;
   letter-spacing: 2px;
-  margin-bottom: 20px;
   &:active {
     box-shadow: 3px 5px 0 white;
     transform: translateY(5px);
+    border: none;
+  }
+  &:focus {
+    border: none;
   }
 `;
+const Error = styled.span`
+  font-size: 2.5vmin;
+  color: red;
+  background-color: lightpink;
+  padding: 2px;
+  width: max-content;
+`;
 
+const CreateLink = styled(Link)`
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  letter-spacing: 2px;
+  color: white;
+  background-color: teal;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1;
+  text-decoration: none;
+  font-size: 2.5vmin;
+  ${tabletBig({ marginTop: "10px" })}
+  ${mobile({ fontSize: "3vmin" })}
+`;
 const AdminUser = () => {
-  const [user, setUser] = useState([]);
+  const [editUser, setEditUser] = useState({});
+  const [inputs, setInputs] = useState({});
   const [isFetching, setIsFetching] = useState(false);
+  const [updateError, setUpdateError] = useState("");
+  const [uploadImage, setUploadImage] = useState(null);
   const accessToken = useSelector((state) => state.user.accessToken);
   const { pathname } = useLocation();
   const userId = pathname.split("/")[3];
 
   useEffect(() => {
+    // get edit user info when page load
     const getUserData = async () => {
       try {
-        setIsFetching(true);
         const res = await UserService.get(userId, accessToken);
-        setUser(res.data);
-        setIsFetching(false);
+        setEditUser(res.data);
       } catch (err) {
-        setIsFetching(false);
         console.log(err);
       }
     };
     getUserData();
   }, []);
+  useEffect(() => {
+    //clear error message after 5 seconds
+    let timer = setTimeout(() => setUpdateError(""), 5000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [updateError]);
+
+  const handlePreview = (e) => {
+    const acceptFileTypes = ["image/jpg", "image/jpeg", "image/png"];
+
+    if (!acceptFileTypes.includes(e.target.files[0].type)) {
+      return window.alert("不支援此檔案格式。(可上傳.png .jpg .jepg檔)");
+    }
+    let reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.addEventListener("loadend", () => {
+      const fileSize = (e.target.files[0].size / (1024 * 1024)).toFixed(4);
+
+      if (fileSize > 10) {
+        return window.alert("照片不能超過100mb");
+        //or resize image
+      } else {
+        setUploadImage({
+          name: e.target.files[0].name,
+          type: e.target.files[0].type,
+          size: e.target.files[0].size,
+          src: reader.result,
+        });
+      }
+    });
+  };
+
+  const handleUploadPic = async () => {
+    try {
+      const res = await UserService.uploadImage(
+        uploadImage.src,
+        editUser._id,
+        accessToken
+      );
+      return res.data;
+    } catch (err) {
+      window.alert("照片上傳失敗，請稍後再試");
+      console.log(err);
+    }
+  };
+
+  const onSubmit = async () => {
+    setIsFetching(true);
+    let imgUrl = editUser.img;
+    try {
+      if (uploadImage) {
+        imgUrl = await handleUploadPic();
+      }
+      console.log(inputs);
+      const updatedUser = await UserService.patch(
+        { _id: editUser._id, ...inputs, img: imgUrl },
+        accessToken
+      );
+      setEditUser(updatedUser.data);
+      window.alert("用戶資訊更新成功");
+      window.scrollTo(0, 0);
+      setIsFetching(false);
+      setUploadImage(null);
+    } catch (err) {
+      console.log(err);
+
+      if (err.response?.data) {
+        setUpdateError(err.response.data);
+      } else {
+        setUpdateError("資訊尚未更新，請稍後再試");
+      }
+      setIsFetching(false);
+      setUploadImage(null);
+    }
+  };
+
+  const handleChange = (e) => {
+    setInputs((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
   return (
     <Container>
       <TopContainer>
         <PageTitle>編輯用戶</PageTitle>
-        <Link to="/admin/users/newuser">
-          <CreateButton>新增用戶</CreateButton>
-        </Link>
+        <CreateLink to="/admin/users">回用戶列表</CreateLink>
       </TopContainer>
       <Wrapper>
         <InfoContainer>
           <UserInfo>
             <Header>
-              <UserImg src={user.img} />
+              <UserImg src={editUser.img} />
               <Detail>
-                <UserName>{user.username}</UserName>
+                <UserName>{editUser.username}</UserName>
                 <CreatedDate>
-                  加入日期：{user.createdAt?.split("T")[0]}
+                  加入日期：{editUser.createdAt?.split("T")[0]}
                 </CreatedDate>
               </Detail>
             </Header>
             <Subtitle>用戶資訊</Subtitle>
             <ListItem>
               <Person />
-              <Content>{user.name}</Content>
+              <Content>{editUser.name}</Content>
             </ListItem>
             <ListItem>
               <Android />
-              <Content>{user.gender}</Content>
+              <Content>{editUser.gender}</Content>
             </ListItem>
             <Subtitle>聯絡資訊</Subtitle>
             <ListItem>
-              <PhoneAndroid />
-              <Content>{user.phone}</Content>
+              <Mail />
+              <Content>{editUser.email}</Content>
             </ListItem>
             <ListItem>
-              <Mail />
-              <Content>{user.email}</Content>
+              <PhoneAndroid />
+              <Content>{editUser.phone || "未填入"}</Content>
             </ListItem>
             <ListItem>
               <LocationOn />
-              <Content>{user.address}</Content>
+              <Content>{editUser.address || "未填入"}</Content>
             </ListItem>
           </UserInfo>
         </InfoContainer>
         <EditContainer>
           <EditTitle>編輯</EditTitle>
-          <Wrapper>
+          <EditWrapper>
             <EditArea>
+              {updateError && <Error>{updateError}</Error>}
               <InputContainer>
-                <Label for="username">用戶名稱</Label>
-                <Input id="username" placeholder={user.username} />
+                <Label htmlFor="username">用戶名稱</Label>
+                <Input
+                  name="username"
+                  id="username"
+                  placeholder="輸入用戶名稱"
+                  defaultValue={editUser.username}
+                  onChange={handleChange}
+                />
               </InputContainer>
               <InputContainer>
-                <Label for="fullname">姓名</Label>
-                <Input id="fullname" placeholder={user.name} />
+                <Label htmlFor="name">姓名</Label>
+                <Input
+                  id="name"
+                  name="name"
+                  placeholder="輸入姓名"
+                  defaultValue={editUser.name}
+                  onChange={handleChange}
+                />
               </InputContainer>
               <InputContainer>
-                <Label for="email">電子信箱</Label>
-                <Input id="email" placeholder={user.email} />
+                <Label htmlFor="email">電子信箱</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  placeholder="輸入電子信箱"
+                  defaultValue={editUser.email}
+                  onChange={handleChange}
+                  type="email"
+                />
               </InputContainer>
               <InputContainer>
-                <Label for="gender">性別</Label>
-                <Select defaultValue={user.gender}>
-                  <option value="男">男</option>
-                  <option value="女">女</option>
-                  <option value="其他">其他</option>
+                <Label htmlFor="gender">性別</Label>
+                <Select
+                  name="gender"
+                  defaultValue={editUser.gender}
+                  onChange={handleChange}
+                >
+                  <option>男</option>
+                  <option>女</option>
+                  <option>其他</option>
                 </Select>
               </InputContainer>
               <InputContainer>
-                <Label for="phone">電話</Label>
-                <Input id="phone" placeholder={user.phone} />
+                <Label htmlFor="phone">電話</Label>
+                <Input
+                  id="phone"
+                  name="phone"
+                  placeholder="輸入電話"
+                  defaultValue={editUser.phone || "未填寫"}
+                  onChange={handleChange}
+                />
               </InputContainer>
               <InputContainer>
-                <Label for="address">地址</Label>
-                <Input id="address" placeholder={user.address} />
+                <Label htmlFor="address">地址</Label>
+                <Input
+                  id="address"
+                  name="address"
+                  placeholder="輸入地址"
+                  defaultValue={editUser.address || "未填寫"}
+                  onChange={handleChange}
+                />
               </InputContainer>
             </EditArea>
 
             <RightContainer>
               <UpdatePicContainer>
-                <ProfileImg src={user.img} />
-                <Upload />
+                <ProfileImg
+                  src={uploadImage?.src || editUser.img}
+                  alt="用戶圖片"
+                />
+                <Label htmlFor="photo">
+                  <Upload />
+                  <input
+                    type="file"
+                    name="photo"
+                    id="photo"
+                    onChange={handlePreview}
+                    style={{ display: "none" }}
+                  />
+                </Label>
               </UpdatePicContainer>
-              <UpdateButton>確定更新</UpdateButton>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                  marginBottom: "20px",
+                }}
+              >
+                <UpdateButton type="reset">捨棄更新</UpdateButton>
+                <UpdateButton type="submit" onClick={onSubmit}>
+                  {isFetching ? "更新中" : "確定更新"}
+                </UpdateButton>
+              </div>
             </RightContainer>
-          </Wrapper>
+          </EditWrapper>
         </EditContainer>
       </Wrapper>
     </Container>

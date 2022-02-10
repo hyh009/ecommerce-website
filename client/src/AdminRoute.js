@@ -8,7 +8,7 @@ const AdminRoute = ({ isLogged }) => {
       <AdminSidebar />
     </div>
   ) : (
-    <Navigate to="/admin/login" />
+    <Navigate to="/login" />
   );
 };
 

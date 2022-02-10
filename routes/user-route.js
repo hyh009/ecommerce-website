@@ -112,7 +112,8 @@ router.patch("/:id", verifyTokenAndAuthorization, async (req, res) => {
   if (error) return res.status(400).json(error.details[0].message);
   if (req.body.email) {
     const emailExist = await User.findOne({ email: req.body.email });
-    if (!emailExist._id.equals(req.params.id))
+    console.log(emailExist);
+    if (emailExist && !emailExist._id.equals(req.params.id))
       return res.status(400).json("此Email已註冊帳號。");
   }
   try {

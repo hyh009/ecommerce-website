@@ -1,15 +1,27 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@material-ui/data-grid";
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+} from "@material-ui/data-grid";
 import { Delete } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import UserService from "../services/user.service";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { tabletBig } from "../responsive";
 
 const Container = styled.div`
-  flex: 4;
+  grid-column: 2/6;
   height: calc(100vh - 50px);
+  position: relative;
+
+  ${tabletBig({
+    minHeight: "calc(100vh - 80px)",
+    gridColumn: "1/2",
+    marginTop: "10px",
+  })}
 `;
 
 const User = styled.div`
@@ -40,6 +52,29 @@ const Button = styled.button`
   padding: 0 5px;
   cursor: pointer;
 `;
+
+const CreateLink = styled(Link)`
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  letter-spacing: 2px;
+  color: white;
+  background-color: teal;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1;
+  text-decoration: none;
+  font-size: 2.5vmin;
+`;
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarColumnsButton />
+    </GridToolbarContainer>
+  );
+}
 
 const AdminUserList = () => {
   const [data, setData] = useState([]);
@@ -85,6 +120,7 @@ const AdminUserList = () => {
       field: "date",
       headerName: "加入日期",
       width: 150,
+      hide: mobile,
       renderCell: (params) => {
         return <span>{params.row.createdAt.split("T")[0]}</span>;
       },
@@ -92,12 +128,29 @@ const AdminUserList = () => {
     {
       field: "email",
       headerName: "電子郵件",
-      width: 200,
+      width: 150,
+      hide: tablet,
+    },
+    {
+      field: "lastLogin",
+      headerName: "上次登入",
+      width: 150,
+      hide: true,
+      renderCell: (params) => {
+        return <span>{params.row.lastLogin.split("T")[0]}</span>;
+      },
+    },
+    {
+      field: "gender",
+      headerName: "性別",
+      width: 120,
+      hide: tablet,
     },
     {
       field: "lank",
       headerName: "會員階級",
       width: 150,
+      hide: mobile,
     },
 
     {
@@ -121,16 +174,19 @@ const AdminUserList = () => {
   ];
   return (
     <Container>
+      <CreateLink to="/admin/users/newuser">新增用戶</CreateLink>
       <div style={{ height: "100%", width: "100%" }}>
         <DataGrid
           getRowId={(row) => row._id}
           rows={data}
           columns={columns}
-          pageSize={6}
+          pageSize={mobile ? 7 : tablet ? 10 : 5}
           disableSelectionOnClick
           loading={loading}
-          checkboxSelection
           density="comfortable"
+          components={{
+            Toolbar: CustomToolbar,
+          }}
         />
       </div>
     </Container>

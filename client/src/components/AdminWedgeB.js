@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import OrderService from "../services/order.service";
 import { format } from "timeago.js";
 import { useSelector } from "react-redux";
+import { tabletBig } from "../responsive";
 
 const Container = styled.div`
   flex: 2;
@@ -43,6 +44,18 @@ const Data = styled.td`
     display: flex;
     align-items: center;
   }
+  ${tabletBig({
+    justifyContent: "center",
+  })}
+`;
+
+const User = styled.div`
+  display: flex;
+  align-items: center;
+  ${tabletBig({
+    flexDirection: "column",
+    gap: "10px",
+  })}
 `;
 const UserImg = styled.img`
   height: 35px;
@@ -113,8 +126,10 @@ const AdminWedgeB = () => {
         {orders?.map((order) => (
           <TableRow key={order._id}>
             <Data className="user">
-              <UserImg src={order.user.img || defaultUser} />
-              <Name>{order.user.username}</Name>
+              <User>
+                <UserImg src={order.user.img || defaultUser} />
+                <Name>{order.user.username}</Name>
+              </User>
             </Data>
             <Data>NT$ {order.amount}</Data>
             <Data>{format(order.createdAt)}</Data>

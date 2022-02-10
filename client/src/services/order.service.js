@@ -14,10 +14,14 @@ class OrderService {
       headers: { token: `Bearer ${TOKEN}` },
     });
   }
-  getSales(productId, year, TOKEN) {
-    return axiosInstance.get(`${ROUTE}/income?pid=${productId}&year=${year}`, {
-      headers: { token: `Bearer ${TOKEN}` },
-    });
+  // get product sales
+  getSales(productId, year, TOKEN, month) {
+    return axiosInstance.get(
+      `${ROUTE}/income?pid=${productId}&year=${year}&month=${month}`,
+      {
+        headers: { token: `Bearer ${TOKEN}` },
+      }
+    );
   }
   // get user spent
   getUserSpent(userId, TOKEN) {

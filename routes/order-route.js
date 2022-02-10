@@ -21,11 +21,11 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
     // if month in the query get latest 2 month data
     if (queryMonth - 2 < 0) {
       queryMonth = queryMonth + 12;
-      start = new Date(queryYear, queryMonth - 2, 1);
-      end = new Date(queryYear, queryMonth, 1);
+      start = new Date(queryYear - 1, queryMonth - 2, 1);
+      end = new Date();
     } else {
       start = new Date(queryYear, queryMonth - 2, 1);
-      end = new Date(queryYear, queryMonth, 1);
+      end = new Date();
     }
   } else {
     start = new Date(queryYear, 0, 1);
@@ -57,6 +57,7 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
           total: { $sum: "$sales" },
         },
       },
+      { $sort: { _id: -1 } }, // 1 for ascending
     ]);
     res.status(200).json(income);
   } catch (err) {

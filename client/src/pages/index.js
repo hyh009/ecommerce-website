@@ -19,7 +19,6 @@ export { default as LinePay } from "./LinePay";
 export { default as Paypal } from "./Paypal";
 export { default as AdminError } from "./AdminError";
 export { default as AdminHome } from "./AdminHome";
-export { default as AdminLogin } from "./AdminLogin";
 export { default as AdminNewProduct } from "./AdminNewProduct";
 export { default as AdminNewUser } from "./AdminNewUser";
 export { default as AdminNotFound } from "./AdminNotFound";

@@ -41,7 +41,6 @@ const SideContainer = styled.div`
   grid-column: 1/2;
   ${tabletBig({
     position: "absolute",
-    top: "0",
     zIndex: "3",
     width: "100%",
     height: "max-content",

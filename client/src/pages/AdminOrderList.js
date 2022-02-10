@@ -1,15 +1,25 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { DataGrid } from "@material-ui/data-grid";
+import {
+  DataGrid,
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
+} from "@material-ui/data-grid";
 import { Delete } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import OrderService from "../services/order.service";
+import { tabletBig } from "../responsive";
 
 const Container = styled.div`
-  flex: 4;
+  grid-column: 2/6;
   height: calc(100vh - 50px);
+  ${tabletBig({
+    minHeight: "calc(100vh - 80px)",
+    gridColumn: "1/2",
+    marginTop: "10px",
+  })}
 `;
 const User = styled.div`
   display: flex;
@@ -38,6 +48,14 @@ const Button = styled.button`
   padding: 0 5px;
   cursor: pointer;
 `;
+
+function CustomToolbar() {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarColumnsButton />
+    </GridToolbarContainer>
+  );
+}
 const AdminOrderList = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -111,7 +129,15 @@ const AdminOrderList = () => {
       width: 120,
       hide: tablet,
       renderCell: (params) => {
-        return <span>{params.row.products.length}件</span>;
+        return (
+          <span>
+            {params.row.products.reduce(
+              (sum, productInfo) => sum + productInfo.quantity,
+              0
+            )}
+            件
+          </span>
+        );
       },
     },
 
@@ -141,10 +167,13 @@ const AdminOrderList = () => {
           getRowId={(row) => row._id}
           rows={data}
           columns={columns}
-          pageSize={6}
+          pageSize={mobile ? 7 : tablet ? 10 : 5}
           disableSelectionOnClick
           loading={loading}
           density="comfortable"
+          components={{
+            Toolbar: CustomToolbar,
+          }}
         />
       </div>
     </Container>

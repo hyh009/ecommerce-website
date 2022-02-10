@@ -30,11 +30,18 @@ const CustomLink = styled(Link)`
   justify-content: center;
   color: black;
 `;
-const Image = styled.img`
-  height: 75%;
-  width: 95%;
-  object-fit: cover;
+const ImageContainer = styled.div`
   overflow: hidden;
+  display: flex;
+  width: 95%;
+  height: 75%;
+  justify-content: center;
+  align-items: center;
+`;
+const Image = styled.img`
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 `;
 const Info = styled.div`
   width: 100%;
@@ -154,6 +161,7 @@ const LogoContainer = styled.div`
     color: lightgray;
   }
   ${tabletBig({ width: "3.5vmin", height: "3.5vmin" })};
+  ${tablet({ width: "5vmin", height: "5vmin" })};
   ${mobile({ width: "10vmin", height: "10vmin" })};
 `;
 
@@ -284,7 +292,9 @@ const Product = ({ item }) => {
 
       <Title>{item.name}</Title>
 
-      <Image src={item.imgs[0].src} alt={item.imgs[0].desc} />
+      <ImageContainer>
+        <Image src={item.imgs[0].src} alt={item.imgs[0].desc} />
+      </ImageContainer>
       <Info title={item.name}>
         <Desc
           className={desc ? "scaleUp" : ""}

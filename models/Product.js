@@ -42,7 +42,7 @@ const ProductSchema = new mongoose.Schema(
         "矽膠小餐墊",
         "蜂巢坐靠墊",
         "不倒翁門擋",
-        "其它",
+        "矽膠鍋墊",
       ],
       required: true,
     },

@@ -10,6 +10,8 @@ import {
   AbcTwoTone,
   ClearTwoTone,
   SettingsBackupRestoreTwoTone,
+  Inventory2,
+  ImageSearch,
 } from "@mui/icons-material";
 import styled from "styled-components";
 import {
@@ -20,17 +22,19 @@ import {
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePartialProduct } from "../redux/apiCall";
+import { tabletBig } from "../responsive";
 
 const PopContainer = styled.div`
   box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
   padding: 20px;
   border-radius: 5px;
-  display: ${(props) => (props.pop === "show" && "flex") || "none"};
+  display: ${(props) => (props.pop ? "flex" : "none")};
   flex-direction: column;
   position: absolute;
   top: 0;
   z-index: 1;
-  height: 100%;
+  min-height: 100%;
+  height: max-content;
   width: 100%;
   background-color: ${(props) =>
     (props.update === "true" && "black") || "white"};
@@ -72,6 +76,7 @@ const AddItemContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 5px;
+  gap: 10px;
   span {
     color: red;
   }
@@ -79,6 +84,7 @@ const AddItemContainer = styled.div`
     font-size: 20px;
     margin-right: 5px;
   }
+  ${tabletBig({ flexDirection: "column", alignItems: "flex-start" })}
 `;
 const Input = styled.input`
   border: none;
@@ -95,6 +101,7 @@ const Select = styled.select`
   padding: 2px;
   border: none;
   border-bottom: 1px solid gray;
+  background-color: white;
   :hover {
     background-color: #eee;
   }
@@ -111,10 +118,9 @@ const Color = styled.div`
   margin: 5px 0;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
   svg {
     font-size: 14px;
-    margin-left: 10px;
     border-radius: 50%;
     cursor: pointer;
     background-color: white;
@@ -138,6 +144,8 @@ const TextArea = styled.textarea`
   resize: none;
   overflow-y: scroll;
   overflow-x: hidden;
+  width: 80%;
+  margin: 5px 0;
   :hover {
     background-color: #eee;
   }
@@ -166,7 +174,6 @@ const CustomClearTwoTone = styled(ClearTwoTone)`
 
 const CustomAdd = styled(Add)`
   font-size: 20px;
-  margin-left: 10px;
   border: 1px solid lightgray;
   border-radius: 50%;
   cursor: pointer;
@@ -205,9 +212,16 @@ const Error = styled.div`
   color: red;
   letter-spacing: 2px;
   padding: 5px;
+  margin-bottom: 20px;
 `;
 
-export const AdminProductEditA = ({ product, pop, setPop, productId }) => {
+export const AdminProductEditA = ({
+  product,
+  pop,
+  setPop,
+  productId,
+  editRef,
+}) => {
   const dispatch = useDispatch();
   const accessToken = useSelector((state) => state.user.accessToken);
   const { error, errMessage } = useSelector((state) => state.product);
@@ -221,6 +235,14 @@ export const AdminProductEditA = ({ product, pop, setPop, productId }) => {
   const [counter, setCounter] = useState(initCounter);
   const [isFetching, setIsFetching] = useState(false);
   const formRef = useRef();
+  // scroll to view
+  useEffect(() => {
+    if (pop && editRef?.current) {
+      editRef.current.scrollIntoView();
+    } else if (!pop) {
+      window.scrollTo(0, 0);
+    }
+  }, [pop]);
 
   const handleOnchange = (e) => {
     if (e.target.type === "textarea") {
@@ -233,28 +255,37 @@ export const AdminProductEditA = ({ product, pop, setPop, productId }) => {
     });
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     if (window.confirm("確定要更新資料嗎？")) {
       setIsFetching(true);
-      updatePartialProduct(productId, inputs, dispatch, accessToken);
-      setInputs({});
-      setPop("hide");
-      setIsFetching(false);
+      const result = await updatePartialProduct(
+        productId,
+        inputs,
+        dispatch,
+        accessToken
+      );
+      if (result[0]) {
+        setInputs({});
+        setPop(false);
+        setIsFetching(false);
+      } else {
+        setIsFetching(false);
+      }
     }
   };
   const handleCancelUpdate = (e) => {
     e.preventDefault();
     if (window.confirm("更新尚未儲存，確定要離開嗎？")) {
       setInputs({});
-      setPop("hide");
+      setPop(false);
       formRef.current.reset();
       setCounter(initCounter);
     }
   };
 
   return (
-    <PopContainer pop={pop} update={isFetching}>
+    <PopContainer pop={pop} update={isFetching} ref={editRef}>
       <EditTitle>編輯</EditTitle>
       <hr
         style={{
@@ -276,6 +307,7 @@ export const AdminProductEditA = ({ product, pop, setPop, productId }) => {
             onChange={handleOnchange}
             rows="1"
             defaultValue={product.name}
+            style={{ width: "100%" }}
           ></TextArea>
           <Counter id="countername">{`${counter.name}/20`}</Counter>
         </InputContainer>
@@ -292,6 +324,7 @@ export const AdminProductEditA = ({ product, pop, setPop, productId }) => {
             onChange={handleOnchange}
             rows="2"
             defaultValue={product.title}
+            style={{ width: "100%" }}
           ></TextArea>
           <Counter id="countertitle">{`${counter.title}/30`}</Counter>
         </InputContainer>
@@ -308,11 +341,12 @@ export const AdminProductEditA = ({ product, pop, setPop, productId }) => {
             onChange={handleOnchange}
             defaultValue={product.desc}
             rows="3"
+            style={{ width: "100%" }}
           ></TextArea>
           <Counter id="counterdesc">{`${counter.desc}/150`}</Counter>
         </InputContainer>
         <InputContainer>
-          <Label htmlFor="category">
+          <Label htmlFor="categories">
             <Category />
             分類
           </Label>
@@ -326,8 +360,35 @@ export const AdminProductEditA = ({ product, pop, setPop, productId }) => {
             <option>蜂巢坐靠墊</option>
             <option>環保無痕窗貼</option>
             <option>不倒翁門擋</option>
-            <option>其它</option>
+            <option>矽膠鍋墊</option>
           </Select>
+        </InputContainer>
+        <InputContainer>
+          <Label htmlFor="instock">
+            <Inventory2 />
+            庫存
+          </Label>
+          <Select
+            name="inStock"
+            defaultValue={product.inStock}
+            onChange={handleOnchange}
+          >
+            <option value={true}>有</option>
+            <option value={false}>無</option>
+          </Select>
+        </InputContainer>
+        <InputContainer>
+          <Label htmlFor="imagePath">
+            <ImageSearch />
+            圖片儲存路徑
+          </Label>
+          <Input
+            type="text"
+            name="imagePath"
+            defaultValue={product.imagePath}
+            placeholder="例：shop_website/imgs/placemat/food/"
+            onChange={handleOnchange}
+          />
         </InputContainer>
 
         {error && <Error>{errMessage ? errMessage : "發生錯誤！"}</Error>}
@@ -344,7 +405,7 @@ export const AdminProductEditA = ({ product, pop, setPop, productId }) => {
 
 // EditArea B
 
-export const AdminProductEditB = ({ pop, setPop, productId }) => {
+export const AdminProductEditB = ({ pop, setPop, productId, editRef }) => {
   const dispatch = useDispatch();
   const product = useSelector((state) =>
     state.product.products.find((product) => product._id === productId)
@@ -379,8 +440,18 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
     setAddInputs(initCol);
     setDeleteEle(initCol);
     setShowAddInput([false, false, false]);
-    setPop("hide");
+    setPop(false);
   }, [product]);
+
+  // scroll to view
+  useEffect(() => {
+    if (pop && editRef?.current) {
+      editRef.current.scrollIntoView();
+    } else if (!pop) {
+      window.scrollTo(0, 0);
+    }
+  }, [pop]);
+
   const handleData = (e, mode, index, colName, ref) => {
     if (mode === "change") {
       setInputs((prev) => {
@@ -437,11 +508,12 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
     });
   };
   const handleCancelUpdate = (e) => {
+    e.preventDefault();
     if (window.confirm("更新尚未儲存，確定要離開嗎？")) {
       setInputs(getInitInput());
       setDeleteEle(initCol);
       setAddInputs(initCol);
-      setPop(() => "hide");
+      setPop(() => false);
       // reset the form
       formRef.current.reset();
       noticeRef.current.forEach((n) => {
@@ -467,7 +539,8 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
       });
     }
   };
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
     if (window.confirm("確定要更新資料嗎？")) {
       setIsFetching(true);
       const filterDelete = (colName, data) => {
@@ -482,12 +555,22 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
       finalData = filterDelete("notice", inputs);
       finalData = filterDelete("colors", finalData);
       finalData = filterDelete("patterns", finalData);
-      updatePartialProduct(productId, finalData, dispatch, accessToken);
+      const result = await updatePartialProduct(
+        productId,
+        finalData,
+        dispatch,
+        accessToken
+      );
+      if (result[0]) {
+        window.alert("成功更新資料");
+      } else {
+        window.alert("資料更新失敗");
+      }
       setIsFetching(false);
     }
   };
   return (
-    <PopContainer pop={pop}>
+    <PopContainer pop={pop} ref={editRef}>
       <EditTitle>編輯</EditTitle>
       <hr
         style={{
@@ -498,18 +581,20 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
       <EditArea id="reset" ref={formRef}>
         <InputContainer>
           <AddItemContainer>
-            <Palette />
-            顏色
-            <CustomAdd
-              style={{ cursor: "pointer" }}
-              onClick={() =>
-                setShowAddInput((prev) =>
-                  prev.map(function (status, index) {
-                    return index === 0 ? !status : status;
-                  })
-                )
-              }
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Palette />
+              顏色
+              <CustomAdd
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  setShowAddInput((prev) =>
+                    prev.map(function (status, index) {
+                      return index === 0 ? !status : status;
+                    })
+                  )
+                }
+              />
+            </div>
             <AdminColorInput
               show={showAddInput[0]}
               setInputs={setInputs}
@@ -533,7 +618,11 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
                     }}
                   />
                   <SettingsBackupRestoreTwoTone
-                    style={{ cursor: "pointer", display: "none" }}
+                    style={{
+                      cursor: "pointer",
+                      display: "none",
+                      color: "gray",
+                    }}
                     onClick={(e) => {
                       handleData(e, "recover", index, "colors", colorRef);
                     }}
@@ -564,18 +653,20 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
 
         <InputContainer>
           <AddItemContainer>
-            <ImagesearchRoller />
-            樣式
-            <CustomAdd
-              style={{ cursor: "pointer" }}
-              onClick={() =>
-                setShowAddInput((prev) =>
-                  prev.map(function (status, index) {
-                    return index === 1 ? !status : status;
-                  })
-                )
-              }
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <ImagesearchRoller />
+              樣式
+              <CustomAdd
+                style={{ cursor: "pointer" }}
+                onClick={() =>
+                  setShowAddInput((prev) =>
+                    prev.map(function (status, index) {
+                      return index === 1 ? !status : status;
+                    })
+                  )
+                }
+              />
+            </div>
             <AdminPatternInput
               show={showAddInput[1]}
               setInputs={setInputs}
@@ -601,7 +692,11 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
                     onClick={(e) => {
                       handleData(e, "recover", index, "patterns", patternRef);
                     }}
-                    style={{ cursor: "pointer", display: "none" }}
+                    style={{
+                      cursor: "pointer",
+                      display: "none",
+                      color: "gray",
+                    }}
                   />
                 </Color>
               ))}
@@ -642,17 +737,19 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
         </InputContainer>
         <InputContainer>
           <AddItemContainer>
-            <CircleNotifications />
-            注意事項<span>(上限30字，5項)</span>
-            <CustomAdd
-              onClick={() =>
-                setShowAddInput((prev) =>
-                  prev.map(function (status, index) {
-                    return index === 2 ? !status : status;
-                  })
-                )
-              }
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <CircleNotifications />
+              注意事項<span>(上限35字，5項)</span>
+              <CustomAdd
+                onClick={() =>
+                  setShowAddInput((prev) =>
+                    prev.map(function (status, index) {
+                      return index === 2 ? !status : status;
+                    })
+                  )
+                }
+              />
+            </div>
           </AddItemContainer>
           <AdminNoticeInput
             show={showAddInput[2]}
@@ -675,22 +772,23 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
                 onClick={(e) => {
                   handleData(e, "recover", index, "notice", noticeRef);
                 }}
-                style={{ cursor: "pointer", display: "none" }}
+                style={{ cursor: "pointer", display: "none", color: "gray" }}
               />
 
-              <Input
+              <TextArea
+                maxLength="35"
+                minLength="5"
                 id={`notice${index}`}
-                placeholder={n}
+                name="notice"
+                placeholder="請輸入最少5個字"
                 onChange={(e) => {
                   handleData(e, "change", index, "notice");
                 }}
-                maxLength="25"
-                type="text"
+                rows="2"
                 defaultValue={n}
-                name="notice"
-              />
+              ></TextArea>
               {inputs?.notice?.length > 0 && (
-                <Counter>{`${inputs?.notice[index]?.length}/25`}</Counter>
+                <Counter>{`${inputs?.notice[index]?.length}/30`}</Counter>
               )}
             </NoticeContainer>
           ))}
@@ -713,8 +811,9 @@ export const AdminProductEditB = ({ pop, setPop, productId }) => {
             </TempAddContainer>
           )}
         </InputContainer>
+        {error && <Error>{errMessage ? errMessage : "發生錯誤！"}</Error>}
       </EditArea>
-      <Block style={{ justifyContent: "space-around" }}>
+      <Block style={{ justifyContent: "space-around", margin: "10px 0" }}>
         <ConfirmButton onClick={handleCancelUpdate}>取消更新</ConfirmButton>
         {isFetching ? (
           <ConfirmButton disabled>更新中</ConfirmButton>

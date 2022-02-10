@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { tabletBig } from "../responsive";
 import {
   ResponsiveContainer,
   LineChart,
@@ -14,6 +15,7 @@ const Container = styled.div`
   box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
   border-radius: 5px;
   margin: ${(props) => props.margin || "20px"};
+  ${tabletBig({ minHeight: "200px", width: "calc(100vw - 40px)" })}
 `;
 const Top = styled.div`
   display: flex;
@@ -33,6 +35,8 @@ const Select = styled.select`
   border: none;
   letter-spacing: 1px;
   border: 1px solid gray;
+  cursor: pointer;
+  background-color: white;
 `;
 const AdminChart = ({ data, title, dataKey, margin, year, setYear }) => {
   const [device, setDevice] = useState();
@@ -46,6 +50,14 @@ const AdminChart = ({ data, title, dataKey, margin, year, setYear }) => {
       setDevice("lg");
     }
   }
+  useEffect(() => {
+    handleCheckDevice();
+    window.addEventListener("resize", handleCheckDevice);
+    return () => {
+      window.removeEventListener("resize", handleCheckDevice);
+    };
+  }, []);
+
   return (
     <Container margin={margin}>
       <Top>
@@ -55,10 +67,18 @@ const AdminChart = ({ data, title, dataKey, margin, year, setYear }) => {
           <option>{new Date().getFullYear() - 1}</option>
         </Select>
       </Top>
-      <ResponsiveContainer width="100%" aspect={4 / 1}>
+      <ResponsiveContainer
+        width="100%"
+        aspect={device === "sm" ? 2 / 1 : 4 / 1}
+      >
         <LineChart
           data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          margin={{
+            top: 5,
+            right: device === "sm" ? 10 : 30,
+            left: device === "sm" ? 10 : 20,
+            bottom: device === "sm" ? 0 : 5,
+          }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="lightgray" />
           <XAxis

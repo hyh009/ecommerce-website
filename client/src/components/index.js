@@ -19,6 +19,7 @@ export { default as SmallProduct } from "./SmallProduct";
 export { default as TextAnimation } from "./TextAnimation";
 export { default as UserInfo } from "./UserInfo";
 export { default as Video } from "./Video";
+export { default as ImageDropzone } from "./ImageDropzone";
 // Admin
 export { default as AdminSidebar } from "./AdminSidebar";
 export { default as AdminTopbar } from "./AdminTopbar";

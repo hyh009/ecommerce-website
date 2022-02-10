@@ -165,6 +165,7 @@ const Submit = styled.button`
 `;
 
 const ProfileEdit = () => {
+  const acceptFileTypes = ["image/jpg", "image/jpeg", "image/png"];
   const user = useSelector((state) => state.user.currentUser);
   const userIsFetching = useSelector((state) => state.user.isFetching);
   const accessToken = useSelector((state) => state.user.accessToken);
@@ -178,8 +179,6 @@ const ProfileEdit = () => {
   const [updatingPic, setUpdatingPic] = useState(false);
 
   const handlePreview = (e) => {
-    const acceptFileTypes = ["image/jpg", "image/jpeg", "image/png"];
-
     if (!acceptFileTypes.includes(e.target.files[0].type)) {
       return window.alert("不支援此檔案格式。(可上傳.png .jpg .jepg檔)");
     }
@@ -310,7 +309,7 @@ const ProfileEdit = () => {
             )}
             <PicLabel
               style={{ display: uploadImage ? "none" : "flex" }}
-              htmlfor="photo"
+              htmlFor="photo"
             >
               <Upload />
               點擊上傳
@@ -399,8 +398,8 @@ const ProfileEdit = () => {
             <Label>地址：</Label>
             <Input
               name="address"
-              defaultValue={user.address || "未填寫"}
-              placeholder={user.address || "未填寫"}
+              defaultValue={user.address}
+              placeholder={user.address}
               {...register("address")}
             />
           </ListItem>

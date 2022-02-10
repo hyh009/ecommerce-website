@@ -1,8 +1,8 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Badge from "@mui/material/Badge";
 import { Logout, Settings, NotificationsNone } from "@mui/icons-material";
-
+import { tabletBig } from "../responsive";
 import { useSelector } from "react-redux";
 
 const Top = styled.div`
@@ -10,7 +10,7 @@ const Top = styled.div`
   height: 50px;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 2;
   background-color: white;
   box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
 `;
@@ -20,6 +20,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  ${tabletBig({ padding: "5px" })}
 `;
 const TopLeft = styled.div`
   display: flex;
@@ -96,25 +97,27 @@ const Topbar = () => {
     <Top>
       <Wrapper>
         <TopLeft>
-          <Logo
-            src={
-              "https://res.cloudinary.com/dh2splieo/image/upload/v1640706199/shop_website/imgs/logo/name_jzjdfr.jpg"
-            }
-          />
+          <Link to="/admin">
+            <Logo
+              src={
+                "https://res.cloudinary.com/dh2splieo/image/upload/v1640706199/shop_website/imgs/logo/name_jzjdfr.jpg"
+              }
+            />
+          </Link>
           <Desc>網站管理後台</Desc>
         </TopLeft>
         <TopRight>
           <IconContainer title="登出" onClick={handleLogout}>
             <Logout />
           </IconContainer>
-          <IconContainer title="通知">
+          {/* <><IconContainer title="通知">
             <Badge badgeContent={1} color="primary">
               <NotificationsNone />
             </Badge>
           </IconContainer>
           <IconContainer title="設定">
             <Settings />
-          </IconContainer>
+          </IconContainer></> */}
           <PhotoContainer>
             <Photo src={user.img} alt={user.username} />
             <div className="userinfo">

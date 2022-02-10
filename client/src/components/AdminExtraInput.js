@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { mobile } from "../responsive";
 
 const Container = styled.div`
   display: flex;
   align-items: center;
   border-radius: 5px;
-  margin-left: 10px;
-`;
-const InputArea = styled.div`
-  display: flex;
+  width: 100%;
+  ${mobile({ flexDirection: "column", gap: "5px" })}
 `;
 
 const InputContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   border: 1px solid lightgray;
   border-radius: 5px;
 `;
@@ -23,7 +23,7 @@ const Input = styled.input`
 `;
 const AddBtn = styled.button`
   border: none;
-  background-color: navy;
+  background-color: teal;
   cursor: pointer;
   color: white;
   padding: 3px 10px;
@@ -33,7 +33,10 @@ const AddBtn = styled.button`
 `;
 
 export const AdminColorInput = ({ show, setInputs, setAddInputs }) => {
-  const [singleInput, setSingleInput] = useState({});
+  const [singleInput, setSingleInput] = useState({
+    code: "#ffffff",
+    name: "",
+  });
 
   const handleInput = (e) => {
     setSingleInput((prev) => {
@@ -48,6 +51,8 @@ export const AdminColorInput = ({ show, setInputs, setAddInputs }) => {
     setInputs((prev) => {
       return { ...prev, colors: [...prev.colors, singleInput] };
     });
+
+    setSingleInput({ code: "#ffffff", name: "" });
   };
   return (
     <Container style={{ display: show ? "flex" : "none" }}>
@@ -57,12 +62,14 @@ export const AdminColorInput = ({ show, setInputs, setAddInputs }) => {
           placeholder="輸入顯示名稱(6字以內)"
           name="name"
           onChange={(e) => handleInput(e)}
+          value={singleInput?.name}
         />
         <Input
           type="color"
           name="code"
           style={{ cursor: "pointer" }}
           onChange={(e) => handleInput(e)}
+          value={singleInput?.code}
         />
       </InputContainer>
       <AddBtn onClick={handleAdd}>新增</AddBtn>
@@ -83,6 +90,7 @@ export const AdminPatternInput = ({ show, setInputs, setAddInputs }) => {
     setInputs((prev) => {
       return { ...prev, patterns: [...prev.patterns, singleInput] };
     });
+    setSingleInput(null);
   };
   return (
     <Container style={{ display: show ? "flex" : "none" }}>
@@ -91,6 +99,7 @@ export const AdminPatternInput = ({ show, setInputs, setAddInputs }) => {
           maxLength="10"
           placeholder="輸入樣式名稱(10字以內)"
           onChange={(e) => handleInput(e)}
+          value={singleInput}
         />
       </InputContainer>
       <AddBtn onClick={handleAdd}>新增</AddBtn>
@@ -121,18 +130,20 @@ export const AdminNoticeInput = ({
       setInputs((prev) => {
         return { ...prev, notice: [...prev.notice, singleInput] };
       });
+      setSingleInput(null);
     }
   };
   return (
     <Container
       style={{ marginBottom: "10px", display: show ? "flex" : "none" }}
     >
-      <InputContainer style={{ width: "85%" }}>
+      <InputContainer style={{ width: "80%" }}>
         <Input
-          maxLength="25"
+          maxLength="35"
           placeholder="輸入注意事項"
           style={{ width: "100%" }}
           onChange={(e) => handleInput(e)}
+          value={singleInput}
         />
       </InputContainer>
       <AddBtn onClick={handleAdd}>新增</AddBtn>

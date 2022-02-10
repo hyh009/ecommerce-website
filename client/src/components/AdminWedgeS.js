@@ -5,13 +5,23 @@ import { Link } from "react-router-dom";
 import UserService from "../services/user.service";
 import { useSelector } from "react-redux";
 import { format } from "timeago.js";
+import { tabletBig } from "../responsive";
 
 const Container = styled.div`
   flex: 1;
   box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
-  margin-right: 10px;
   padding: 20px;
   border-radius: 5px;
+  &::-webkit-scrollbar-thumb {
+    background: transparent; /* Optional: just make scrollbar invisible */
+  }
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  ${tabletBig({
+    overflowX: "auto",
+    width: "100%",
+  })}
 `;
 const Title = styled.h3`
   font-size: 3vmin;
@@ -19,17 +29,16 @@ const Title = styled.h3`
 `;
 
 const ListContainer = styled.ul`
-  list-style-type: none;
-  padding: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin: 10px 0;
-  padding: 5px;
+  list-style-type: none;
+  width: 100%;
   cursor: pointer;
-  border-radius: 5px;
-  &:hover {
-    background-color: #eee;
-  }
+  ${tabletBig({
+    flexDirection: "row",
+    width: "max-content",
+  })}
 `;
 const UserList = styled.li`
   display: flex;
@@ -37,13 +46,23 @@ const UserList = styled.li`
   font-size: 2.25vmin;
   width: 100%;
   justify-content: space-around;
+  margin: 10px 0;
+  padding: 5px;
+  border-radius: 5px;
+  &:hover {
+    background-color: #eee;
+  }
+  ${tabletBig({
+    flexDirection: "column",
+    gap: "5px",
+    width: "150px",
+  })}
 `;
 const UserImg = styled.img`
   height: 35px;
   width: 35px;
   border-radius: 50%;
   object-fit: cover;
-  overflow: hidden;
 `;
 const Info = styled.div`
   display: flex;
@@ -51,8 +70,15 @@ const Info = styled.div`
 `;
 const UserName = styled.span`
   letter-spacing: 2px;
+  ${tabletBig({
+    textAlign: "center",
+  })}
 `;
-const CreatedDate = styled.span``;
+const CreatedDate = styled.span`
+  ${tabletBig({
+    textAlign: "center",
+  })}
+`;
 const Display = styled.div`
   font-size: 2.25vmin;
   cursor: pointer;
@@ -102,9 +128,10 @@ const AdminWedgeS = () => {
   return (
     <Container>
       <Title>新加入用戶</Title>
-      {users?.map((user) => (
-        <ListContainer key={user._id}>
-          <UserList>
+
+      <ListContainer>
+        {users?.map((user) => (
+          <UserList key={user._id}>
             <UserImg src={user.img || defaultUser} />
             <Info>
               <UserName>{user.username}</UserName>
@@ -120,8 +147,8 @@ const AdminWedgeS = () => {
               </Display>
             </Link>
           </UserList>
-        </ListContainer>
-      ))}
+        ))}
+      </ListContainer>
     </Container>
   );
 };

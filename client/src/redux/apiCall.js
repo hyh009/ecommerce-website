@@ -204,11 +204,12 @@ export const updatePartialProduct = async (
   try {
     const res = await ProductService.patch(id, updateData, accessToken);
     dispatch(updatePartialProductSuccess({ product: res.data }));
-    console.log("update", res.data);
+    return [res.data, null];
   } catch (err) {
     console.log(err);
     err.response.data &&
       dispatch(updatePartialProductFailure(err.response.data));
+    return [null, err.response?.data];
   }
 };
 

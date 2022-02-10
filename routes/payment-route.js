@@ -13,6 +13,12 @@ const {
   verifyTokenAndAdmin,
 } = require("./validation-token");
 
+const COMFIRM_URL = "http://localhost:3000/payment/confirm";
+const CANCEL_URL = "http://localhost:3000/payment/cancel";
+
+// const COMFIRM_URL = "https://hsinyaoecommercewebsite.herokuapp.com/payment/confirm";
+// const CANCEL_URL =  "https://hsinyaoecommercewebsite.herokuapp.com/payment/cancel";
+
 // LINE Pay
 const linePayBaseUrl = "https://sandbox-api-pay.line.me";
 const key = process.env.LINEPAY_SECRET;
@@ -38,7 +44,20 @@ function createRequestConfig(hmacBase64, nonce) {
 
 // linepay payment request
 router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
-  const order = req.body.order;
+  const orderDetail = req.body.order;
+  const packages = createLinePackages(orderDetail);
+
+  const order = {
+    amount: orderDetail.amount + orderDetail.shipping,
+    currency: "TWD",
+    orderId: orderDetail._id,
+    packages: packages,
+    redirectUrls: {
+      confirmUrl: COMFIRM_URL,
+      cancelUrl: CANCEL_URL,
+    },
+  };
+
   const nonce = uuid();
   const requestUri = "/v3/payments/request";
   const hamcBase64 = createSignature(order, nonce, requestUri);
@@ -67,7 +86,11 @@ router.post(
   "/linepay/confirm/:id",
   verifyTokenAndAuthorization,
   async (req, res) => {
-    const { amountAndCurrency, transactionId } = req.body;
+    const { order, transactionId } = req.body;
+    const amountAndCurrency = {
+      amount: order.amount + order.shipping,
+      currency: "TWD",
+    };
     const nonce = uuid();
     const confirmUri = `/v3/payments/${transactionId}/confirm`;
     const hamcBase64 = createSignature(amountAndCurrency, nonce, confirmUri);
@@ -148,4 +171,41 @@ router.post(
     }
   }
 );
+
+//For Line
+const createLinePackages = (orderDetail) => {
+  let packages = [];
+  for (let i = 0; i < orderDetail.products.length; i++) {
+    packages.push({
+      id: i + 1,
+      amount: orderDetail.products[i].amount,
+      products: [
+        {
+          id: orderDetail.products[i]._id,
+          name: `${orderDetail.products[i].title} - ${orderDetail.products[i].color}${orderDetail.products[i].pattern}`,
+          imageUrl: orderDetail.products[i].imgUrl,
+          quantity: orderDetail.products[i].quantity,
+          price: orderDetail.products[i].price,
+        },
+      ],
+    });
+  }
+  //add shipping fee
+  packages.push({
+    id: orderDetail.products.length,
+    amount: orderDetail.shipping,
+    products: [
+      {
+        id: 0,
+        name: "運費",
+        quantity: 1,
+        imageUrl:
+          "https://res.cloudinary.com/dh2splieo/image/upload/v1643035258/shop_website/imgs/24296403_dkqscf.jpg",
+        price: orderDetail.shipping,
+      },
+    ],
+  });
+  return packages;
+};
+
 module.exports = router;

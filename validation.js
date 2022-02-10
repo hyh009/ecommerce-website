@@ -36,6 +36,8 @@ const registerValidation = (data) => {
         "any.required": "請再次輸入密碼。",
         "any.only": "前後輸入的密碼不相同。",
       }),
+    phone: Joi.string(),
+    address: Joi.string(),
   });
   return schema.validate(data);
 };
@@ -111,25 +113,25 @@ const updatePasswordValidation = (data) => {
 
 const productValidation = (data) => {
   const schema = Joi.object({
-    name: Joi.string().min(3).max(20).required().messages({
+    name: Joi.string().required().min(3).max(20).messages({
       "string.empty": `請輸入產品名稱。`,
       "string.min": `名稱最少3個字。`,
-      "string.max": `名稱最多10個字。`,
+      "string.max": `名稱最多20個字。`,
       "any.required": "請輸入產品名稱。",
     }),
-    title: Joi.string().min(5).max(30).required().messages({
+    title: Joi.string().required().min(5).max(30).messages({
       "string.empty": `請輸入產品顯示標題。`,
       "string.min": `標題最少5個字。`,
-      "string.max": `標題最多25個字。`,
+      "string.max": `標題最多30個字。`,
       "any.required": "請輸入產品顯示標題。",
     }),
-    desc: Joi.string().min(10).max(150).required().messages({
+    desc: Joi.string().required().min(10).max(150).messages({
       "string.empty": `請輸入產品描述。`,
       "string.min": `產品描述最少10個字。`,
-      "string.max": `產品描述最多100個字。`,
+      "string.max": `產品描述最多150個字。`,
       "any.required": "請輸入產品描述。",
     }),
-    price: Joi.number().min(0).required().messages({
+    price: Joi.number().required().min(0).messages({
       "number.empty": `請輸入產品價格。`,
       "number.min": `價格最少0元。`,
       "any.required": "請輸入產品價格。",
@@ -144,15 +146,15 @@ const productValidation = (data) => {
       })
     ),
     categories: Joi.string()
+      .required()
       .valid(
         "隨你PAD吸管",
         "環保無痕窗貼",
         "矽膠小餐墊",
         "蜂巢坐靠墊",
         "不倒翁門擋",
-        "其它"
+        "矽膠鍋墊"
       )
-      .required()
       .messages({
         "any.required": "請輸入正確的商品分類名稱。",
         "any.only": "請輸入正確的商品分類名稱",
@@ -165,9 +167,11 @@ const productValidation = (data) => {
     ),
     patterns: Joi.array().items(Joi.string()),
     notice: Joi.array().items(Joi.string()).max(5),
-    imagePath: Joi.string().required().message({
+    imagePath: Joi.string().required().messages({
+      "string.empty": "請輸入圖片路徑。",
       "any.required": "請填入圖片路徑。",
     }),
+    inStock: Joi.boolean(),
   });
   return schema.validate(data);
 };
@@ -177,17 +181,17 @@ const updateProductValidation = (data) => {
     name: Joi.string().min(3).max(20).messages({
       "string.empty": `請輸入產品名稱。`,
       "string.min": `名稱最少3個字。`,
-      "string.max": `名稱最多10個字。`,
+      "string.max": `名稱最多20個字。`,
     }),
     title: Joi.string().min(5).max(30).messages({
       "string.empty": `請輸入標題。`,
       "string.min": `標題最少5個字。`,
-      "string.max": `標題最多25個字。`,
+      "string.max": `標題最多30個字。`,
     }),
     desc: Joi.string().min(10).max(150).messages({
       "string.empty": `請輸入產品描述。`,
       "string.min": `產品描述最少10個字。`,
-      "string.max": `產品描述最多100個字。`,
+      "string.max": `產品描述最多150個字。`,
     }),
     price: Joi.number().min(0).messages({
       "number.empty": `請輸入產品價格。`,
@@ -208,7 +212,7 @@ const updateProductValidation = (data) => {
         "矽膠小餐墊",
         "蜂巢坐靠墊",
         "不倒翁門擋",
-        "其它"
+        "矽膠鍋墊"
       )
       .messages({
         "any.only": "請輸入正確的商品分類名稱",
@@ -222,6 +226,7 @@ const updateProductValidation = (data) => {
     ),
     patterns: Joi.array().items(Joi.string()),
     notice: Joi.array().items(Joi.string()).max(5),
+    inStock: Joi.boolean(),
     imagePath: Joi.string(),
   });
   return schema.validate(data);

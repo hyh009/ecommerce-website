@@ -403,7 +403,7 @@ const Product = () => {
   return (
     <Container>
       <Helmet>
-        <title>{`${currentProduct.title} | 墊一店`}</title>
+        <title>{`${currentProduct.title || ""} | 墊一店`}</title>
         <meta name="description" content={`${currentProduct.desc}。`}></meta>
       </Helmet>
       {isFetching ? (

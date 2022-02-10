@@ -129,12 +129,14 @@ const LoadAnimation = ({ showAnimation, setShowAnimation }) => {
             <TextAnimation order="second" text="用液態矽膠照顧你的生活" />
           </CoverText>
         )}
-        <Click
-          title="點擊進入"
-          onClick={() => setShowAnimation((prev) => !prev)}
-        >
-          Enter
-        </Click>
+        {!isFetching && (
+          <Click
+            title="點擊進入"
+            onClick={() => setShowAnimation((prev) => !prev)}
+          >
+            Enter
+          </Click>
+        )}
       </CoverImgContainer>
     </Container>
   );

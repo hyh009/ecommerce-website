@@ -1,15 +1,16 @@
 import styled from "styled-components";
 import { ArrowDownward, ArrowUpward, Remove } from "@mui/icons-material";
+import { tabletBig } from "../responsive";
 
 const Container = styled.div`
   box-shadow: 0 0 10px rgba(122, 122, 122, 0.25);
   flex: 1;
   padding: 20px;
-  margin: 0 20px;
   display: flex;
   flex-direction: column;
   border-radius: 5px;
   cursor: pointer;
+  ${tabletBig({ width: "100%" })}
 `;
 const Title = styled.span`
   font-size: 16px;
@@ -79,10 +80,12 @@ const AdminFeatureInfo = (props) => {
               ? "red"
               : props.data?.rate > 0
               ? "green"
-              : "blue"
+              : props.data?.rate === 0
+              ? "blue"
+              : "gray"
           }
         >
-          {props.data?.rate}%
+          {props.data?.rate || "-"}%
         </Rate>
         {props.data?.rate < 0 && (
           <CustomArrowDownward style={{ fontSize: 14 }} />

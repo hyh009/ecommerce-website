@@ -27,7 +27,7 @@ export const sliderItems = [
       "過年換春聯殘膠難清又怕貼歪不復返嗎？無痕創意春聯撕貼僅需一秒鐘，輕鬆搞定春聯佈置。",
     button: "告別殘膠",
     bg: "FBF0F3",
-    product_id: "1",
+    product_id: "6204d0b3381dbe5f50b4eeef",
   },
   {
     id: 4,
@@ -50,7 +50,7 @@ export const categories = [
   },
   {
     id: 2,
-    title: "無痕窗貼",
+    title: "環保無痕窗貼",
     img: "https://res.cloudinary.com/dh2splieo/image/upload/v1640706206/shop_website/imgs/spring/spring2_cqpxzr.jpg",
     desc: "無痕創意窗貼，背面專利螞蟻雄兵吸盤設計，利用真空吸力，完整貼附於平滑表面材質，不用膠帶就能輕鬆貼附。",
   },

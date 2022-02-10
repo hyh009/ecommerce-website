@@ -5,7 +5,7 @@ class ProductService {
   //Read
   getAll(category) {
     return typeof category === "undefined" || category === "all"
-      ? axiosInstance.get(ROUTE)
+      ? axiosInstance.get(`${ROUTE}?new=true`)
       : axiosInstance.get(`${ROUTE}?category=${category}`);
   }
 

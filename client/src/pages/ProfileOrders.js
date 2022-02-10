@@ -143,7 +143,7 @@ const ProfileOrders = () => {
           getRowId={(row) => row._id}
           rows={orders}
           columns={columns}
-          pageSize={tablet ? 10 : 5}
+          pageSize={mobile ? 7 : tablet ? 10 : 5}
           disableSelectionOnClick
           loading={loading}
           localeText={localtext}

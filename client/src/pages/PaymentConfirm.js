@@ -84,7 +84,6 @@ const PaymentConfirm = () => {
   const dispatch = useDispatch();
   const [isFetching, setIsFetching] = useState(false);
   const [success, setSuccess] = useState(Boolean(searchParams.get("success")));
-  console.log(transactionId, method);
 
   useEffect(() => {
     const getOrder = async () => {

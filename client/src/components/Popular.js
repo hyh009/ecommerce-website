@@ -3,18 +3,24 @@ import styled from "styled-components";
 import { tabletBig, tablet, mobile } from "../responsive";
 import Products from "./Products";
 import ProductService from "../services/product.service";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
 const Container = styled.div`
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-auto-rows: 1fr;
-  ${tabletBig({ gridTemplateColumns: "repeat(3, 1fr)" })};
-  ${tablet({ padding: "20px 0", gridTemplateColumns: "repeat(2, 1fr)" })};
-  ${mobile({ padding: "20px 0", gridTemplateColumns: "repeat(1, 1fr)" })};
+  ${tabletBig({ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" })};
+  ${tablet({
+    padding: "20px 0",
+    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+  })};
+  ${mobile({
+    padding: "20px 0",
+    gridTemplateColumns: "repeat(1, minmax(0, 1fr))",
+  })};
 `;
 const ProgressContainer = styled.div`
   display: flex;
@@ -56,20 +62,19 @@ const Popular = ({ sort, filters }) => {
   const [items, setItems] = useState([]);
   const [filtereditems, setFiltereditems] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
-  const navigate = useNavigate();
+  const products = useSelector((state) => state.product.products);
 
   useEffect(() => {
-    setIsFetching(true);
     const getProducts = async () => {
+      setIsFetching(true);
       try {
         if (typeof filters === "undefined") {
-          const res = await ProductService.getAll();
-          setFiltereditems(res.data.slice(0, 8));
+          console.log("pass");
+          setFiltereditems(() => products.slice(0, 8));
           setIsFetching(false);
         } else {
           const res = await ProductService.getAll(filters.category);
           setItems(res.data);
-          navigate(`/products/${filters.category}`, { replace: true });
           setIsFetching(false);
         }
       } catch (err) {
@@ -126,26 +131,29 @@ const Popular = ({ sort, filters }) => {
 
       setFiltereditems(result);
     } else {
-      setFiltereditems(items);
+      if (typeof filters === "undefined") {
+        return;
+      } else {
+        setFiltereditems(items);
+      }
     }
-  }, [items, filters, navigate]);
+  }, [items, filters]);
 
   useEffect(() => {
-    if (sort === "newest") {
+    if (sort === "asc") {
+      setFiltereditems((prev) => [...prev].sort((a, b) => a.price - b.price));
+    } else if (sort === "desc") {
+      setFiltereditems((prev) => [...prev].sort((a, b) => b.price - a.price));
+    } else {
       setFiltereditems((prev) =>
         [...prev].sort(
           (a, b) =>
             new Date(b?.createdAt?.split("T")[0]) -
-            new Date(alert?.createdAt?.split("T")[0])
+            new Date(a?.createdAt?.split("T")[0])
         )
       );
-    } else if (sort === "asc") {
-      setFiltereditems((prev) => [...prev].sort((a, b) => a.price - b.price));
-    } else {
-      setFiltereditems((prev) => [...prev].sort((a, b) => b.price - a.price));
     }
   }, [sort]);
-
   return (
     <Container>
       {isFetching ? (

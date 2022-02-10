@@ -6,6 +6,7 @@ import NotFound from "../pages/NotFound";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { categories } from "../data";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div``;
 const Title = styled.h1`
@@ -41,6 +42,7 @@ const Select = styled.select`
   border-radius: 5px;
   text-align: center;
   border: 1.5px solid black;
+  background-color: white;
   ${mobile({ margin: "10px 0" })}
   &:hover {
     border: 2px solid teal;
@@ -51,13 +53,18 @@ const Option = styled.option``;
 const ProductList = () => {
   // get the category's name from path
   const location = useLocation();
+  const navigate = useNavigate();
   const cat = decodeURIComponent(location.pathname.split("/")[2]);
   const [filters, setfilters] = useState({ category: cat });
   const [sort, setSort] = useState("newest");
   const [catExist, setCatExist] = useState(true);
   const handleFilterChange = (e) => {
-    const value = e.target.value;
-    setfilters({ ...filters, [e.target.name]: value });
+    if (e.target.name === "category") {
+      navigate(`/products/${e.target.value}`, { replace: true });
+    } else {
+      const value = e.target.value;
+      setfilters({ ...filters, [e.target.name]: value });
+    }
   };
   useEffect(() => {
     setfilters((f) => {
@@ -93,7 +100,7 @@ const ProductList = () => {
             <Option>隨你PAD吸管</Option>
             <Option>矽膠小餐墊</Option>
             <Option>蜂巢坐靠墊</Option>
-            <Option>無痕窗貼</Option>
+            <Option>環保無痕窗貼</Option>
             <Option>不倒翁門擋</Option>
             <Option>矽膠鍋墊</Option>
           </Select>
