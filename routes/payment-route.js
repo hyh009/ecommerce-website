@@ -13,11 +13,13 @@ const {
   verifyTokenAndAdmin,
 } = require("./validation-token");
 
-const COMFIRM_URL = "http://localhost:3000/payment/confirm";
-const CANCEL_URL = "http://localhost:3000/payment/cancel";
+// const COMFIRM_URL = "http://localhost:3000/payment/confirm";
+// const CANCEL_URL = "http://localhost:3000/payment/cancel";
 
-// const COMFIRM_URL = "https://hsinyaoecommercewebsite.herokuapp.com/payment/confirm";
-// const CANCEL_URL =  "https://hsinyaoecommercewebsite.herokuapp.com/payment/cancel";
+const COMFIRM_URL =
+  "https://hsinyaoecommercewebsite.herokuapp.com/payment/confirm";
+const CANCEL_URL =
+  "https://hsinyaoecommercewebsite.herokuapp.com/payment/cancel";
 
 // LINE Pay
 const linePayBaseUrl = "https://sandbox-api-pay.line.me";
