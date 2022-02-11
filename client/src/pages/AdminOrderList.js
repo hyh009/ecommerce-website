@@ -78,7 +78,8 @@ const AdminOrderList = () => {
     getOrders();
   }, []);
   const handleDelete = (id) => {
-    setData(data.filter((item) => item._id != id));
+    window.confirm("確定刪除此訂單嗎？") &&
+      setData(data.filter((item) => item._id != id));
   };
   const columns = [
     { field: "_id", headerName: "ID", width: 100 },

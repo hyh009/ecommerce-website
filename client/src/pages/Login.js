@@ -163,7 +163,7 @@ const Login = () => {
       </Helmet>
       <Wrapper>
         <Title>登入帳號</Title>
-        {error && <Error>{errMessage ? errMessage : "發生錯誤！"}</Error>}
+        {errMessage && <Error>{errMessage}</Error>}
         <Form>
           <Input
             placeholder="Email"

@@ -245,6 +245,7 @@ const AdminUser = () => {
     };
     getUserData();
   }, []);
+
   useEffect(() => {
     //clear error message after 5 seconds
     let timer = setTimeout(() => setUpdateError(""), 5000);
@@ -299,7 +300,6 @@ const AdminUser = () => {
       if (uploadImage) {
         imgUrl = await handleUploadPic();
       }
-      console.log(inputs);
       const updatedUser = await UserService.patch(
         { _id: editUser._id, ...inputs, img: imgUrl },
         accessToken
@@ -363,11 +363,11 @@ const AdminUser = () => {
             </ListItem>
             <ListItem>
               <PhoneAndroid />
-              <Content>{editUser.phone || "未填入"}</Content>
+              <Content>{editUser.phone || "未填寫"}</Content>
             </ListItem>
             <ListItem>
               <LocationOn />
-              <Content>{editUser.address || "未填入"}</Content>
+              <Content>{editUser.address || "未填寫"}</Content>
             </ListItem>
           </UserInfo>
         </InfoContainer>

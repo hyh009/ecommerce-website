@@ -139,6 +139,13 @@ const Input = styled.input`
   padding: 5px 2px;
   width: 100%;
 `;
+
+const Select = styled.select`
+  border: none;
+  padding: 5px 2px;
+  width: 100%;
+  background-color: white;
+`;
 const Error = styled.span`
   font-size: 2.5vmin;
   color: red;
@@ -363,14 +370,18 @@ const ProfileEdit = () => {
           {errors.gender && <Error>{errors.gender.message}</Error>}
           <ListItem>
             <Label>性別：</Label>
-            <Input
+            <Select
               name="gender"
               defaultValue={user.gender}
               placeholder={user.gender}
               {...register("gender", {
                 required: "請選澤性別",
               })}
-            />
+            >
+              <option>男</option>
+              <option>女</option>
+              <option>其他</option>
+            </Select>
           </ListItem>
           <Subtitle>聯絡資訊</Subtitle>
           <ListItem>
@@ -399,7 +410,7 @@ const ProfileEdit = () => {
             <Input
               name="address"
               defaultValue={user.address}
-              placeholder={user.address}
+              placeholder={user.address || "未填寫"}
               {...register("address")}
             />
           </ListItem>

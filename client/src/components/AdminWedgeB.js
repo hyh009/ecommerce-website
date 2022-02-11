@@ -12,8 +12,9 @@ const Container = styled.div`
   border-radius: 5px;
 `;
 const TransactionTable = styled.table`
-  border-collapse: collapse;
+  border-collapse: separate;
   width: 100%;
+  border-spacing: 0px 5px;
 `;
 const Title = styled.h3`
   font-size: 3vmin;
@@ -21,25 +22,21 @@ const Title = styled.h3`
   font-weight: normal;
 `;
 
-const TableHead = styled.tr``;
-
 const TableRow = styled.tr`
   cursor: pointer;
 
   &:hover {
     background-color: #eee;
-    border-radius: 10px;
   }
 `;
 const Column = styled.th`
   font-size: 2.25vmin;
-  margin: 10px 0;
   letter-spacing: 1px;
 `;
 const Data = styled.td`
   font-size: 2.5vmin;
   text-align: center;
-  padding: 10px;
+  padding: 10px 0;
   &.user {
     display: flex;
     align-items: center;
@@ -117,27 +114,31 @@ const AdminWedgeB = () => {
     <Container>
       <Title>最新交易資訊</Title>
       <TransactionTable>
-        <TableHead>
-          <Column>用戶</Column>
-          <Column>金額</Column>
-          <Column>更新日期</Column>
-          <Column>狀態</Column>
-        </TableHead>
-        {orders?.map((order) => (
-          <TableRow key={order._id}>
-            <Data className="user">
-              <User>
-                <UserImg src={order.user.img || defaultUser} />
-                <Name>{order.user.username}</Name>
-              </User>
-            </Data>
-            <Data>NT$ {order.amount}</Data>
-            <Data>{format(order.createdAt)}</Data>
-            <Data>
-              <Button type={order.status}>{order.status}</Button>
-            </Data>
+        <thead>
+          <TableRow>
+            <Column>用戶</Column>
+            <Column>金額</Column>
+            <Column>更新日期</Column>
+            <Column>狀態</Column>
           </TableRow>
-        ))}
+        </thead>
+        <tbody>
+          {orders?.map((order) => (
+            <TableRow key={order._id}>
+              <Data className="user">
+                <User>
+                  <UserImg src={order.user.img || defaultUser} />
+                  <Name>{order.user.username}</Name>
+                </User>
+              </Data>
+              <Data>NT$ {order.amount}</Data>
+              <Data>{format(order.createdAt)}</Data>
+              <Data>
+                <Button type={order.status}>{order.status}</Button>
+              </Data>
+            </TableRow>
+          ))}
+        </tbody>
       </TransactionTable>
     </Container>
   );

@@ -183,7 +183,7 @@ const Nav = ({ position }) => {
 
   const handleLogout = () => {
     userLogout(dispatch);
-    navigate("/login");
+    return navigate("/login");
   };
   //Click outside close
   let menuRef = useRef();

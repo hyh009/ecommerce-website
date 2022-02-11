@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { tabletBig } from "../responsive";
+import { tabletBig, mobile } from "../responsive";
 import {
   Home,
   Insights,
@@ -61,22 +61,24 @@ const Menu = styled.div`
 `;
 const Title = styled.h3`
   letter-spacing: 3px;
-  font-size: 12px;
+  font-size: 2vmin;
   color: #acb2ac;
   margin-bottom: 5px;
   font-weight: 550;
   display: flex;
   align-items: center;
   ${tabletBig({ marginBottom: "0", padding: "0 10px", height: "30px" })}
+  ${mobile({ fontSize: "2.5vmin" })}
 `;
 const ListContainer = styled.ul`
   display: flex;
   flex-direction: column;
-  font-size: 0.8rem;
+  font-size: 2vmin;
   list-style-type: none;
   padding-left: 5px;
   gap: 5px;
-  ${tabletBig({ padding: "0 10px" })}
+  ${tabletBig({ padding: "20px 10px" })}
+  ${mobile({ padding: "5px 10px", fontSize: "3vmin" })}
 `;
 const ListItem = styled.li`
   display: flex;

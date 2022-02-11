@@ -5,7 +5,7 @@ class PaymentService {
   linepayPost(orderDetail, TOKEN) {
     return axiosInstance.post(
       `${ROUTE}/linepay/${orderDetail.user}`,
-      { orderDetail },
+      { order: orderDetail },
       {
         headers: { token: `Bearer ${TOKEN}` },
       }

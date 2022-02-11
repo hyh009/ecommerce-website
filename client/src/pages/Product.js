@@ -210,6 +210,7 @@ const Select = styled.select`
   border-radius: 5px;
   text-align: center;
   border: 1px solid black;
+  background-color: white;
 
   &:hover {
     border: 2px solid teal;

@@ -180,6 +180,7 @@ const AdminNewUser = () => {
             <option>男</option>
             <option>女</option>
             <option>其他</option>
+            <option>未設定</option>
           </Select>
         </InputContainer>
         <InputContainer>

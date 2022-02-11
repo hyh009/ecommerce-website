@@ -289,6 +289,7 @@ const AdminProduct = () => {
         "Dec",
       ].map((month) => ({
         name: month,
+        銷售金額: 0,
       })),
     []
   );
@@ -297,22 +298,18 @@ const AdminProduct = () => {
     const getPStats = async () => {
       try {
         const res = await OrderService.getSales(product._id, year, accessToken);
-        if (res.data.length > 0) {
-          res.data.map((item) =>
-            setPStats(() =>
-              MONTHS.map(
-                (row, index) =>
-                  (item._id - 1 === index &&
-                    Object.assign(row, { Sales: item.total })) ||
-                  Object.assign(row, { Sales: 0 })
-              )
-            )
-          );
-        } else {
-          setPStats(() =>
-            MONTHS.map((name) => Object.assign(name, { Sales: 0 }))
-          );
-        }
+        setPStats(() =>
+          MONTHS.map((month, index) => {
+            let updateData = month;
+            res.data.forEach((item) => {
+              if (item._id === index + 1) {
+                updateData = { ...month, 銷售金額: item.total };
+                return;
+              }
+            });
+            return updateData;
+          })
+        );
       } catch (err) {
         console.log(err);
       }
@@ -503,7 +500,7 @@ const AdminProduct = () => {
           <AdminChart
             data={pStats}
             title="年度銷售狀況"
-            dataKey="Sales"
+            dataKey="銷售金額"
             margin="0"
             year={year}
             setYear={setYear}

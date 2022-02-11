@@ -71,6 +71,7 @@ const AdminHome = () => {
         "Dec",
       ].map((month) => ({
         name: month,
+        新增用戶: 0,
       })),
     []
   );
@@ -79,15 +80,18 @@ const AdminHome = () => {
     const getStats = async () => {
       try {
         const res = await UserService.getStats(year, accessToken);
-        res.data.map((item) =>
-          setUserStats(() =>
-            MONTHS.map(
-              (row, index) =>
-                (item._id - 1 === index &&
-                  Object.assign(row, { 新增用戶: item.total })) ||
-                Object.assign(row, { 新增用戶: 0 })
-            )
-          )
+
+        setUserStats(() =>
+          MONTHS.map((month, index) => {
+            let updateData = month;
+            res.data.forEach((item) => {
+              if (item._id.month === index + 1) {
+                updateData = { ...month, 新增用戶: item.total };
+                return;
+              }
+            });
+            return updateData;
+          })
         );
       } catch (err) {
         console.log(err);
@@ -113,13 +117,13 @@ const AdminHome = () => {
             amount: data.total,
             rate:
               Math.floor(
-                ((res.data[index]?.total * 100) / res.data[index + 1]?.total -
+                ((res.data[index]?.total * 100) / res.data?.[index - 1]?.total -
                   100) *
                   100
               ) / 100,
           };
         });
-        setFeatureData(newData);
+        setFeatureData(newData.reverse());
       } catch (err) {
         console.log(err);
       }

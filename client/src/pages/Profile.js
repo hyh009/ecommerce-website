@@ -80,6 +80,7 @@ const Profile = () => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const [userSpent, setUserSpent] = useState([]);
   const [amountToVIP, setAmountToVIP] = useState(5000);
+  //get User spent every month in current year
   const MONTHS = useMemo(
     () =>
       [
@@ -97,29 +98,31 @@ const Profile = () => {
         "12月",
       ].map((month) => ({
         name: month,
+        消費金額: 0,
       })),
     []
   );
-  //get User spent every month in current year
   useEffect(() => {
     const getSpent = async () => {
       try {
         const res = await OrderService.getUserSpent(user._id, accessToken);
-        res.data.map((item) =>
-          setUserSpent(() =>
-            MONTHS.map(
-              (row, index) =>
-                (item._id.month - 1 === index &&
-                  Object.assign(row, { 消費金額: item.total })) ||
-                Object.assign(row, { 消費金額: 0 })
-            )
-          )
+        setUserSpent(() =>
+          MONTHS.map((month, index) => {
+            let updateData = month;
+            res.data.forEach((item) => {
+              if (item._id.month === index + 1) {
+                updateData = { ...month, 消費金額: item.total };
+                return;
+              }
+            });
+            return updateData;
+          })
         );
       } catch (err) {
         console.log(err);
       }
     };
-    // calculate the amount to become VIP menber
+
     getSpent();
   }, [user]);
 

@@ -42,6 +42,7 @@ const SideContainer = styled.div`
   ${tabletBig({
     position: "absolute",
     zIndex: "3",
+    top: "0px",
     width: "100%",
     height: "max-content",
     minHeight: "max-content",

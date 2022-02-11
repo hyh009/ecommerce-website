@@ -35,19 +35,19 @@ app.use("/api/orders", orderRoute);
 app.use("/api/mail", mailchimpRoute);
 app.use("/api/payment", paymentRoute);
 
-// app.use(express.static(path.join(__dirname, "/client/public")));
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname, "/client/public", "index.html"));
-// });
+app.use(express.static(path.join(__dirname, "/client/public")));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/public", "index.html"));
+});
 
 app.use(express.static(path.join(__dirname, "/client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "/client/build", "index.html"));
 });
 
-app.get("/*", (req, res) => {
-  res.status(404).json("404此頁面不存在。");
-});
+// app.get("/*", (req, res) => {
+//   res.status(404).json("404此頁面不存在。");
+// });
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`Running on ${process.env.PORT || "5000"} port`);

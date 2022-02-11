@@ -31,7 +31,6 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
     start = new Date(queryYear, 0, 1);
     end = new Date(queryYear + 1, 0, 1);
   }
-  console.log(start, end);
   try {
     const income = await Order.aggregate([
       {
@@ -57,7 +56,7 @@ router.get("/income", verifyTokenAndAdmin, async (req, res) => {
           total: { $sum: "$sales" },
         },
       },
-      { $sort: { _id: -1 } }, // 1 for ascending
+      { $sort: { _id: 1 } }, // 1 for ascending
     ]);
     res.status(200).json(income);
   } catch (err) {
@@ -92,6 +91,11 @@ router.get("/spent/:id", verifyTokenAndAuthorization, async (req, res) => {
         $group: {
           _id: { month: "$month", year: "$year" },
           total: { $sum: "$spent" },
+        },
+      },
+      {
+        $sort: {
+          "_id.month": 1,
         },
       },
     ]);

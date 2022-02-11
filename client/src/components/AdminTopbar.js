@@ -3,7 +3,9 @@ import styled from "styled-components";
 import Badge from "@mui/material/Badge";
 import { Logout, Settings, NotificationsNone } from "@mui/icons-material";
 import { tabletBig } from "../responsive";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { userLogout } from "../redux/apiCall";
+import { useNavigate } from "react-router-dom";
 
 const Top = styled.div`
   width: 100%;
@@ -92,7 +94,12 @@ const Photo = styled.img`
 
 const Topbar = () => {
   const user = useSelector((state) => state.user.currentUser);
-  const handleLogout = () => {};
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    userLogout(dispatch);
+    return navigate("/login");
+  };
   return (
     <Top>
       <Wrapper>
