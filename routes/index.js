@@ -6,4 +6,5 @@ module.exports = {
   orderRoute: require("./order-route"),
   mailchimpRoute: require("./mailchimp-route"),
   paymentRoute: require("./payment-route"),
+  recaptchaRoute: require("./recaptcha.route"),
 };

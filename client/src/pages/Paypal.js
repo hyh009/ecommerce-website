@@ -2,13 +2,11 @@ import styled from "styled-components";
 import { tabletBig, mobile } from "../responsive";
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import ReactDOM from "react-dom";
 import NotFound from "./NotFound";
 import PaymentService from "../services/payment.service";
-import OrderService from "../services/order.service";
 import { Helmet } from "react-helmet";
-import { updateCart } from "../redux/apiCall";
 
 const Container = styled.div`
   width: 100%;
@@ -58,7 +56,6 @@ const Paypal = () => {
   const user = useSelector((state) => state.user.currentUser);
   const accessToken = useSelector((state) => state.user.accessToken);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const createOrder = async (data, actions) => {
     try {
@@ -74,50 +71,10 @@ const Paypal = () => {
   };
 
   const onApprove = (data, actions) => {
-    return actions.order
-      .capture()
-      .then(function (details) {
-        const updateOrder = {
-          _id: order._id,
-          status: "訂單處理中",
-          payment: {
-            method: "paypal",
-            status: "已付款",
-          },
-        };
-        OrderService.updateOrder(user._id, updateOrder, accessToken).then(() =>
-          // clear up cart
-          {
-            const newProducts = [];
-            updateCart(dispatch, user, newProducts, accessToken).then(
-              function () {
-                return navigate({
-                  pathname: "/payment/confirm",
-                  search: `?orderId=${order._id}&method=paypal&success=true`,
-                });
-              }
-            );
-          }
-        );
-      })
-      .catch((err) => {
-        const updateOrder = {
-          _id: order._id,
-          status: "訂單取消",
-          payment: {
-            method: "paypal",
-            status: "付款失敗",
-          },
-        };
-        OrderService.updateOrder(user._id, updateOrder, accessToken).then(
-          function () {
-            return navigate({
-              pathname: "/payment/confirm",
-              search: `?orderId=${order._id}&method=paypal&success=false`,
-            });
-          }
-        );
-      });
+    return navigate({
+      pathname: "/payment/confirm",
+      search: `?orderId=${order._id}&method=paypal`,
+    });
   };
   return (
     <div>
@@ -141,6 +98,7 @@ const Paypal = () => {
             <PayPalButton
               createOrder={(data, actions) => createOrder(data, actions)}
               onApprove={(data, actions) => onApprove(data, actions)}
+              onCancel={() => navigate("/payment/cancel")}
             />
           </ButtonContainer>
         </Container>

@@ -83,6 +83,7 @@ const PaymentConfirm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isFetching, setIsFetching] = useState(false);
+  const [show404, setShow404] = useState(false);
   const [success, setSuccess] = useState(Boolean(searchParams.get("success")));
 
   useEffect(() => {
@@ -93,44 +94,63 @@ const PaymentConfirm = () => {
         // if passthrough this page twice, show 404
         const order = res.data;
         if (order.status !== "待付款") {
-          setTransactionId(null);
+          setShow404(true);
           setIsFetching(false);
           return;
         }
-        await PaymentService.linepayConfirm(transactionId, order, accessToken);
+        // linepay
+        if (transactionId) {
+          const response = await PaymentService.linepayConfirm(
+            transactionId,
+            order,
+            accessToken
+          );
+          if (response.data.success) {
+            setSuccess(true);
+            setShow404(false);
+            setIsFetching(false);
 
-        const updateOrder = {
-          _id: orderId,
-          status: "訂單處理中",
-          payment: {
-            ...order.payment,
-            status: "已付款",
-          },
-        };
-        await OrderService.updateOrder(order.user, updateOrder, accessToken);
-        // clear up cart
-        const newProducts = [];
-        updateCart(dispatch, user, newProducts, accessToken);
-        setSuccess(true);
-        setIsFetching(false);
+            // clear up cart
+            const newProducts = [];
+            updateCart(dispatch, user, newProducts, accessToken);
+            setSuccess(true);
+            setIsFetching(false);
+          } else if (!response.data.success) {
+            setSuccess(false);
+            setShow404(false);
+            setIsFetching(false);
+          }
+          // paypal
+        } else if (method === "paypal") {
+          const response = await PaymentService.paypalCapture(
+            order,
+            accessToken
+          );
+
+          if (response.data.success) {
+            setSuccess(true);
+            setShow404(false);
+            setIsFetching(false);
+
+            // clear up cart
+            const newProducts = [];
+            updateCart(dispatch, user, newProducts, accessToken);
+            setSuccess(true);
+            setIsFetching(false);
+          } else if (!response.data.success) {
+            setSuccess(false);
+            setShow404(false);
+            setIsFetching(false);
+          }
+        }
       } catch (err) {
-        // fail => cancel order
-        const updateOrder = {
-          _id: orderId,
-          status: "訂單取消",
-          payment: {
-            status: "付款失敗",
-            transactionId: transactionId,
-            method: "linepay",
-          },
-        };
-        await OrderService.updateOrder(user._id, updateOrder, accessToken);
         setSuccess(false);
+        setShow404(false);
         setIsFetching(false);
       }
     };
 
-    if (transactionId && orderId) {
+    if (orderId) {
       getOrder();
     }
   }, []);
@@ -148,7 +168,7 @@ const PaymentConfirm = () => {
             資料讀取中...
           </span>
         </ProgressContainer>
-      ) : !transactionId && method !== "paypal" ? (
+      ) : show404 ? (
         <NotFound content="page" />
       ) : success ? (
         <Block>

@@ -28,6 +28,16 @@ class PaymentService {
       }
     );
   }
+
+  paypalCapture(order, TOKEN) {
+    return axiosInstance.post(
+      `${ROUTE}/paypal/captureOrder/${order.user}`,
+      { order },
+      {
+        headers: { token: `Bearer ${TOKEN}` },
+      }
+    );
+  }
 }
 
 export default new PaymentService();

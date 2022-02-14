@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import { tabletBig, tablet, mobile } from "../responsive";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import AuthService from "../services/auth.service";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import ReCAPTCHA from "react-google-recaptcha";
+import { reCaptcha, axiosInstance } from "../services/config";
 
 const Container = styled.div`
   width: 100%;
@@ -40,6 +42,7 @@ const Form = styled.form`
   flex-wrap: wrap;
   justify-content: center;
   ${tablet({ flexDirection: "column", alignItems: "center" })}
+  ${mobile({ alignItems: "flex-start" })};
 `;
 
 const Input = styled.input`
@@ -50,7 +53,7 @@ const Input = styled.input`
   margin: 5px 10px;
   padding: 8px 5px;
   ${tablet({ width: "95%", fontSize: "20px", margin: "8px 5px" })}
-  ${mobile({ width: "95%", fontSize: "18px", margin: "5px 0" })}
+  ${mobile({ width: "100%", fontSize: "18px", margin: "5px 0" })}
 `;
 const Select = styled.select`
   flex: 1;
@@ -61,7 +64,7 @@ const Select = styled.select`
   padding: 8px 5px;
   cursor: pointer;
   ${tablet({ width: "95%", fontSize: "20px", margin: "8px 5px" })}
-  ${mobile({ width: "95%", fontSize: "18px", margin: "5px 0" })}
+  ${mobile({ width: "100%", fontSize: "18px", margin: "5px 0" })}
 `;
 
 const Agreement = styled.span`
@@ -76,7 +79,11 @@ const Button = styled.div`
   background: #ffa211;
   text-align: center;
 `;
+const ReCAPTCHAContainer = styled.div`
+  margin: 10px 0;
 
+  ${mobile({ transform: "scale(0.77)", transformOrigin: "0 0" })};
+`;
 const Error = styled.div`
   color: #545454;
   font-size: 14px;
@@ -90,6 +97,8 @@ const Register = () => {
   const navigate = useNavigate();
   const [input, setInput] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
+  const [token, setToken] = useState("");
+  const recaptchaRef = useRef(null);
   const handleInput = (e) => {
     setInput((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
@@ -98,11 +107,22 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await AuthService.register(input);
-      window.alert(`註冊成功，將導向登入頁面。`);
-      navigate("/login");
+      if (!token) {
+        return setErrorMessage("請勾選我不是機器人");
+      }
+
+      const res = await axiosInstance.post("/recaptcha", { captcha: token });
+      if (res.data === true) {
+        await AuthService.register(input);
+        window.alert(`註冊成功，將導向登入頁面。`);
+        recaptchaRef.current.reset();
+        return navigate("/login");
+      } else if (res.data === false) {
+        recaptchaRef.current.reset();
+        return window.alert("機器人驗證未通過，請重新勾選我不是機器人");
+      }
     } catch (err) {
-      setErrorMessage(err.response.data);
+      setErrorMessage(err.response?.data);
     }
   };
   return (
@@ -143,6 +163,14 @@ const Register = () => {
             placeholder="確認密碼"
             onChange={handleInput}
           />
+          <ReCAPTCHAContainer>
+            <ReCAPTCHA
+              sitekey={reCaptcha.key}
+              onChange={(token) => setToken(token)}
+              onExpired={() => setToken("")}
+              ref={recaptchaRef}
+            />
+          </ReCAPTCHAContainer>
           <Agreement>
             按下註冊鈕的同時，表示您已詳閱我們的資料使用政策與使用條款，同意使用
             墊一店 所提供的服務並訂閱電子報。

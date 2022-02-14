@@ -3,6 +3,7 @@ const uuid = require("uuid4");
 const crypto = require("crypto-js");
 const axios = require("axios");
 const paypal = require("@paypal/checkout-server-sdk");
+const Order = require("../models").orderModel;
 const Environment = paypal.core.SandboxEnvironment;
 const paypalClient = new paypal.core.PayPalHttpClient(
   new Environment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_SECRECT)
@@ -13,13 +14,13 @@ const {
   verifyTokenAndAdmin,
 } = require("./validation-token");
 
-// const COMFIRM_URL = "http://localhost:3000/payment/confirm";
-// const CANCEL_URL = "http://localhost:3000/payment/cancel";
+const COMFIRM_URL = "http://localhost:3000/payment/confirm";
+const CANCEL_URL = "http://localhost:3000/payment/cancel";
 
-const COMFIRM_URL =
-  "https://hsinyaoecommercewebsite.herokuapp.com/payment/confirm";
-const CANCEL_URL =
-  "https://hsinyaoecommercewebsite.herokuapp.com/payment/cancel";
+// const COMFIRM_URL =
+//   "https://hsinyaoecommercewebsite.herokuapp.com/payment/confirm";
+// const CANCEL_URL =
+//   "https://hsinyaoecommercewebsite.herokuapp.com/payment/cancel";
 
 // LINE Pay
 const linePayBaseUrl = "https://sandbox-api-pay.line.me";
@@ -70,6 +71,7 @@ router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
       order,
       configs
     );
+
     res.status(200).json({
       paymentUrl: response.data.info.paymentUrl.web,
       paymentUrlApp: response.data.info.paymentUrl.app,
@@ -104,15 +106,32 @@ router.post(
         amountAndCurrency,
         configs
       );
-
+      console.log("response", response);
+      // update order
+      // 0000 => payment approved
       if (response.data.returnCode === "0000") {
-        res.status(200).json("付款成功");
-        console.log(res);
+        Order.paymentApproved(order._id, "linepay", function (err, data) {
+          if (err) {
+            console.log("err", err);
+          } else {
+            console.log("data", data);
+          }
+        });
+        res.status(200).json({ success: true, message: "付款成功" });
       } else {
-        res.status(500).json("付款失敗");
+        // update order
+        Order.paymentFailed(order._id, "linepay", function (err, data) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(data);
+          }
+        });
+        res.status(200).json({ success: false, message: "付款失敗" });
       }
     } catch (err) {
-      res.status(500).json(err);
+      console.log(err);
+      res.status(500).json({ success: false, message: err });
     }
   }
 );
@@ -126,6 +145,7 @@ router.post(
     const request = new paypal.orders.OrdersCreateRequest();
     const { order } = req.body;
     const total = order.amount + order.shipping;
+
     request.prefer("return=representation");
     request.requestBody({
       intent: "CAPTURE", // capture the information of user
@@ -147,7 +167,7 @@ router.post(
           },
           items: order.products.map((product) => {
             return {
-              name: product.title + product.color + product.color,
+              name: `${product.title} - ${product?.pattern}${product?.color}`,
               unit_amount: {
                 currency_code: "TWD",
                 value: product.price,
@@ -164,16 +184,56 @@ router.post(
 
     // request payment
     try {
-      const order = await paypalClient.execute(request);
-      console.log(order);
-      res.status(200).json({ id: order.result.id });
+      const paypalOrder = await paypalClient.execute(request);
+      // add transactionId to DB
+      console.log(paypalOrder.result.id);
+      await Order.addTransitionId(order._id, paypalOrder.result.id);
+      res.status(200).json({ id: paypalOrder.result.id });
     } catch (err) {
-      res.status(500).json({ error: err.message });
       console.log(err);
+      res.status(500).json({ error: err.message });
     }
   }
 );
 
+router.post(
+  "/paypal/captureOrder/:id",
+  verifyTokenAndAuthorization,
+  async (req, res) => {
+    const { order } = req.body;
+    const request = new paypal.orders.OrdersCaptureRequest(
+      order.payment.transactionId
+    );
+    request.requestBody({});
+    try {
+      let response = await paypalClient.execute(request);
+      console.log(response);
+      if (response) {
+        // update order
+        Order.paymentApproved(order._id, "paypal", function (err, data) {
+          if (err) {
+            console.log("err", err);
+          } else {
+            console.log("data", data);
+          }
+        });
+        res.status(200).json({ success: true, message: "付款成功" });
+      } else {
+        Order.paymentFailed(order._id, "paypal", function (err, data) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log(data);
+          }
+        });
+        res.status(200).json({ success: false, message: "付款失敗" });
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: err.message });
+    }
+  }
+);
 //For Line
 const createLinePackages = (orderDetail) => {
   let packages = [];

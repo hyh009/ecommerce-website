@@ -10,6 +10,7 @@ const cartRoute = require("./routes").cartRoute;
 const orderRoute = require("./routes").orderRoute;
 const mailchimpRoute = require("./routes").mailchimpRoute;
 const paymentRoute = require("./routes").paymentRoute;
+const recaptchaRoute = require("./routes").recaptchaRoute;
 const cors = require("cors");
 const path = require("path");
 
@@ -34,16 +35,17 @@ app.use("/api/carts", cartRoute);
 app.use("/api/orders", orderRoute);
 app.use("/api/mail", mailchimpRoute);
 app.use("/api/payment", paymentRoute);
+app.use("/api/recaptcha", recaptchaRoute);
 
-// app.use(express.static(path.join(__dirname, "/client/public")));
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname, "/client/public", "index.html"));
-// });
-
-app.use(express.static(path.join(__dirname, "/client/build")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+app.use(express.static(path.join(__dirname, "/client/public")));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "/client/public", "index.html"));
 });
+
+// app.use(express.static(path.join(__dirname, "/client/build")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "/client/build", "index.html"));
+// });
 
 app.get("/*", (req, res) => {
   res.status(404).json("404此頁面不存在。");

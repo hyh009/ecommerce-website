@@ -52,12 +52,60 @@ const OrderSchema = new mongoose.Schema(
         enum: ["待付款", "已付款", "付款失敗", "已退款", "已取消"],
         default: "待付款",
       },
-      transactionId: { type: Number },
+      transactionId: { type: String },
       paymentAccessToken: { type: String },
     },
   },
   { timestamps: true }
 );
+
+OrderSchema.statics.addTransitionId = function addTransactionId(
+  id,
+  transactionId,
+  cb
+) {
+  return this.findOneAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        "payment.transactionId": transactionId,
+      },
+    },
+    { new: true },
+    cb
+  );
+};
+
+// update order when confirmed payment
+OrderSchema.statics.paymentApproved = function paymentApproved(id, method, cb) {
+  return this.findOneAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        status: "訂單處理中",
+        "payment.status": "付款成功",
+        "payment.method": method,
+      },
+    },
+    { new: true },
+    cb
+  );
+};
+
+OrderSchema.statics.paymentFailed = function paymentFailed(id, method, cb) {
+  return this.findOneAndUpdate(
+    { _id: id },
+    {
+      $set: {
+        status: "訂單未成立",
+        "payment.status": "付款失敗",
+        "payment.method": method,
+      },
+    },
+    { new: true },
+    cb
+  );
+};
 
 const Order = mongoose.model("Order", OrderSchema);
 module.exports = Order;

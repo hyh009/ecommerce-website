@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import emailjs from "@emailjs/browser";
 import { Helmet } from "react-helmet";
@@ -6,6 +7,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { mobile, tabletBig } from "../responsive";
+import ReCAPTCHA from "react-google-recaptcha";
+import { reCaptcha, axiosInstance } from "../services/config";
 
 const Container = styled.div`
   display: flex;
@@ -129,6 +132,10 @@ const IconContaniner = styled.div`
   display: flex;
   justify-content: space-around;
 `;
+const ReCAPTCHAContainer = styled.div`
+  margin: 10px 0;
+  ${mobile({ transform: "scale(0.77)", transformOrigin: "0 0" })};
+`;
 
 const SocailIcon = styled.div`
   width: 40px;
@@ -144,6 +151,9 @@ const SocailIcon = styled.div`
 `;
 
 const Contact = () => {
+  const [token, setToken] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
+  const recaptchaRef = useRef(null);
   // use hook form for validation
   const {
     register,
@@ -151,20 +161,40 @@ const Contact = () => {
     formState: { errors },
   } = useForm();
 
+  // error message only show 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCaptchaError("");
+    }, 5000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [captchaError]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!token) {
+      return setCaptchaError("請勾選我不是機器人");
+    }
     try {
-      await emailjs.sendForm(
-        process.env.REACT_APP_EMAIL_SERVICE_ID,
-        process.env.REACT_APP_EMAIL_TEMPLATE_ID,
-        e.target,
-        process.env.REACT_APP_EMAIL_USER_ID
-      );
-      window.alert("感謝您的填寫，我們會盡快回覆您的訊息。");
-      reset();
+      const res = await axiosInstance.post("/recaptcha", { captcha: token });
+      if (res.data === true) {
+        await emailjs.sendForm(
+          "service_wpqgqx7",
+          "template_c0gls7u",
+          e.target,
+          "user_8DfhmetmZJgRGMgzYl8Pe"
+        );
+        reset();
+        recaptchaRef.current.reset();
+        return window.alert("感謝您的填寫，我們會盡快回覆您的訊息。");
+      } else if (res.data === false) {
+        recaptchaRef.current.reset();
+        return window.alert("機器人驗證未通過，請重新勾選我不是機器人");
+      }
     } catch (err) {
-      window.alert("發生錯誤，請稍候再試。");
       console.log(err);
+      return window.alert("發生錯誤，請稍候再試。");
     }
   };
 
@@ -224,6 +254,15 @@ const Contact = () => {
                 required: "請輸入訊息內容",
               })}
             ></TextArea>
+            <ReCAPTCHAContainer>
+              <ReCAPTCHA
+                sitekey={reCaptcha.key}
+                onChange={(token) => setToken(token)}
+                onExpired={() => setToken("")}
+                ref={recaptchaRef}
+              />
+            </ReCAPTCHAContainer>
+            {captchaError && <Error>{captchaError}</Error>}
             <Submit type="submit">確定提交</Submit>
           </Form>
         </FormContainer>

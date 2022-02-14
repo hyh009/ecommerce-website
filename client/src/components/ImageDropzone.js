@@ -58,7 +58,7 @@ const ImageDropzone = ({ images, setImages }) => {
         const fileSize = (file.size / (1024 * 1024)).toFixed(4);
 
         if (fileSize > 10) {
-          return window.alert("照片不能超過100mb");
+          return window.alert("照片不能超過10mb");
         } else {
           setImages((prev) => [
             ...prev,
@@ -92,7 +92,7 @@ const ImageDropzone = ({ images, setImages }) => {
             拖曳圖片至此 或 點擊選擇上傳圖片(最多6張)
           </p>
           <em style={{ textAlign: "center" }} className="small">
-            僅接受.jepg .jpg .png 檔案(大小100mb內)
+            僅接受.jepg .jpg .png 檔案(大小10mb內)
           </em>
         </>
       )}

@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { tabletBig, mobile } from "../responsive";
 import styled from "styled-components";
-import { useSearchParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { useSelector } from "react-redux";
-import OrderService from "../services/order.service";
-import NotFound from "./NotFound";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   padding: 20px;
@@ -18,15 +13,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 `;
-const Block = styled.div`
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  ${tabletBig({ flexDirection: "column" })}
-`;
+
 const Image = styled.img`
   object-fit: cover;
   width: 35%;
@@ -58,96 +45,36 @@ const GoBackBtn = styled.button`
   cursor: pointer;
 `;
 
-const ProgressContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: calc(100vh - 90px);
-  gap: 20px;
-  ${tabletBig({ height: "50vh" })}
-`;
-
 const PaymentCancel = () => {
   const navigate = useNavigate();
-  const user = useSelector((state) => state.user.currentUser);
-  const accessToken = useSelector((state) => state.user.accessToken);
-  const [searchParams] = useSearchParams();
-  const [transactionId, setTransactionId] = useState(
-    searchParams.get("transactionId")
-  );
-  const orderId = searchParams.get("orderId");
-  const [isFetching, setIsFetching] = useState(false);
-  useEffect(() => {
-    const updateOrderState = async () => {
-      setIsFetching(true);
-      const res = await OrderService.getOrderById(orderId);
-      // if passthrough this page twice, show 404
-      const order = res.data;
-      if (order.status !== "待付款") {
-        setTransactionId(null);
-        setIsFetching(false);
-        return;
-      }
-      const updateOrder = {
-        _id: orderId,
-        status: "訂單取消",
-        payment: {
-          status: "已取消",
-        },
-      };
-      await OrderService.updateOrder(user._id, updateOrder, accessToken);
-      setIsFetching(false);
-    };
-
-    if (transactionId && orderId) {
-      updateOrderState();
-    }
-  }, []);
   return (
     <Container>
-      {!transactionId || !orderId ? (
-        <NotFound content="page" />
-      ) : isFetching ? (
-        <ProgressContainer>
-          <Box sx={{ display: "flex" }}>
-            <CircularProgress />
-          </Box>
-          <span style={{ textAlign: "center", width: "100%" }}>
-            資料讀取中...
-          </span>
-        </ProgressContainer>
-      ) : (
-        <Block>
-          <Helmet>
-            <title>取消付款|墊一店</title>
-            <meta
-              name="description"
-              content="付款失敗，訂單已取消，請重新下單。"
-            ></meta>
-          </Helmet>
-          <Image
-            alt="Paid failed"
-            src="https://res.cloudinary.com/dh2splieo/image/upload/v1641970932/shop_website/imgs/undraw_notify_re_65on_q6oigl.svg"
-          />
-          <TextContainer>
-            <Text>
-              付款失敗。
-              <br />
-              訂單已取消，請重新下單。
-            </Text>
-            <GoBackBtn
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/products/all");
-              }}
-            >
-              回產品一覽
-            </GoBackBtn>
-          </TextContainer>
-        </Block>
-      )}
+      <Helmet>
+        <title>取消付款|墊一店</title>
+        <meta
+          name="description"
+          content="付款失敗，訂單已取消，請重新下單。"
+        ></meta>
+      </Helmet>
+      <Image
+        alt="Paid failed"
+        src="https://res.cloudinary.com/dh2splieo/image/upload/v1641970932/shop_website/imgs/undraw_notify_re_65on_q6oigl.svg"
+      />
+      <TextContainer>
+        <Text>
+          付款失敗。
+          <br />
+          訂單未成立，請重新下單。
+        </Text>
+        <GoBackBtn
+          onClick={(e) => {
+            e.preventDefault();
+            navigate("/products/all");
+          }}
+        >
+          回產品一覽
+        </GoBackBtn>
+      </TextContainer>
     </Container>
   );
 };
