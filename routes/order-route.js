@@ -190,7 +190,7 @@ router.post("/:id", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 //Update
-router.patch("/:id/:orderId", verifyTokenAndAuthorization, async (req, res) => {
+router.patch("/:id/:orderId", verifyTokenAndAdmin, async (req, res) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
       req.params.orderId,

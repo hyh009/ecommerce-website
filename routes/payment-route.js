@@ -9,18 +9,15 @@ const paypalClient = new paypal.core.PayPalHttpClient(
   new Environment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_SECRECT)
 );
 
-const {
-  verifyTokenAndAuthorization,
-  verifyTokenAndAdmin,
-} = require("./validation-token");
+const { verifyTokenAndAuthorization } = require("./validation-token");
 
-const COMFIRM_URL = "http://localhost:3000/payment/confirm";
-const CANCEL_URL = "http://localhost:3000/payment/cancel";
+// const COMFIRM_URL = "http://localhost:3000/payment/confirm";
+// const CANCEL_URL = "http://localhost:3000/payment/cancel";
 
-// const COMFIRM_URL =
-//   "https://hsinyaoecommercewebsite.herokuapp.com/payment/confirm";
-// const CANCEL_URL =
-//   "https://hsinyaoecommercewebsite.herokuapp.com/payment/cancel";
+const COMFIRM_URL =
+  "https://hsinyaoecommercewebsite.herokuapp.com/payment/confirm";
+const CANCEL_URL =
+  "https://hsinyaoecommercewebsite.herokuapp.com/payment/cancel";
 
 // LINE Pay
 const linePayBaseUrl = "https://sandbox-api-pay.line.me";
@@ -106,7 +103,6 @@ router.post(
         amountAndCurrency,
         configs
       );
-      console.log("response", response);
       // update order
       // 0000 => payment approved
       if (response.data.returnCode === "0000") {
@@ -207,7 +203,6 @@ router.post(
     request.requestBody({});
     try {
       let response = await paypalClient.execute(request);
-      console.log(response);
       if (response) {
         // update order
         Order.paymentApproved(order._id, "paypal", function (err, data) {
