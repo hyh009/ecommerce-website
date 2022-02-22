@@ -261,17 +261,6 @@ const Checkout = () => {
           orderDetail,
           accessToken
         );
-        // save transactionId and paymentAccessToken to DB
-        const updateOrder = {
-          ...orderDetail,
-          payment: {
-            method: "linepay",
-            transactionId: resPay.data.transactionId,
-            paymentAccessToken: resPay.data.paymentAccessToken,
-            status: "待付款",
-          },
-        };
-        await OrderService.updateOrder(user._id, updateOrder, accessToken);
 
         navigate("/payment/linepay", {
           state: {

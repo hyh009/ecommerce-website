@@ -68,12 +68,14 @@ router.post("/linepay/:id", verifyTokenAndAuthorization, async (req, res) => {
       order,
       configs
     );
+    await Order.addTransitionId(
+      orderDetail._id,
+      response.data.info.transactionId
+    );
 
     res.status(200).json({
       paymentUrl: response.data.info.paymentUrl.web,
       paymentUrlApp: response.data.info.paymentUrl.app,
-      transactionId: response.data.info.transactionId,
-      paymentAccessToken: response.data.info.paymentAccessToken,
     });
   } catch (err) {
     console.log({ err });
@@ -182,7 +184,6 @@ router.post(
     try {
       const paypalOrder = await paypalClient.execute(request);
       // add transactionId to DB
-      console.log(paypalOrder.result.id);
       await Order.addTransitionId(order._id, paypalOrder.result.id);
       res.status(200).json({ id: paypalOrder.result.id });
     } catch (err) {
