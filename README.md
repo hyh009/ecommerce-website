@@ -1,7 +1,7 @@
 # ecommerce-website
 練習製作電商網站，前端react，後端node.js<br/>
-[網站部署(heroku)](https://hsinyaoecommercewebsite.herokuapp.com/)
-
+[網站部署(heroku)](https://hsinyaoecommercewebsite.herokuapp.com/)<br/>
+### 網站架構
 ```mermaid
 graph TD;
     網站-->首頁;
