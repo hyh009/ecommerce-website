@@ -153,6 +153,7 @@ const SocailIcon = styled.div`
 const Contact = () => {
   const [token, setToken] = useState("");
   const [captchaError, setCaptchaError] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
   const recaptchaRef = useRef(null);
   // use hook form for validation
   const {
@@ -172,8 +173,10 @@ const Contact = () => {
   }, [captchaError]);
 
   const handleSubmit = async (e) => {
+    setIsFetching(true);
     e.preventDefault();
     if (!token) {
+      setIsFetching(false);
       return setCaptchaError("請勾選我不是機器人");
     }
     try {
@@ -187,9 +190,11 @@ const Contact = () => {
         );
         reset();
         recaptchaRef.current.reset();
+        setIsFetching(false);
         return window.alert("感謝您的填寫，我們會盡快回覆您的訊息。");
       } else if (res.data === false) {
         recaptchaRef.current.reset();
+        setIsFetching(false);
         return window.alert("機器人驗證未通過，請重新勾選我不是機器人");
       }
     } catch (err) {
@@ -263,7 +268,9 @@ const Contact = () => {
               />
             </ReCAPTCHAContainer>
             {captchaError && <Error>{captchaError}</Error>}
-            <Submit type="submit">確定提交</Submit>
+            <Submit type="submit" disabled={isFetching}>
+              確定提交
+            </Submit>
           </Form>
         </FormContainer>
         <Card>
@@ -293,6 +300,7 @@ const Contact = () => {
           </InfoContainer>
           <MapContainer>
             <iframe
+              title="墊一店位置"
               src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3619.2419265821673!2d121.2877846!3d24.8897282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468183d2e30c5a3%3A0xbebe3263ff84f24b!2zMzM1LCBUYW95dWFuIENpdHksIERheGkgRGlzdHJpY3QsIOaciOa5lui3rzEyOOiZnw!5e0!3m2!1sen!2stw!4v1643314926097!5m2!1sen!2stw"
               width="100%"
               loading="lazy"

@@ -33,7 +33,17 @@ router.get("/find/:id", async (req, res) => {
     res.status(404).json("查找的商品不存在");
   }
 });
-
+//Get by array of ids
+router.get("/findbulk", async (req, res) => {
+  const ids = Object.values(req.query);
+  try {
+    const products = await Product.find({ _id: { $in: ids } });
+    res.status(200).json(products);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json("系統發生問題，請稍候再試");
+  }
+});
 //Get All
 router.get("/", async (req, res) => {
   const qNew = req.query.new;

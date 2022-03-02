@@ -124,15 +124,17 @@ const Profile = () => {
     };
 
     getSpent();
-  }, [user]);
+  }, [user, MONTHS, accessToken]);
 
   useEffect(() => {
     const getVipAmount = () => {
       let vipAmount = 5000;
       userSpent.forEach((monthData) => (vipAmount -= monthData["消費金額"]));
-      return vipAmount;
+      setAmountToVIP(vipAmount);
     };
-    setAmountToVIP(() => getVipAmount());
+    if (userSpent) {
+      getVipAmount();
+    }
   }, [userSpent]);
 
   return (

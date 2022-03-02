@@ -99,6 +99,7 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [token, setToken] = useState("");
   const recaptchaRef = useRef(null);
+
   const handleInput = (e) => {
     setInput((prev) => {
       return { ...prev, [e.target.name]: e.target.value };

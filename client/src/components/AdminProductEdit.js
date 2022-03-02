@@ -19,7 +19,7 @@ import {
   AdminPatternInput,
   AdminNoticeInput,
 } from "./AdminExtraInput.js";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updatePartialProduct } from "../redux/apiCall";
 import { tabletBig } from "../responsive";
@@ -242,7 +242,7 @@ export const AdminProductEditA = ({
     } else if (!pop) {
       window.scrollTo(0, 0);
     }
-  }, [pop]);
+  }, [pop, editRef]);
 
   const handleOnchange = (e) => {
     if (e.target.type === "textarea") {
@@ -404,6 +404,11 @@ export const AdminProductEditA = ({
 };
 
 // EditArea B
+const initCol = {
+  colors: [],
+  notice: [],
+  patterns: [],
+};
 
 export const AdminProductEditB = ({ pop, setPop, productId, editRef }) => {
   const dispatch = useDispatch();
@@ -412,21 +417,16 @@ export const AdminProductEditB = ({ pop, setPop, productId, editRef }) => {
   );
   const accessToken = useSelector((state) => state.user.accessToken);
   const { error, errMessage } = useSelector((state) => state.product);
-  function getInitInput() {
+  const getInitInput = useCallback(() => {
     return {
       colors: product.colors,
       notice: product.notice,
       patterns: product.patterns,
       price: product.price,
     };
-  }
+  }, [product]);
   const [isFetching, setIsFetching] = useState(false);
   const [inputs, setInputs] = useState(getInitInput());
-  const initCol = {
-    colors: [],
-    notice: [],
-    patterns: [],
-  };
   const [deleteEle, setDeleteEle] = useState(initCol);
   const [showAddInput, setShowAddInput] = useState([false, false, false]);
   const [addInputs, setAddInputs] = useState(initCol);
@@ -441,7 +441,7 @@ export const AdminProductEditB = ({ pop, setPop, productId, editRef }) => {
     setDeleteEle(initCol);
     setShowAddInput([false, false, false]);
     setPop(false);
-  }, [product]);
+  }, [getInitInput, product, setPop]);
 
   // scroll to view
   useEffect(() => {
@@ -450,7 +450,7 @@ export const AdminProductEditB = ({ pop, setPop, productId, editRef }) => {
     } else if (!pop) {
       window.scrollTo(0, 0);
     }
-  }, [pop]);
+  }, [pop, editRef]);
 
   const handleData = (e, mode, index, colName, ref) => {
     if (mode === "change") {
@@ -563,10 +563,33 @@ export const AdminProductEditB = ({ pop, setPop, productId, editRef }) => {
       );
       if (result[0]) {
         window.alert("成功更新資料");
+        // reset the form
+        formRef.current.reset();
+        noticeRef.current.forEach((n) => {
+          if (n !== null) {
+            n.style.textDecoration = "none";
+            n.children[0].style.display = "inline-block";
+            n.children[1].style.display = "none";
+          }
+        });
+        colorRef.current.forEach((n) => {
+          if (n !== null) {
+            n.style.textDecoration = "none";
+            n.children[0].style.display = "inline-block";
+            n.children[1].style.display = "none";
+          }
+        });
+        patternRef.current.forEach((n) => {
+          if (n !== null) {
+            n.style.textDecoration = "none";
+            n.children[0].style.display = "inline-block";
+            n.children[1].style.display = "none";
+          }
+        });
+        setIsFetching(false);
       } else {
         window.alert("資料更新失敗");
       }
-      setIsFetching(false);
     }
   };
   return (

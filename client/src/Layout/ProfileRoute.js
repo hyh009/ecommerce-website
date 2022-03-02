@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom";
-import Nav from "./components/Nav";
-import Footer from "./components/Footer";
-import Sidebar from "./components/Sidebar";
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
+import Sidebar from "../components/Sidebar";
 
-const PrivateRoute = ({ isLogged }) => {
+const ProfileRoute = ({ isLogged }) => {
   return isLogged ? (
     <div>
       <Nav position="static" />
@@ -15,4 +15,4 @@ const PrivateRoute = ({ isLogged }) => {
   );
 };
 
-export default PrivateRoute;
+export default ProfileRoute;

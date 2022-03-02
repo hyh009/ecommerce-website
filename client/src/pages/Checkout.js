@@ -219,7 +219,7 @@ const Checkout = () => {
       window.alert("請先將商品加入購物車");
       navigate("/products/all");
     }
-  }, [cart.products]);
+  }, [cart.products, navigate]);
 
   // handle show more button
   const handleShowMore = (e) => {

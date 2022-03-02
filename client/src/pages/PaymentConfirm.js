@@ -75,9 +75,8 @@ const PaymentConfirm = () => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const user = useSelector((state) => state.user.currentUser);
   const [searchParams] = useSearchParams();
-  const [transactionId, setTransactionId] = useState(
-    searchParams.get("transactionId")
-  );
+  const transactionId = searchParams.get("transactionId");
+
   const method = searchParams.get("method");
   const orderId = searchParams.get("orderId");
   const navigate = useNavigate();
@@ -153,7 +152,7 @@ const PaymentConfirm = () => {
     if (orderId) {
       getOrder();
     }
-  }, []);
+  }, [transactionId, orderId, accessToken, dispatch, method, user]);
 
   //確認付款是否成功
   //清空購物車

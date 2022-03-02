@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { tabletBig, mobile } from "../responsive";
@@ -127,7 +127,7 @@ const AdminSidebar = () => {
   const [showUpArrow, setShowUpArrow] = useState(false);
   const [device, setDevice] = useState("desktop");
   const { pathname } = useLocation();
-  function handleCheckDevice() {
+  const handleCheckDevice = useCallback(() => {
     if (window.innerWidth > 1024) {
       setShowList(true);
       setShowUpArrow(false);
@@ -137,14 +137,14 @@ const AdminSidebar = () => {
       setShowUpArrow(false);
       setDevice("tablet");
     }
-  }
+  }, []);
   useEffect(() => {
     handleCheckDevice();
     window.addEventListener("resize", handleCheckDevice);
     return () => {
       window.removeEventListener("resize", handleCheckDevice);
     };
-  }, []);
+  }, [handleCheckDevice]);
 
   //set show to false when path change( only for tablet and mobile)
   useEffect(() => {
@@ -152,7 +152,7 @@ const AdminSidebar = () => {
       setShowList(false);
       setShowUpArrow(false);
     }
-  }, [pathname]);
+  }, [pathname, device]);
   return (
     <Container>
       <SideContainer>

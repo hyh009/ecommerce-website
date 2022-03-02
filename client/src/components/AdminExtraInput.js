@@ -78,7 +78,7 @@ export const AdminColorInput = ({ show, setInputs, setAddInputs }) => {
 };
 
 export const AdminPatternInput = ({ show, setInputs, setAddInputs }) => {
-  const [singleInput, setSingleInput] = useState(null);
+  const [singleInput, setSingleInput] = useState("");
   const handleInput = (e) => {
     setSingleInput(e.target.value);
   };
@@ -90,7 +90,7 @@ export const AdminPatternInput = ({ show, setInputs, setAddInputs }) => {
     setInputs((prev) => {
       return { ...prev, patterns: [...prev.patterns, singleInput] };
     });
-    setSingleInput(null);
+    setSingleInput("");
   };
   return (
     <Container style={{ display: show ? "flex" : "none" }}>
@@ -114,7 +114,7 @@ export const AdminNoticeInput = ({
   inputs,
   deleteEle,
 }) => {
-  const [singleInput, setSingleInput] = useState(null);
+  const [singleInput, setSingleInput] = useState("");
   const handleInput = (e) => {
     setSingleInput(e.target.value);
   };
@@ -130,7 +130,7 @@ export const AdminNoticeInput = ({
       setInputs((prev) => {
         return { ...prev, notice: [...prev.notice, singleInput] };
       });
-      setSingleInput(null);
+      setSingleInput("");
     }
   };
   return (

@@ -308,6 +308,8 @@ const Product = () => {
   const cart = useSelector((state) => state.cart);
   const accessToken = useSelector((state) => state.user.accessToken);
 
+  const [showSmallProduct, setShowSmallProduct] = useState(false);
+
   useEffect(() => {
     //get single product information
     const getProduct = async () => {
@@ -323,6 +325,10 @@ const Product = () => {
     };
     getProduct();
   }, [productId]);
+
+  useEffect(() => {
+    setShowSmallProduct(true);
+  }, [cart.products]);
 
   const handleChangePic = (e) => {
     const pic_Id = parseInt(e.target.id);
@@ -418,7 +424,9 @@ const Product = () => {
         </ProgressContainer>
       ) : currentProduct?._id ? (
         <>
-          <SmallProduct />
+          {showSmallProduct && (
+            <SmallProduct setShowSmallProduct={setShowSmallProduct} />
+          )}
           <Wrapper>
             <ImgContainer>
               <PicContainer>

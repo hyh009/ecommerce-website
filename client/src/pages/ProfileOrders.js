@@ -63,12 +63,11 @@ const ProfileOrders = () => {
         setOrders(res.data);
         setLoading(false);
       } catch (err) {
-        console.log(err);
         setLoading(false);
       }
     };
     getOrders();
-  }, []);
+  }, [user._id, accessToken]);
 
   const mobile = useMediaQuery("(max-width:480px)");
   const tablet = useMediaQuery("(max-width:770px)");

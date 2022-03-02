@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import styled from "styled-components";
-import { tabletBig, mobile } from "../responsive";
 import { CloudUpload } from "@mui/icons-material";
 
 const getColor = (props) => {
@@ -46,33 +45,36 @@ const CustomCloudUpload = styled(CloudUpload)`
 `;
 
 const ImageDropzone = ({ images, setImages }) => {
-  const onDrop = useCallback((acceptedFiles) => {
-    if (images.length + acceptedFiles.length > 6)
-      return window.alert("產品照片不能超過6張");
-    // Do something with the files
-    acceptedFiles.forEach((file) => {
-      let reader = new FileReader();
-      reader.readAsDataURL(file);
-      // check file size
-      reader.addEventListener("loadend", () => {
-        const fileSize = (file.size / (1024 * 1024)).toFixed(4);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      if (images.length + acceptedFiles.length > 6)
+        return window.alert("產品照片不能超過6張");
+      // Do something with the files
+      acceptedFiles.forEach((file) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        // check file size
+        reader.addEventListener("loadend", () => {
+          const fileSize = (file.size / (1024 * 1024)).toFixed(4);
 
-        if (fileSize > 10) {
-          return window.alert("照片不能超過10mb");
-        } else {
-          setImages((prev) => [
-            ...prev,
-            {
-              name: file.name,
-              type: file.type,
-              size: file.size,
-              src: reader.result,
-            },
-          ]);
-        }
+          if (fileSize > 10) {
+            return window.alert("照片不能超過10mb");
+          } else {
+            setImages((prev) => [
+              ...prev,
+              {
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                src: reader.result,
+              },
+            ]);
+          }
+        });
       });
-    });
-  }, []);
+    },
+    [images.length, setImages]
+  );
   const { getRootProps, getInputProps, isDragActive, isDragReject } =
     useDropzone({
       accept: "image/jpeg,image/png,image/jpg",

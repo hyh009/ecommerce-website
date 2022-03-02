@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   Android,
   Mail,
@@ -173,12 +173,16 @@ const UserInfo = ({ edit, showEditInfo, setShowEditInfo }) => {
       setShowChangeBtn(false);
     }
   };
-  const ClickOutsideClose = (e) => {
-    if (!colorImgRef?.current?.contains(e.target)) {
-      setShowChangeBtn(false);
-      setCoverColor(user.coverColor);
-    }
-  };
+
+  const ClickOutsideClose = useCallback(
+    (e) => {
+      if (!colorImgRef?.current?.contains(e.target)) {
+        setShowChangeBtn(false);
+        setCoverColor(user.coverColor);
+      }
+    },
+    [setCoverColor, setShowChangeBtn, user]
+  );
 
   //Click ouside cancel onChange color changed
   useEffect(() => {

@@ -213,26 +213,25 @@ const Wish = () => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const [wishProducts, setWishProducts] = useState([]);
   useEffect(() => {
-    wishIds.forEach(async (id) => {
-      const res = await ProductService.get(id);
-      setWishProducts((prev) => [...prev, res.data]);
-    });
-  }, []);
+    if (wishIds) {
+      const getProductsInfo = async () => {
+        const res = await ProductService.getByIds(wishIds);
+        setWishProducts(res.data);
+      };
+      getProductsInfo();
+    }
+  }, [wishIds]);
 
   const handleRemove = (e) => {
     const updateLike = wishIds.filter((id) => id !== e.target.id);
     const newUser = { _id: user._id, like: updateLike };
     updateUser(dispatch, newUser, accessToken);
-    setWishProducts((prev) =>
-      prev.filter((product) => updateLike.includes(product._id))
-    );
   };
 
   const handleClearup = (e) => {
     e.preventDefault();
     const newUser = { _id: user._id, like: [] };
     updateUser(dispatch, newUser, accessToken);
-    setWishProducts([]);
   };
 
   return (

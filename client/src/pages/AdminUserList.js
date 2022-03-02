@@ -97,10 +97,10 @@ const AdminUserList = () => {
       }
     };
     getAllUser();
-  }, []);
+  }, [accessToken]);
   const handleDelete = (id) => {
     window.confirm("確定刪除此用戶嗎？") &&
-      setData(data.filter((item) => item._id != id));
+      setData(data.filter((item) => item._id !== id));
   };
   const columns = [
     { field: "_id", headerName: "ID", width: 100 },

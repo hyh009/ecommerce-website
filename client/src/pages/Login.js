@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { tabletBig, mobile } from "../responsive";
 import { Link, useNavigate } from "react-router-dom";
@@ -104,44 +104,47 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isFetching, error, errMessage } = useSelector((state) => state.user);
+  const { isFetching, errMessage } = useSelector((state) => state.user);
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.user.currentUser);
   const accessToken = useSelector((state) => state.user.accessToken);
 
   //將未登入時加入購物車的產品儲存至資料庫
-  const getSavedCart = async (user) => {
-    const productsInTempCart = [...cart.products];
-    // get saved cart from database
-    let savedCart = await getCartData(dispatch, user, accessToken);
-    if (productsInTempCart.length > 0) {
-      //if there are some products in the cart before login
-      let newProducts;
-      let repeat;
-      if (savedCart?.products?.length > 0) {
-        //if there are some products in database
-        productsInTempCart.forEach((newProduct) => {
-          [repeat, newProducts] = checkProductInCart(
-            savedCart.products,
-            newProduct,
-            newProduct.quantity
-          );
-          if (!repeat) {
-            //new items not in the cart
-            newProducts.push(newProduct);
-            savedCart.products = newProducts;
-          } else {
-            //new items already in the cart (just add quantity)
-            savedCart.products = newProducts;
-          }
-        });
-        //update redux & DB
-        return updateCart(dispatch, user, newProducts, accessToken);
+  const getSavedCart = useCallback(
+    async (user) => {
+      const productsInTempCart = [...cart.products];
+      // get saved cart from database
+      let savedCart = await getCartData(dispatch, user, accessToken);
+      if (productsInTempCart.length > 0) {
+        //if there are some products in the cart before login
+        let newProducts;
+        let repeat;
+        if (savedCart?.products?.length > 0) {
+          //if there are some products in database
+          productsInTempCart.forEach((newProduct) => {
+            [repeat, newProducts] = checkProductInCart(
+              savedCart.products,
+              newProduct,
+              newProduct.quantity
+            );
+            if (!repeat) {
+              //new items not in the cart
+              newProducts.push(newProduct);
+              savedCart.products = newProducts;
+            } else {
+              //new items already in the cart (just add quantity)
+              savedCart.products = newProducts;
+            }
+          });
+          //update redux & DB
+          return updateCart(dispatch, user, newProducts, accessToken);
+        }
+        //no savedCart but have tempCart
+        return updateCart(dispatch, user, productsInTempCart, accessToken);
       }
-      //no savedCart but have tempCart
-      return updateCart(dispatch, user, productsInTempCart, accessToken);
-    }
-  };
+    },
+    [accessToken, cart, dispatch]
+  );
   // handle login
   const handleClick = async (e) => {
     e.preventDefault();
@@ -153,7 +156,7 @@ const Login = () => {
       getSavedCart(user);
       return navigate("/profile");
     }
-  }, [user]);
+  }, [user, getSavedCart, navigate]);
 
   return (
     <Container>

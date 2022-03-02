@@ -80,7 +80,6 @@ function CustomToolbar() {
 const AdminProductList = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
-  const accessToken = useSelector((state) => state.user.accessToken);
   const mobile = useMediaQuery("(max-width:480px)");
   const tablet = useMediaQuery("(max-width:770px)");
 

@@ -109,7 +109,7 @@ const AdminWedgeB = () => {
       }
     };
     getOrders();
-  }, []);
+  }, [accessToken]);
   return (
     <Container>
       <Title>最新交易資訊</Title>

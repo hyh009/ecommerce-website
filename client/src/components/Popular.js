@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { tabletBig, tablet, mobile } from "../responsive";
 import Products from "./Products";
 import ProductService from "../services/product.service";
-import { useSelector } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
@@ -62,15 +61,14 @@ const Popular = ({ sort, filters }) => {
   const [items, setItems] = useState([]);
   const [filtereditems, setFiltereditems] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
-  const products = useSelector((state) => state.product.products);
 
   useEffect(() => {
     const getProducts = async () => {
       setIsFetching(true);
       try {
         if (typeof filters === "undefined") {
-          console.log("pass");
-          setFiltereditems(() => products.slice(0, 8));
+          const res = await ProductService.getAll();
+          setFiltereditems(() => res.data.slice(0, 8));
           setIsFetching(false);
         } else {
           const res = await ProductService.getAll(filters.category);

@@ -244,7 +244,7 @@ const AdminUser = () => {
       }
     };
     getUserData();
-  }, []);
+  }, [userId, accessToken]);
 
   useEffect(() => {
     //clear error message after 5 seconds

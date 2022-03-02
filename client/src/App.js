@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import GlobalStyle from "./GlobalStyle";
 import { BrowserRouter } from "react-router-dom";
-import { MainLayout } from "./components";
+import { MainLayout, ProfileRoute, AdminRoute, ScrollToTop } from "./Layout";
 import {
   About,
   Cart,
@@ -34,9 +34,6 @@ import {
   AdminOrderList,
   AdminOrderEdit,
 } from "./pages";
-import ScrollToTop from "./ScrollToTop";
-import PrivateRoute from "./PrivateRoute";
-import AdminRoute from "./AdminRoute";
 import { getUser, userLogout, getCartData, getProducts } from "./redux/apiCall";
 
 const App = () => {
@@ -57,14 +54,22 @@ const App = () => {
       if (expiredDate < today) {
         window.alert("登入期限到期，若有需求請重新登入帳號");
         userLogout(dispatch);
-      } else {
-        // when refresh, update redux user and cart data from db
-        // to prevent different user information in different device (or browser) after update user info
-        getUser(dispatch, user._id, accessToken);
-        getCartData(dispatch, user, accessToken);
+        return;
       }
     }
-  }, []);
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    // when refresh, update redux user from db
+    // to prevent different user information in different device (or browser) after update user info
+    getUser(dispatch, user._id, accessToken);
+  }, [accessToken, dispatch, user._id]);
+
+  useEffect(() => {
+    // when refresh, update redux cart data from db
+    // to prevent different user information in different device (or browser)
+    getCartData(dispatch, user, accessToken);
+  }, [accessToken, user, dispatch]);
 
   return (
     <BrowserRouter>
@@ -78,7 +83,7 @@ const App = () => {
             }
           />
           <Route path="/login" element={<Login />} />
-          <Route element={<PrivateRoute isLogged={Boolean(user)} />}>
+          <Route element={<ProfileRoute isLogged={Boolean(user)} />}>
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/edit" element={<ProfileEdit />} />
             <Route path="/profile/order" element={<ProfileOrders />} />

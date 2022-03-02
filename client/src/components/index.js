@@ -8,7 +8,6 @@ export { default as LoadAnimation } from "./LoadAnimation";
 export { default as Message } from "./Message";
 export { default as Nav } from "./Nav";
 export { default as Newsletter } from "./Newsletter";
-export { default as MainLayout } from "./MainLayout";
 export { default as Popular } from "./Popular";
 export { default as Products } from "./Products";
 export { default as ProfileCart } from "./ProfileCart";

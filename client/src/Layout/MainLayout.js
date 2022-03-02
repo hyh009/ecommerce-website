@@ -1,9 +1,9 @@
 import React from "react";
-import Announcement from "./Announcement";
-import Nav from "./Nav";
-import Newsletter from "./Newsletter";
-import Footer from "./Footer";
-import ScrollToTopBtn from "./ScrollToTopBtn";
+import Announcement from "../components/Announcement";
+import Nav from "../components/Nav";
+import Newsletter from "../components/Newsletter";
+import Footer from "../components/Footer";
+import ScrollToTopBtn from "../components/ScrollToTopBtn";
 import { Outlet } from "react-router-dom";
 
 const MainLayout = () => {

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import Badge from "@mui/material/Badge";
-import { Logout, Settings, NotificationsNone } from "@mui/icons-material";
+import { Logout } from "@mui/icons-material";
 import { tabletBig } from "../responsive";
 import { useSelector, useDispatch } from "react-redux";
 import { userLogout } from "../redux/apiCall";
@@ -34,10 +33,11 @@ const Logo = styled.img`
 `;
 const Desc = styled.span`
   font-size: 18px;
-  //font-weight: bold;
+  font-weight: bold;
   letter-spacing: 3px;
   margin-left: 5px;
   color: lightgray;
+  ${tabletBig({ fontSize: "3vmin", letterSpacing: "0px" })}
 `;
 const TopRight = styled.div`
   display: flex;
@@ -117,14 +117,6 @@ const Topbar = () => {
           <IconContainer title="登出" onClick={handleLogout}>
             <Logout />
           </IconContainer>
-          {/* <><IconContainer title="通知">
-            <Badge badgeContent={1} color="primary">
-              <NotificationsNone />
-            </Badge>
-          </IconContainer>
-          <IconContainer title="設定">
-            <Settings />
-          </IconContainer></> */}
           <PhotoContainer>
             <Photo src={user.img} alt={user.username} />
             <div className="userinfo">

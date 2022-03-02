@@ -121,7 +121,7 @@ const AdminWedgeS = () => {
       }
     };
     getUsers();
-  }, []);
+  }, [accessToken]);
   const defaultUser =
     "https://res.cloudinary.com/dh2splieo/image/upload/v1642260982/shop_website/user/defaultUser_z2hlsg.png";
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled, { keyframes } from "styled-components";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
@@ -11,7 +11,7 @@ const animation = keyframes`
 `;
 
 const Container = styled.div`
-  display: ${(props) => (props.showSmallProduct ? "flex" : "none")};
+  display: flex;
   width: 210px;
   align-items: center;
   position: fixed;
@@ -86,26 +86,13 @@ const Price = styled.span`
   align-self: center;
   justify-self: center;
 `;
-const SmallProduct = () => {
+const SmallProduct = ({ setShowSmallProduct }) => {
   const cartProducts = useSelector((state) => state.cart.products);
-  const [showSmallProduct, setShowSmallProduct] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
-  useEffect(() => {
-    const startInterval = window.setInterval(function () {
-      if (!isFetching) {
-        setShowSmallProduct(true);
-        clearInterval(startInterval);
-      }
-    }, 500);
-  }, [cartProducts]);
   return (
-    <Container
-      showSmallProduct={showSmallProduct}
-      onAnimationEnd={() => setShowSmallProduct(false)}
-    >
+    <Container onAnimationEnd={() => setShowSmallProduct(false)}>
       {cartProducts?.slice(-5)?.map((product, index) => (
         <Product key={index}>
-          <Image src={product.img} onLoad={() => setIsFetching(false)} />
+          <Image src={product.img} alt={product.title} />
           <Info>
             <Title>{product.title}</Title>
             {product?.color?.code && <Color color={product.color.code} />}

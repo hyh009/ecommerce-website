@@ -98,7 +98,7 @@ const AdminHome = () => {
       }
     };
     getStats();
-  }, [MONTHS, year]);
+  }, [MONTHS, year, accessToken]);
 
   useEffect(() => {
     const getIncome = async () => {
@@ -129,7 +129,7 @@ const AdminHome = () => {
       }
     };
     getIncome();
-  }, []);
+  }, [accessToken]);
 
   return (
     <Container>

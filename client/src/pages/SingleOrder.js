@@ -121,7 +121,7 @@ const SingleOrder = () => {
       try {
         const res = await OrderService.getOrderById(orderId);
         setOrder(res.data);
-        isFetching(false);
+        setIsFetching(false);
       } catch (err) {
         setIsFetching(false);
       }

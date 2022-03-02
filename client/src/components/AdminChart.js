@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { tabletBig } from "../responsive";
 import {
@@ -41,7 +41,7 @@ const Select = styled.select`
 const AdminChart = ({ data, title, dataKey, margin, year, setYear }) => {
   const [device, setDevice] = useState();
 
-  function handleCheckDevice() {
+  const handleCheckDevice = useCallback(() => {
     if (window.innerWidth > 770) {
       setDevice("md");
     } else if (window.innerWidth < 480) {
@@ -49,14 +49,14 @@ const AdminChart = ({ data, title, dataKey, margin, year, setYear }) => {
     } else {
       setDevice("lg");
     }
-  }
+  }, []);
   useEffect(() => {
     handleCheckDevice();
     window.addEventListener("resize", handleCheckDevice);
     return () => {
       window.removeEventListener("resize", handleCheckDevice);
     };
-  }, []);
+  }, [handleCheckDevice]);
 
   return (
     <Container margin={margin}>

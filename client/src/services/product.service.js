@@ -12,6 +12,14 @@ class ProductService {
   get(productId) {
     return axiosInstance.get(`${ROUTE}/find/${productId}`);
   }
+
+  getByIds(productIds) {
+    const queries = productIds.reduce(
+      (prev, current, index) => `${prev}&objectId${index}=${current}`,
+      ""
+    );
+    return axiosInstance.get(`${ROUTE}/findbulk?${queries.slice(1)}`);
+  }
   delete(id, TOKEN) {
     return axiosInstance.delete(`${ROUTE}/${id}`, {
       headers: { token: `Bearer ${TOKEN}` },

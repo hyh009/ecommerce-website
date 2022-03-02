@@ -60,6 +60,7 @@ const Button = styled.button`
 
 const Newsletter = () => {
   const [email, setEmail] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
   // check if email is valid by regex
   const validateEmail = (email) => {
     return String(email)
@@ -71,18 +72,20 @@ const Newsletter = () => {
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
-
+    setIsFetching(true);
     if (validateEmail(email)) {
       try {
         await MailService.signup(email);
         window.alert("成功訂閱電子報");
         setEmail("");
+        setIsFetching(false);
       } catch (err) {
         window.alert(err.response.data);
         setEmail("");
+        setIsFetching(false);
       }
     } else {
-      console.log("not");
+      setIsFetching(false);
       return window.alert("請輸入正確email");
     }
   };
@@ -99,7 +102,7 @@ const Newsletter = () => {
           placeholder="請輸入Email"
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Button type="submit">
+        <Button type="submit" disabled={isFetching}>
           <SendIcon style={{ fontSize: 32 }} />
         </Button>
       </InputContainer>

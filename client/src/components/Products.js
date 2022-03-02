@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { tabletBig, tablet, mobile } from "../responsive";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -217,9 +217,9 @@ const Product = ({ item }) => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const [display, setDisplay] = useState(false);
   const [desc, setDesc] = useState(false);
-  const checkLike = () => {
+  const checkLike = useCallback(() => {
     return user?.like?.includes(item._id);
-  };
+  }, [user, item._id]);
   const [like, setLike] = useState(() => checkLike());
 
   // on mounse enter & leave event handler
@@ -253,7 +253,7 @@ const Product = ({ item }) => {
     if (user) {
       setLike(() => checkLike());
     }
-  }, [user]);
+  }, [user, checkLike]);
 
   return (
     <Container>

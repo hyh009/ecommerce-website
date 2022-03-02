@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { tabletBig } from "../responsive";
 import { useSelector } from "react-redux";
@@ -132,7 +132,7 @@ const Sidebar = () => {
   const [device, setDevice] = useState("desktop");
   const user = useSelector((state) => state.user.currentUser);
   const { pathname } = useLocation();
-  function handleCheckDevice() {
+  const handleCheckDevice = useCallback(() => {
     if (window.innerWidth > 1024) {
       setShowList(true);
       setShowUpArrow(false);
@@ -142,14 +142,14 @@ const Sidebar = () => {
       setShowUpArrow(false);
       setDevice("tablet");
     }
-  }
+  }, []);
   useEffect(() => {
     handleCheckDevice();
     window.addEventListener("resize", handleCheckDevice);
     return () => {
       window.removeEventListener("resize", handleCheckDevice);
     };
-  }, []);
+  }, [handleCheckDevice]);
 
   //set show to false when path change( only for tablet and mobile)
   useEffect(() => {
@@ -157,7 +157,7 @@ const Sidebar = () => {
       setShowList(false);
       setShowUpArrow(false);
     }
-  }, [pathname]);
+  }, [pathname, device]);
 
   return (
     <Container>

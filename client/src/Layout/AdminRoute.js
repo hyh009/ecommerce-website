@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { AdminTopbar, AdminSidebar } from "./components";
+import { AdminTopbar, AdminSidebar } from "../components";
 
 const AdminRoute = ({ isLogged }) => {
   return isLogged ? (

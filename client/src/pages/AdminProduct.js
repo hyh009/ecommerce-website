@@ -315,7 +315,7 @@ const AdminProduct = () => {
       }
     };
     getPStats();
-  }, [MONTHS, product, year]);
+  }, [MONTHS, product, year, accessToken]);
 
   const handleTepDel = (e, index, mode) => {
     if (mode === "del") {
