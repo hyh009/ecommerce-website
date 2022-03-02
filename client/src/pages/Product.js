@@ -327,7 +327,9 @@ const Product = () => {
   }, [productId]);
 
   useEffect(() => {
-    setShowSmallProduct(true);
+    if (cart.products) {
+      setShowSmallProduct(true);
+    }
   }, [cart.products]);
 
   const handleChangePic = (e) => {

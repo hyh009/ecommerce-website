@@ -62,14 +62,11 @@ const App = () => {
   useEffect(() => {
     // when refresh, update redux user from db
     // to prevent different user information in different device (or browser) after update user info
-    getUser(dispatch, user._id, accessToken);
-  }, [accessToken, dispatch]);
-
-  useEffect(() => {
-    // when refresh, update redux cart data from db
-    // to prevent different user information in different device (or browser)
-    getCartData(dispatch, user, accessToken);
-  }, [accessToken, user, dispatch]);
+    if (user) {
+      getUser(dispatch, user._id, accessToken);
+      getCartData(dispatch, user, accessToken);
+    }
+  }, []);
 
   return (
     <BrowserRouter>
