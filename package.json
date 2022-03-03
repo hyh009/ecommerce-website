@@ -26,7 +26,6 @@
     "joi": "^17.4.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.13",
-    "redis": "^4.0.4",
     "uuid4": "^2.0.2"
   },
   "devDependencies": {
