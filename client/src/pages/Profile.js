@@ -103,27 +103,33 @@ const Profile = () => {
     []
   );
   useEffect(() => {
+    let mounted = true;
     const getSpent = async () => {
       try {
         const res = await OrderService.getUserSpent(user._id, accessToken);
-        setUserSpent(() =>
-          MONTHS.map((month, index) => {
-            let updateData = month;
-            res.data.forEach((item) => {
-              if (item._id.month === index + 1) {
-                updateData = { ...month, 消費金額: item.total };
-                return;
-              }
-            });
-            return updateData;
-          })
-        );
+        if (mounted) {
+          setUserSpent(() =>
+            MONTHS.map((month, index) => {
+              let updateData = month;
+              res.data.forEach((item) => {
+                if (item._id.month === index + 1) {
+                  updateData = { ...month, 消費金額: item.total };
+                  return;
+                }
+              });
+              return updateData;
+            })
+          );
+        }
       } catch (err) {
         console.log(err);
       }
     };
 
     getSpent();
+    return () => {
+      mounted = false;
+    };
   }, [user, MONTHS, accessToken]);
 
   useEffect(() => {

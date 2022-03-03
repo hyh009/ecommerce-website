@@ -213,13 +213,19 @@ const Wish = () => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const [wishProducts, setWishProducts] = useState([]);
   useEffect(() => {
+    let mounted = true;
     if (wishIds) {
       const getProductsInfo = async () => {
         const res = await ProductService.getByIds(wishIds);
-        setWishProducts(res.data);
+        if (mounted) {
+          setWishProducts(res.data);
+        }
       };
       getProductsInfo();
     }
+    return () => {
+      mounted = false;
+    };
   }, [wishIds]);
 
   const handleRemove = (e) => {

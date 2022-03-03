@@ -56,17 +56,20 @@ const ProfileOrders = () => {
 
   useEffect(() => {
     // get orders data
+    let mounted = true;
     const getOrders = async () => {
-      setLoading(true);
       try {
         const res = await OrderService.getOrdersbyUser(user._id, accessToken);
-        setOrders(res.data);
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-      }
+        if (mounted) {
+          setOrders(res.data);
+        }
+      } catch (err) {}
+      setLoading(false);
     };
     getOrders();
+    return () => {
+      mounted = false;
+    };
   }, [user._id, accessToken]);
 
   const mobile = useMediaQuery("(max-width:480px)");

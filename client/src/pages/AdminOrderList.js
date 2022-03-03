@@ -64,18 +64,23 @@ const AdminOrderList = () => {
   const mobile = useMediaQuery("(max-width:480px)");
   const tablet = useMediaQuery("(max-width:770px)");
   useEffect(() => {
+    let mounted = true;
     const getOrders = async () => {
       try {
         setLoading(true);
         const res = await OrderService.get(accessToken);
-        setData(res.data);
-        setLoading(false);
+        if (mounted) {
+          setData(res.data);
+        }
       } catch (err) {
-        setLoading(false);
         console.log(err);
       }
+      setLoading(false);
     };
     getOrders();
+    return () => {
+      mounted = false;
+    };
   }, [accessToken]);
   const handleDelete = (id) => {
     window.confirm("確定刪除此訂單嗎？") &&

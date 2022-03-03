@@ -116,17 +116,21 @@ const SingleOrder = () => {
   const [displayPackages, setDisplayPackages] = useState(3);
   const [isFetching, setIsFetching] = useState(false);
   useEffect(() => {
+    let mounted = true;
     const getOrder = async () => {
       setIsFetching(true);
       try {
         const res = await OrderService.getOrderById(orderId);
-        setOrder(res.data);
-        setIsFetching(false);
-      } catch (err) {
-        setIsFetching(false);
-      }
+        if (mounted) {
+          setOrder(res.data);
+        }
+      } catch (err) {}
+      setIsFetching(false);
     };
     getOrder();
+    return () => {
+      mounted = false;
+    };
   }, [orderId]);
 
   // handle show more button

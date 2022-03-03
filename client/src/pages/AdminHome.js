@@ -77,27 +77,33 @@ const AdminHome = () => {
   );
 
   useEffect(() => {
+    let mounted = true;
     const getStats = async () => {
       try {
         const res = await UserService.getStats(year, accessToken);
 
-        setUserStats(() =>
-          MONTHS.map((month, index) => {
-            let updateData = month;
-            res.data.forEach((item) => {
-              if (item._id.month === index + 1) {
-                updateData = { ...month, 新增用戶: item.total };
-                return;
-              }
-            });
-            return updateData;
-          })
-        );
+        if (mounted) {
+          setUserStats(() =>
+            MONTHS.map((month, index) => {
+              let updateData = month;
+              res.data.forEach((item) => {
+                if (item._id.month === index + 1) {
+                  updateData = { ...month, 新增用戶: item.total };
+                  return;
+                }
+              });
+              return updateData;
+            })
+          );
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getStats();
+    return () => {
+      mounted = false;
+    };
   }, [MONTHS, year, accessToken]);
 
   useEffect(() => {

@@ -91,12 +91,13 @@ const ProductList = () => {
           }`}
         ></meta>
       </Helmet>
-      <Title>{cat === "all" ? "全類商品" : cat}</Title>
+      <Title>{cat === "all" ? "全部商品" : cat}</Title>
       <FilterContainer>
         <Filter>
           <FilterText>篩選商品：</FilterText>
           <Select name="category" onChange={handleFilterChange}>
             <Option value="all">請選擇分類</Option>
+            <Option value="all">全部商品</Option>
             <Option>隨你PAD吸管</Option>
             <Option>矽膠小餐墊</Option>
             <Option>蜂巢坐靠墊</Option>

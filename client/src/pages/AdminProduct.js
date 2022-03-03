@@ -295,26 +295,32 @@ const AdminProduct = () => {
   );
 
   useEffect(() => {
+    let mounted = true;
     const getPStats = async () => {
       try {
         const res = await OrderService.getSales(product._id, year, accessToken);
-        setPStats(() =>
-          MONTHS.map((month, index) => {
-            let updateData = month;
-            res.data.forEach((item) => {
-              if (item._id === index + 1) {
-                updateData = { ...month, 銷售金額: item.total };
-                return;
-              }
-            });
-            return updateData;
-          })
-        );
+        if (mounted) {
+          setPStats(() =>
+            MONTHS.map((month, index) => {
+              let updateData = month;
+              res.data.forEach((item) => {
+                if (item._id === index + 1) {
+                  updateData = { ...month, 銷售金額: item.total };
+                  return;
+                }
+              });
+              return updateData;
+            })
+          );
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getPStats();
+    return () => {
+      mounted = false;
+    };
   }, [MONTHS, product, year, accessToken]);
 
   const handleTepDel = (e, index, mode) => {

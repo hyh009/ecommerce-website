@@ -52,15 +52,8 @@ const CoverImg = styled.img`
   object-fit: cover;
   height: 100%;
   width: 100%;
-  opacity: 0.8;
+  opacity: 1;
   ${mobile({ objectPosition: "80%" })}
-`;
-const Block = styled.div`
-  background-color: #042f80;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  z-index: -1;
 `;
 
 const CoverText = styled.div`
@@ -114,10 +107,9 @@ const LoadAnimation = ({ showAnimation, setShowAnimation }) => {
       )}
 
       <CoverImgContainer device="small" isFetching={isFetching}>
-        <Block></Block>
         <CoverImg
           src={
-            "https://res.cloudinary.com/dh2splieo/image/upload/v1640706210/shop_website/imgs/straw/straw_rainbow/straw_rainbow3_mjtpim.jpg"
+            "https://res.cloudinary.com/dh2splieo/image/upload/v1646313543/shop_website/imgs/cover/straw_rainbow_cover_z6gvtp.png"
           }
           onLoad={() => setIsFetching((prev) => !prev)}
         />

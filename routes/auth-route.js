@@ -46,7 +46,6 @@ router.post("/login", async (req, res) => {
       user.comparePassword(password, function (err, isMatch) {
         if (isMatch) {
           //get the user
-          const { password, ...others } = user._doc;
           const accessToken = jwt.sign(
             {
               id: user._id,
@@ -59,13 +58,13 @@ router.post("/login", async (req, res) => {
           User.newLogin(email, function (err, data) {
             if (err) {
               console.log(err);
+              res.status(500).json("系統發生錯誤，請稍後再試。");
             } else {
-              const { password, ...others } = data._doc;
+              const { password, ...newOthers } = data._doc;
               console.log("成功更新上次登入時間");
+              res.status(200).json({ ...newOthers, accessToken });
             }
           });
-
-          res.status(200).json({ ...others, accessToken });
         } else {
           console.log(err);
           res.status(401).json("帳號或密碼不正確，請重新登入。");

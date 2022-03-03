@@ -111,36 +111,38 @@ const Login = () => {
 
   //將未登入時加入購物車的產品儲存至資料庫
   const getSavedCart = useCallback(
-    async (user) => {
+    async (user, mounted) => {
       const productsInTempCart = [...cart.products];
       // get saved cart from database
       let savedCart = await getCartData(dispatch, user, accessToken);
-      if (productsInTempCart.length > 0) {
-        //if there are some products in the cart before login
-        let newProducts;
-        let repeat;
-        if (savedCart?.products?.length > 0) {
-          //if there are some products in database
-          productsInTempCart.forEach((newProduct) => {
-            [repeat, newProducts] = checkProductInCart(
-              savedCart.products,
-              newProduct,
-              newProduct.quantity
-            );
-            if (!repeat) {
-              //new items not in the cart
-              newProducts.push(newProduct);
-              savedCart.products = newProducts;
-            } else {
-              //new items already in the cart (just add quantity)
-              savedCart.products = newProducts;
-            }
-          });
-          //update redux & DB
-          return updateCart(dispatch, user, newProducts, accessToken);
+      if (mounted) {
+        if (productsInTempCart.length > 0) {
+          //if there are some products in the cart before login
+          let newProducts;
+          let repeat;
+          if (savedCart?.products?.length > 0) {
+            //if there are some products in database
+            productsInTempCart.forEach((newProduct) => {
+              [repeat, newProducts] = checkProductInCart(
+                savedCart.products,
+                newProduct,
+                newProduct.quantity
+              );
+              if (!repeat) {
+                //new items not in the cart
+                newProducts.push(newProduct);
+                savedCart.products = newProducts;
+              } else {
+                //new items already in the cart (just add quantity)
+                savedCart.products = newProducts;
+              }
+            });
+            //update redux & DB
+            return updateCart(dispatch, user, newProducts, accessToken);
+          }
+          //no savedCart but have tempCart
+          return updateCart(dispatch, user, productsInTempCart, accessToken);
         }
-        //no savedCart but have tempCart
-        return updateCart(dispatch, user, productsInTempCart, accessToken);
       }
     },
     [accessToken, cart, dispatch]
@@ -152,10 +154,14 @@ const Login = () => {
   };
 
   useEffect(() => {
+    let mounted = true;
     if (user) {
-      getSavedCart(user);
-      return navigate("/profile");
+      getSavedCart(user, mounted);
     }
+    return () => {
+      mounted = false;
+      navigate("/profile");
+    };
   }, [user, getSavedCart, navigate]);
 
   return (

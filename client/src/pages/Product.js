@@ -312,25 +312,24 @@ const Product = () => {
 
   useEffect(() => {
     //get single product information
+    let mounted = true;
     const getProduct = async () => {
       try {
         const res = await ProductService.get(productId);
-        setCurrentProduct(res.data);
-        setCurrentImg(res.data.imgs[0]);
-        setIsFetching(false);
+        if (mounted) {
+          setCurrentProduct(res.data);
+          setCurrentImg(res.data.imgs[0]);
+        }
       } catch (err) {
         console.log(err);
-        setIsFetching(false);
       }
+      setIsFetching(false);
     };
     getProduct();
+    return () => {
+      mounted = false;
+    };
   }, [productId]);
-
-  useEffect(() => {
-    if (cart.products) {
-      setShowSmallProduct(true);
-    }
-  }, [cart.products]);
 
   const handleChangePic = (e) => {
     const pic_Id = parseInt(e.target.id);
@@ -407,6 +406,8 @@ const Product = () => {
       updateCart(dispatch, user, [newProduct], accessToken);
     }
     setShowMessage(true);
+    setIsFetching(false);
+    setShowSmallProduct(true);
   };
 
   return (
@@ -426,9 +427,10 @@ const Product = () => {
         </ProgressContainer>
       ) : currentProduct?._id ? (
         <>
-          {showSmallProduct && (
-            <SmallProduct setShowSmallProduct={setShowSmallProduct} />
-          )}
+          <SmallProduct
+            setShowSmallProduct={setShowSmallProduct}
+            showSmallProduct={showSmallProduct}
+          />
           <Wrapper>
             <ImgContainer>
               <PicContainer>

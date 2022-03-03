@@ -11,7 +11,7 @@ const animation = keyframes`
 `;
 
 const Container = styled.div`
-  display: flex;
+  display: ${(props) => (props.showSmallProduct ? "flex" : "none")};
   width: 210px;
   align-items: center;
   position: fixed;
@@ -86,10 +86,13 @@ const Price = styled.span`
   align-self: center;
   justify-self: center;
 `;
-const SmallProduct = ({ setShowSmallProduct }) => {
+const SmallProduct = ({ setShowSmallProduct, showSmallProduct }) => {
   const cartProducts = useSelector((state) => state.cart.products);
   return (
-    <Container onAnimationEnd={() => setShowSmallProduct(false)}>
+    <Container
+      onAnimationEnd={() => setShowSmallProduct(false)}
+      showSmallProduct={showSmallProduct}
+    >
       {cartProducts?.slice(-5)?.map((product, index) => (
         <Product key={index}>
           <Image src={product.img} alt={product.title} />

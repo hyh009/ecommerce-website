@@ -144,8 +144,8 @@ const Footer = ({ background }) => {
           <CustomLink to="/products/隨你PAD吸管">
             <ListItem>隨你PAD吸管</ListItem>
           </CustomLink>
-          <CustomLink to="/products/無痕窗貼">
-            <ListItem>無痕窗貼</ListItem>
+          <CustomLink to="/products/環保無痕窗貼">
+            <ListItem>環保無痕窗貼</ListItem>
           </CustomLink>
           <CustomLink to="/products/蜂巢坐靠墊">
             <ListItem>蜂巢坐靠墊</ListItem>
@@ -156,8 +156,8 @@ const Footer = ({ background }) => {
           <CustomLink to="/products/不倒翁門擋">
             <ListItem>不倒翁門擋</ListItem>
           </CustomLink>
-          <CustomLink to="/products/其它">
-            <ListItem>其它商品</ListItem>
+          <CustomLink to="/products/矽膠鍋墊">
+            <ListItem>矽膠鍋墊</ListItem>
           </CustomLink>
         </List>
       </Center>

@@ -82,21 +82,24 @@ const AdminUserList = () => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const mobile = useMediaQuery("(max-width:480px)");
   const tablet = useMediaQuery("(max-width:770px)");
-  const defaultUser =
-    "https://res.cloudinary.com/dh2splieo/image/upload/v1642260982/shop_website/user/defaultUser_z2hlsg.png";
   useEffect(() => {
+    let mounted = true;
     const getAllUser = async () => {
       try {
         setLoading(true);
         const res = await UserService.getAll(accessToken);
-        setData(res.data);
-        setLoading(false);
+        if (mounted) {
+          setData(res.data);
+        }
       } catch (err) {
         console.log(err);
-        setLoading(false);
       }
+      setLoading(false);
     };
     getAllUser();
+    return () => {
+      mounted = false;
+    };
   }, [accessToken]);
   const handleDelete = (id) => {
     window.confirm("確定刪除此用戶嗎？") &&
@@ -111,7 +114,7 @@ const AdminUserList = () => {
       renderCell: (params) => {
         return (
           <User>
-            <UserImg src={params.row.img || defaultUser} alt="" />
+            <UserImg src={params.row.img} alt="" />
             <span>{params.row.username}</span>
           </User>
         );

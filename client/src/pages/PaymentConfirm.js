@@ -86,6 +86,7 @@ const PaymentConfirm = () => {
   const [success, setSuccess] = useState(Boolean(searchParams.get("success")));
 
   useEffect(() => {
+    let mounted = true;
     const getOrder = async () => {
       try {
         setIsFetching(true);
@@ -104,20 +105,22 @@ const PaymentConfirm = () => {
             order,
             accessToken
           );
-          if (response.data.success) {
-            setSuccess(true);
-            setShow404(false);
-            setIsFetching(false);
+          if (mounted) {
+            if (response.data.success) {
+              setSuccess(true);
+              setShow404(false);
+              setIsFetching(false);
 
-            // clear up cart
-            const newProducts = [];
-            updateCart(dispatch, user, newProducts, accessToken);
-            setSuccess(true);
-            setIsFetching(false);
-          } else if (!response.data.success) {
-            setSuccess(false);
-            setShow404(false);
-            setIsFetching(false);
+              // clear up cart
+              const newProducts = [];
+              updateCart(dispatch, user, newProducts, accessToken);
+              setSuccess(true);
+              setIsFetching(false);
+            } else if (!response.data.success) {
+              setSuccess(false);
+              setShow404(false);
+              setIsFetching(false);
+            }
           }
           // paypal
         } else if (method === "paypal") {
@@ -126,20 +129,22 @@ const PaymentConfirm = () => {
             accessToken
           );
 
-          if (response.data.success) {
-            setSuccess(true);
-            setShow404(false);
-            setIsFetching(false);
+          if (mounted) {
+            if (response.data.success) {
+              setSuccess(true);
+              setShow404(false);
+              setIsFetching(false);
 
-            // clear up cart
-            const newProducts = [];
-            updateCart(dispatch, user, newProducts, accessToken);
-            setSuccess(true);
-            setIsFetching(false);
-          } else if (!response.data.success) {
-            setSuccess(false);
-            setShow404(false);
-            setIsFetching(false);
+              // clear up cart
+              const newProducts = [];
+              updateCart(dispatch, user, newProducts, accessToken);
+              setSuccess(true);
+              setIsFetching(false);
+            } else if (!response.data.success) {
+              setSuccess(false);
+              setShow404(false);
+              setIsFetching(false);
+            }
           }
         }
       } catch (err) {
@@ -152,6 +157,10 @@ const PaymentConfirm = () => {
     if (orderId) {
       getOrder();
     }
+
+    return () => {
+      mounted = false;
+    };
   }, [transactionId, orderId, accessToken, dispatch, method, user]);
 
   //確認付款是否成功

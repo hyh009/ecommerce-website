@@ -63,24 +63,32 @@ const Popular = ({ sort, filters }) => {
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
+    let timer;
     const getProducts = async () => {
       setIsFetching(true);
       try {
         if (typeof filters === "undefined") {
           const res = await ProductService.getAll();
-          setFiltereditems(() => res.data.slice(0, 8));
-          setIsFetching(false);
+          if (mounted) {
+            setFiltereditems(() => res.data.slice(0, 8));
+          }
         } else {
           const res = await ProductService.getAll(filters.category);
-          setItems(res.data);
-          setIsFetching(false);
+          if (mounted) {
+            setItems(res.data);
+          }
         }
       } catch (err) {
         console.log(err);
-        setIsFetching(false);
       }
+      timer = setTimeout(() => setIsFetching(false), 500);
     };
     getProducts();
+    return () => {
+      mounted = false;
+      clearTimeout(timer);
+    };
   }, [filters]);
 
   useEffect(() => {
@@ -138,18 +146,20 @@ const Popular = ({ sort, filters }) => {
   }, [items, filters]);
 
   useEffect(() => {
-    if (sort === "asc") {
-      setFiltereditems((prev) => [...prev].sort((a, b) => a.price - b.price));
-    } else if (sort === "desc") {
-      setFiltereditems((prev) => [...prev].sort((a, b) => b.price - a.price));
-    } else {
-      setFiltereditems((prev) =>
-        [...prev].sort(
-          (a, b) =>
-            new Date(b?.createdAt?.split("T")[0]) -
-            new Date(a?.createdAt?.split("T")[0])
-        )
-      );
+    if (sort) {
+      if (sort === "asc") {
+        setFiltereditems((prev) => [...prev].sort((a, b) => a.price - b.price));
+      } else if (sort === "desc") {
+        setFiltereditems((prev) => [...prev].sort((a, b) => b.price - a.price));
+      } else if (sort === "newest") {
+        setFiltereditems((prev) =>
+          [...prev].sort(
+            (a, b) =>
+              new Date(b?.createdAt?.split("T")[0]) -
+              new Date(a?.createdAt?.split("T")[0])
+          )
+        );
+      }
     }
   }, [sort]);
   return (

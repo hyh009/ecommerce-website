@@ -235,15 +235,21 @@ const AdminUser = () => {
 
   useEffect(() => {
     // get edit user info when page load
+    let mounted = true;
     const getUserData = async () => {
       try {
         const res = await UserService.get(userId, accessToken);
-        setEditUser(res.data);
+        if (mounted) {
+          setEditUser(res.data);
+        }
       } catch (err) {
         console.log(err);
       }
     };
     getUserData();
+    return () => {
+      mounted = false;
+    };
   }, [userId, accessToken]);
 
   useEffect(() => {

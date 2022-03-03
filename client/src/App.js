@@ -57,7 +57,7 @@ const App = () => {
         return;
       }
     }
-  }, [dispatch, user]);
+  }, []);
 
   useEffect(() => {
     // when refresh, update redux user from db
