@@ -16,7 +16,7 @@ const Container = styled.div`
   })}
 `;
 const PageTitle = styled.h3`
-  font-size: 22px;
+  font-size: 1.375rem;
   letter-spacing: 2px;
   color: black;
 `;
@@ -37,7 +37,7 @@ const InputContainer = styled.div`
   flex-direction: column;
 `;
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 0.875rem;
   padding-bottom: 10px;
 `;
 const Input = styled.input`

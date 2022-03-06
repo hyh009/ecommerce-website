@@ -2,7 +2,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { mobile } from "../responsive";
 
-// define function tocreate css by loop
+// define function to create css by loop
 
 const duration = 0.1; // the delay time of each word in animation
 const arrayLength = 11; // longest length of the texts
@@ -52,7 +52,7 @@ const Container = styled.span`
     ${getAnimations(arrayLength)}
     ${mobile({
       fontSize: "5vmin",
-    })}
+    })};
   }
 `;
 
@@ -60,7 +60,7 @@ const TextAnimation = (props) => {
   const textArray = props.text.split("");
 
   return (
-    <Container size={props.size} order={props.order}>
+    <Container order={props.order}>
       {textArray.map((text, index) => (
         <span key={index}>{text}</span>
       ))}

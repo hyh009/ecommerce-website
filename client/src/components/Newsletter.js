@@ -24,10 +24,10 @@ const Title = styled.h3`
   ${mobile({ padding: "15px", fontSize: "1.5rem" })}
 `;
 const Description = styled.p`
-  font-size: 20px;
+  font-size: 1.25rem;
   margin: 20px;
   font-weight: 550;
-  ${mobile({ fontSize: "14px", textAlign: "center" })}
+  ${mobile({ fontSize: "0.875rem", textAlign: "center" })}
 `;
 const InputContainer = styled.form`
   background-color: white;

@@ -103,7 +103,7 @@ const Description = styled.p`
 const Button = styled.button`
   background: transparent;
   letter-spacing: 2px;
-  font-size: 20px;
+  font-size: 1.25rem;
   padding: 5px 8px 5px 10px;
   cursor: pointer;
   border: 2px solid black;

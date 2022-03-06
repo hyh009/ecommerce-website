@@ -45,7 +45,7 @@ const TopContainer = styled.div`
 `;
 
 const PageTitle = styled.h3`
-  font-size: 22px;
+  font-size: 1.375rem;
   letter-spacing: 2px;
   color: black;
 `;
@@ -79,7 +79,7 @@ const EditButton = styled.button`
   background-color: teal;
   border: none;
   color: white;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 2px 5px;
   border-radius: 5px;
   cursor: pointer;
@@ -101,28 +101,28 @@ const ProductImg = styled.img`
 const ProductName = styled.span`
   font-weight: bold;
   letter-spacing: 1px;
-  font-size: 16px;
+  font-size: 1rem;
 `;
 const CreatedDate = styled.span`
   color: gray;
-  font-size: 14px;
+  font-size: 0.875rem;
 `;
 const Subtitle = styled.ul`
   color: gray;
   padding: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 10px 0;
   letter-spacing: 1px;
 `;
 const ListItem = styled.li`
   list-style-type: none;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 10px 0;
   display: flex;
   align-items: flex-start;
   letter-spacing: 1px;
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     path {
       color: black;
     }
@@ -213,7 +213,7 @@ const DelFilter = styled.div`
 const ImageTitle = styled.h4`
   letter-spacing: 2px;
   font-weight: normal;
-  font-size: 16px;
+  font-size: 1rem;
 `;
 const ImageIconContainer = styled.div`
   display: flex;
@@ -222,7 +222,7 @@ const ImageIconContainer = styled.div`
 const LabelFile = styled.label`
   display: flex;
   align-items: center;
-  font-size: 16px;
+  font-size: 1rem;
   input[type="file"] {
     display: none;
   }
@@ -232,7 +232,7 @@ const FileContainer = styled.div`
   margin-left: 10px;
   align-items: center;
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     cursor: pointer;
   }
 `;
@@ -572,7 +572,7 @@ const AdminProduct = () => {
                 </LabelFile>
                 <FileContainer>
                   {previewFile && <PreviewImg src={previewFile} alt="upload" />}
-                  <span style={{ fontSize: "14px" }}>{file?.name}</span>
+                  <span style={{ fontSize: "0.875rem" }}>{file?.name}</span>
                   <ClearTwoTone
                     style={{
                       display: Boolean(file) ? "inline-block" : "none",

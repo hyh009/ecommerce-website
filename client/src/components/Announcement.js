@@ -23,7 +23,7 @@ const moving = keyframes`
 `;
 
 const Text = styled.span`
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   color: white;
   position: absolute;

@@ -20,7 +20,7 @@ const Container = styled.div`
 `;
 
 const PageTitle = styled.h3`
-  font-size: 22px;
+  font-size: 1.375rem;
   letter-spacing: 2px;
   color: black;
 `;
@@ -53,7 +53,7 @@ const SmallInputContainer = styled.div`
 `;
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 0.875rem;
 
   &.required:: after {
     content: "*";
@@ -99,7 +99,7 @@ const Select = styled.select`
 const Color = styled.div`
   background-color: ${(props) => props.color || "black"};
   padding: 5px 10px;
-  font-size: 14px;
+  font-size: 0.875rem;
   border-radius: 10px;
   border: 1px solid lightgray;
   color: white;
@@ -109,7 +109,7 @@ const Color = styled.div`
   align-items: center;
   gap: 10px;
   svg {
-    font-size: 14px;
+    font-size: 0.875rem;
     border-radius: 50%;
     cursor: pointer;
     background-color: white;
@@ -119,12 +119,12 @@ const Color = styled.div`
 const Block = styled.div`
   display: flex;
   gap: 10px;
-  font-size: 16px;
+  font-size: 1rem;
   flex-wrap: wrap;
 `;
 
 const Counter = styled.span`
-  font-size: 12px;
+  font-size: 0.75rem;
   color: gray;
   height: 100%;
   margin: 0 5px;

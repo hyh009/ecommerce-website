@@ -177,7 +177,10 @@ const Popular = ({ sort, filters }) => {
         filtereditems.map((item) => <Products key={item._id} item={item} />)
       ) : (
         <NocontentContainer>
-          <NocontentImg src="https://res.cloudinary.com/dh2splieo/image/upload/v1641970932/shop_website/imgs/undraw_notify_re_65on_q6oigl.svg" />
+          <NocontentImg
+            src="https://res.cloudinary.com/dh2splieo/image/upload/v1641970932/shop_website/imgs/undraw_notify_re_65on_q6oigl.svg"
+            alt="目前沒有尋找中的商品..."
+          />
           <NocontentText>目前沒有尋找中的商品...</NocontentText>
         </NocontentContainer>
       )}

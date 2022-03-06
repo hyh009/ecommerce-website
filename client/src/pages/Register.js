@@ -30,7 +30,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 300;
   letter-spacing: 1px;
   text-align: center;
@@ -52,8 +52,8 @@ const Input = styled.input`
   border: none;
   margin: 5px 10px;
   padding: 8px 5px;
-  ${tablet({ width: "95%", fontSize: "20px", margin: "8px 5px" })}
-  ${mobile({ width: "100%", fontSize: "18px", margin: "5px 0" })}
+  ${tablet({ width: "95%", fontSize: "1.25rem", margin: "8px 5px" })}
+  ${mobile({ width: "100%", fontSize: "1.125rem", margin: "5px 0" })}
 `;
 const Select = styled.select`
   flex: 1;
@@ -63,12 +63,12 @@ const Select = styled.select`
   margin: 5px 10px;
   padding: 8px 5px;
   cursor: pointer;
-  ${tablet({ width: "95%", fontSize: "20px", margin: "8px 5px" })}
-  ${mobile({ width: "100%", fontSize: "18px", margin: "5px 0" })}
+  ${tablet({ width: "95%", fontSize: "1.25rem", margin: "8px 5px" })}
+  ${mobile({ width: "100%", fontSize: "1.125rem", margin: "5px 0" })}
 `;
 
 const Agreement = styled.span`
-  font-size: 12px;
+  font-size: 0.75rem;
   margin: 10px;
 `;
 const Button = styled.div`
@@ -86,7 +86,7 @@ const ReCAPTCHAContainer = styled.div`
 `;
 const Error = styled.div`
   color: #545454;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: red;
   letter-spacing: 2px;
   padding: 5px;

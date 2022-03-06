@@ -98,7 +98,7 @@ const CategoryInfo = ({ item }) => {
     <Container>
       <FlipCardInner>
         <FlipCardFront>
-          <Image src={item.img} />
+          <Image src={item.img} alt={item.title} />
           <Info>
             <Title>{item.title}</Title>
           </Info>

@@ -106,7 +106,7 @@ const EditTitle = styled.span`
 const Subtitle = styled.ul`
   color: gray;
   padding: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 5px;
   letter-spacing: 2px;
   background-color: #fff9e8;
@@ -116,7 +116,7 @@ const Subtitle = styled.ul`
 `;
 const ListItem = styled.li`
   list-style-type: none;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 10px 0;
   display: grid;
   grid-template-columns: 1fr 4fr;
@@ -125,7 +125,7 @@ const ListItem = styled.li`
   border-bottom: 1px dotted lightgray;
   gap: 5px;
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     path {
       color: black;
     }

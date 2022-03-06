@@ -109,23 +109,23 @@ const UserImg = styled.img`
 const UserName = styled.span`
   font-weight: bold;
   letter-spacing: 1px;
-  font-size: 16px;
+  font-size: 1rem;
 `;
 const CreatedDate = styled.span`
   color: gray;
-  font-size: 14px;
+  font-size: 0.875rem;
 `;
 const Subtitle = styled.ul`
   color: gray;
   padding: 0;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 10px 0;
   letter-spacing: 2px;
   border-bottom: 2px dashed lightgray;
 `;
 const ListItem = styled.li`
   list-style-type: none;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 10px 0;
   display: flex;
   align-items: center;
@@ -135,7 +135,7 @@ const ListItem = styled.li`
     background-color: #eee;
   }
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     path {
       color: black;
     }
@@ -209,7 +209,7 @@ const UserInfo = ({ edit, showEditInfo, setShowEditInfo }) => {
           </ChangeColorBtn>
         </CoverImg>
         <ImageContainer edit={edit}>
-          <UserImg src={user.img} />
+          <UserImg src={user.img} alt={user.username} />
         </ImageContainer>
         <Info>
           <Detail edit={edit}>

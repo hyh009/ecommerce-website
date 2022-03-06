@@ -31,13 +31,13 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 300;
   letter-spacing: 1px;
   text-align: center;
   margin-bottom: 10px;
-  ${tabletBig({ fontSize: "32px", margin: "10px" })}
-  ${mobile({ fontSize: "28px", margin: "5px" })}
+  ${tabletBig({ fontSize: "2rem", margin: "10px" })}
+  ${mobile({ fontSize: "1.75rem", margin: "5px" })}
 `;
 
 const Form = styled.form`
@@ -54,8 +54,7 @@ const Input = styled.input`
   border: 1px solid lightgray;
   margin: 5px 0;
   padding: 8px 5px;
-  ${tabletBig({ fontSize: "24px", padding: "10px 8px", margin: "15px" })}
-  ${tabletBig({ fontSize: "22px", padding: "10px 8px", margin: "10px" })}
+  ${tabletBig({ fontSize: "1.375rem", padding: "10px 8px", margin: "10px" })}
   &:hover {
     filter: brightness(95%);
   }
@@ -69,8 +68,8 @@ const LinkContainer = styled.div`
 
 const CustomLink = styled(Link)`
   color: black;
-  font-size: 14px;
-  ${tabletBig({ fontSize: "18px" })}
+  font-size: 0.875rem;
+  ${tabletBig({ fontSize: "1.125rem" })}
 `;
 
 const Button = styled.button`
@@ -81,8 +80,8 @@ const Button = styled.button`
   cursor: pointer;
   background: #ffa211;
   text-align: center;
-  ${tabletBig({ fontSize: "20px", marginTop: "20px" })}
-  ${tabletBig({ fontSize: "18px", marginTop: "15px" })}
+  ${tabletBig({ fontSize: "1.25rem", marginTop: "20px" })}
+  ${tabletBig({ fontSize: "1.125rem", marginTop: "15px" })}
   &:disabled {
     color: #ffa211;
     cursor: not-allowed;
@@ -94,7 +93,7 @@ const Error = styled.div`
   color: #545454;
   width: 100%;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: red;
   letter-spacing: 2px;
   padding: 5px;
@@ -157,10 +156,10 @@ const Login = () => {
     let mounted = true;
     if (user) {
       getSavedCart(user, mounted);
+      navigate("/profile");
     }
     return () => {
       mounted = false;
-      navigate("/profile");
     };
   }, [user, getSavedCart, navigate]);
 

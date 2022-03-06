@@ -26,7 +26,7 @@ const Top = styled.div`
 const Title = styled.h3`
   margin: 5px;
   letter-spacing: 2px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: normal;
 `;
 const Select = styled.select`

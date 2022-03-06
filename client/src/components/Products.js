@@ -139,7 +139,7 @@ const Title = styled.span`
 const CustomPaletteIcon = styled(PaletteIcon)`
   color: white;
   &.css-i4bv87-MuiSvgIcon-root {
-    ${tablet({ fontSize: "28px" })};
+    ${tablet({ fontSize: "1.75rem" })};
   }
 `;
 
@@ -208,7 +208,7 @@ const Pattern = styled.div`
 const CurstomImageIcon = styled(ImageIcon)`
   color: white;
   &.css-i4bv87-MuiSvgIcon-root {
-    ${tablet({ fontSize: "28px" })};
+    ${tablet({ fontSize: "1.75rem" })};
   }
 `;
 const Product = ({ item }) => {

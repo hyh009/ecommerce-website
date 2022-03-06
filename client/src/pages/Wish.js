@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 `;
 const Title = styled.h1`
   text-align: center;
-  font-size: 24px;
+  font-size: 1.5rem;
   letter-spacing: 2px;
   margin-bottom: 10px;
 `;
@@ -36,7 +36,7 @@ const TopText = styled.span`
   margin: 0 10px;
   ${mobile({
     margin: "20px 10px",
-    fontSize: "16px",
+    fontSize: "1rem",
     textAlign: "center",
   })}
 `;
@@ -96,7 +96,7 @@ const Details = styled.div`
   justify-content: space-around;
   margin-left: 10px;
   padding: 10px;
-  font-size: 16px;
+  font-size: 1rem;
   ${mobile({ margin: "10px" })}
 `;
 const Image = styled.img`
@@ -132,7 +132,7 @@ const Pattern = styled.span`
   letter-spacing: 1px;
   ${tabletBig({
     maxWidth: "80px",
-    fontSize: "14px",
+    fontSize: "0.875rem",
   })}
 `;
 const PriceDetail = styled.div`
@@ -147,13 +147,13 @@ const PriceDetail = styled.div`
 `;
 
 const ProductPrice = styled.span`
-  font-size: 20px;
+  font-size: 1.25rem;
   ${tabletBig({ marginTop: "0", marginLeft: "50px" })}
   ${mobile({ margin: "15px 0" })}
 `;
 
 const ActionBtn = styled.button`
-  font-size: 16px;
+  font-size: 1rem;
   border: none;
   background-color: ${(props) => (props.color === "action" ? "teal" : "#eee")};
   color: ${(props) => (props.color === "action" ? "white" : "black")};
@@ -185,7 +185,7 @@ const Summary = styled.div`
 `;
 
 const SummaryTitle = styled.span`
-  font-size: 28px;
+  font-size: 1.75rem;
   letter-spacing: 2px;
   align-self: center;
 `;
@@ -195,7 +195,7 @@ const SummaryImg = styled.img`
 `;
 
 const Button = styled.button`
-  font-size: 18px;
+  font-size: 1.125rem;
   border: none;
   padding: 5px;
   cursor: pointer;
@@ -203,7 +203,7 @@ const Button = styled.button`
   color: white;
   letter-spacing: 2px;
   position: relative;
-  ${tablet({ height: "60px", fontSize: "24px" })}
+  ${tablet({ height: "60px", fontSize: "1.5rem" })}
 `;
 const Wish = () => {
   const dispatch = useDispatch();

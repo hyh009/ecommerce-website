@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 
 const animation = keyframes`
-    0% {transform:translateY(-0%); }
+    0% {transform:translateY(0%);}
     30% {transform:translateY(-60%); }
     70% {transform:translateY(-30%); }
     100% {transform:translateY(-100% );}
@@ -112,6 +112,7 @@ const LoadAnimation = ({ showAnimation, setShowAnimation }) => {
             "https://res.cloudinary.com/dh2splieo/image/upload/v1646313543/shop_website/imgs/cover/straw_rainbow_cover_z6gvtp.png"
           }
           onLoad={() => setIsFetching((prev) => !prev)}
+          alt="封面照片"
         />
         {!isFetching && (
           <CoverText>

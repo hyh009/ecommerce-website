@@ -32,7 +32,7 @@ const Logo = styled.img`
   display: block;
 `;
 const Desc = styled.span`
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: bold;
   letter-spacing: 3px;
   margin-left: 5px;
@@ -51,7 +51,7 @@ const IconContainer = styled.div`
   margin-right: 20px;
   svg {
     color: #404040;
-    font-size: 22px;
+    font-size: 1.375rem;
   }
 `;
 
@@ -69,7 +69,7 @@ const PhotoContainer = styled.div`
     z-index: 10;
     display: flex;
     flex-direction: column;
-    font-size: 12px;
+    font-size: 0.75rem;
     padding: 5px;
     border-radius: 5px;
     span {
@@ -109,6 +109,7 @@ const Topbar = () => {
               src={
                 "https://res.cloudinary.com/dh2splieo/image/upload/v1640706199/shop_website/imgs/logo/name_jzjdfr.jpg"
               }
+              alt="LOGO"
             />
           </Link>
           <Desc>網站管理後台</Desc>

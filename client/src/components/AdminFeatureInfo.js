@@ -13,7 +13,7 @@ const Container = styled.div`
   ${tabletBig({ width: "100%" })}
 `;
 const Title = styled.span`
-  font-size: 16px;
+  font-size: 1rem;
   letter-spacing: 2px;
 `;
 
@@ -24,7 +24,7 @@ const AmountContainer = styled.div`
 `;
 
 const Amount = styled.span`
-  font-size: 24px;
+  font-size: 1.5rem;
   letter-spacing: 2px;
   color: teal;
   font-weight: bold;
@@ -32,7 +32,7 @@ const Amount = styled.span`
 
 const Rate = styled.span`
   margin-left: 10px;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: bold;
   letter-spacing: 1px;
   color: ${(props) => props.color};
@@ -56,7 +56,7 @@ const CustomRemove = styled(Remove)`
   }
 `;
 const Desc = styled.span`
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #acb2ac;
   letter-spacing: 1px;
 `;

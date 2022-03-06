@@ -57,7 +57,7 @@ const InputContainer = styled.div`
 `;
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -66,12 +66,12 @@ const Label = styled.label`
     color: red;
   }
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     margin-right: 5px;
   }
 `;
 const AddItemContainer = styled.div`
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -81,7 +81,7 @@ const AddItemContainer = styled.div`
     color: red;
   }
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     margin-right: 5px;
   }
   ${tabletBig({ flexDirection: "column", alignItems: "flex-start" })}
@@ -110,7 +110,7 @@ const Select = styled.select`
 const Color = styled.div`
   background-color: ${(props) => props.color || "black"};
   padding: 5px 10px;
-  font-size: 14px;
+  font-size: 0.875rem;
   border-radius: 10px;
   border: 1px solid lightgray;
   color: white;
@@ -120,7 +120,7 @@ const Color = styled.div`
   align-items: center;
   gap: 10px;
   svg {
-    font-size: 14px;
+    font-size: 0.875rem;
     border-radius: 50%;
     cursor: pointer;
     background-color: white;
@@ -130,12 +130,12 @@ const Color = styled.div`
 const Block = styled.div`
   display: flex;
   gap: 10px;
-  font-size: 16px;
+  font-size: 1rem;
   flex-wrap: wrap;
 `;
 
 const Counter = styled.div`
-  font-size: 12px;
+  font-size: 0.75rem;
   color: gray;
   align-self: flex-end;
 `;
@@ -157,7 +157,7 @@ const NoticeContainer = styled.div`
   align-items: center;
   gap: 5px;
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     cursor: pointer;
     border-radius: 5px;
     border: 1px solid lightgray;
@@ -173,7 +173,7 @@ const CustomClearTwoTone = styled(ClearTwoTone)`
 `;
 
 const CustomAdd = styled(Add)`
-  font-size: 20px;
+  font-size: 1.25rem;
   border: 1px solid lightgray;
   border-radius: 50%;
   cursor: pointer;
@@ -187,7 +187,7 @@ const TempAddContainer = styled.div`
 `;
 
 const TempText = styled.span`
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
   color: red;
   padding: 5px;
@@ -208,7 +208,7 @@ const Error = styled.div`
   color: #545454;
   width: 100%;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: red;
   letter-spacing: 2px;
   padding: 5px;
@@ -653,7 +653,7 @@ export const AdminProductEditB = ({ pop, setPop, productId, editRef }) => {
                 </Color>
               ))}
             </Block>
-          )) || <Block style={{ fontSize: "16px" }}>無</Block>}
+          )) || <Block style={{ fontSize: "1rem" }}>無</Block>}
           {addInputs?.colors?.length > 0 && (
             <TempAddContainer>
               <TempText>新增顏色</TempText>
@@ -724,7 +724,7 @@ export const AdminProductEditB = ({ pop, setPop, productId, editRef }) => {
                 </Color>
               ))}
             </Block>
-          )) || <Block style={{ fontSize: "16px" }}>無</Block>}
+          )) || <Block style={{ fontSize: "1rem" }}>無</Block>}
           {addInputs?.patterns?.length > 0 && (
             <TempAddContainer>
               <TempText>新增樣式</TempText>

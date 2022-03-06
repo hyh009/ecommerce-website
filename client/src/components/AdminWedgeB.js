@@ -96,9 +96,6 @@ const Button = styled.button`
 const AdminWedgeB = () => {
   const [orders, setOrders] = useState([]);
   const accessToken = useSelector((state) => state.user.accessToken);
-  const defaultUser =
-    "https://res.cloudinary.com/dh2splieo/image/upload/v1642260982/shop_website/user/defaultUser_z2hlsg.png";
-
   useEffect(() => {
     const getOrders = async () => {
       try {
@@ -127,7 +124,7 @@ const AdminWedgeB = () => {
             <TableRow key={order._id}>
               <Data className="user">
                 <User>
-                  <UserImg src={order.user.img || defaultUser} />
+                  <UserImg src={order.user.img} alt={order.user.username} />
                   <Name>{order.user.username}</Name>
                 </User>
               </Data>

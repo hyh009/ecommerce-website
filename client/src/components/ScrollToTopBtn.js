@@ -15,7 +15,7 @@ const Container = styled.div`
   background-color: rgba(56, 236, 206, 0.5);
   svg {
     color: white;
-    font-size: 30px;
+    font-size: 1.875rem;
   }
 `;
 

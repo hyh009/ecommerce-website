@@ -40,31 +40,31 @@ const SmallBlock = styled.div`
 `;
 
 const BadgeTitle = styled.span`
-  font-size: 12px;
+  font-size: 0.75rem;
   letter-spacing: 1px;
   color: #545454;
 `;
 const BadgeContent = styled.span`
-  font-size: 20px;
+  font-size: 1.25rem;
   text-align: center;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
   justify-content: center;
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     color: #104646;
   }
 `;
 
 const Calc = styled.span`
-  font-size: 9px;
+  font-size: 0.56rem;
   letter-spacing: 1px;
   display: flex;
   align-items: center;
   justify-content: center;
   svg {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: #fce149;
   }
 `;

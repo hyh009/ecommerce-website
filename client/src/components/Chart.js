@@ -24,18 +24,18 @@ const Container = styled.div`
 const Title = styled.h3`
   margin: 5px;
   letter-spacing: 2px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: normal;
   display: flex;
   align-items: center;
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     color: teal;
   }
 `;
 
 const Desc = styled.p`
-  font-size: 10px;
+  font-size: 0.625rem;
   margin: 5px;
   letter-spacing: 1px;
 `;
@@ -83,7 +83,7 @@ const Chart = ({ data, title, desc, dataKey, gap }) => {
           >
             <Bar dataKey={dataKey} fill="#5ecec4" />
             <CartesianGrid strokeDasharray="3 3" stroke="lightgray" />
-            <Tooltip itemStyle={{ color: "teal", fontSize: "16px" }} />
+            <Tooltip itemStyle={{ color: "teal", fontSize: "1rem" }} />
             <XAxis
               tick={{ fontSize: device === "sm" ? 10 : 14 }}
               interval={0}

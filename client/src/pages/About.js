@@ -13,7 +13,6 @@ const Container = styled.div`
 
 const SubTitle = styled.h2`
   padding: 25px 0px 10px 25px;
-  font-size: 28px;
   font-weight: 100;
   width: 100%;
   align-self: left;

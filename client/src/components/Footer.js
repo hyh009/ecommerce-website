@@ -29,7 +29,7 @@ const Left = styled.div`
 
 const Logo = styled.h3`
   font-weight: 600;
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: 500;
   text-shadow: 2px 2px lightgray;
 `;

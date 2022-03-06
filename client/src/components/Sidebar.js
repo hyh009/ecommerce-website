@@ -66,7 +66,7 @@ const Menu = styled.div`
 `;
 const Title = styled.h3`
   letter-spacing: 3px;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #acb2ac;
   margin-bottom: 5px;
   font-weight: 550;
@@ -114,12 +114,12 @@ const ListItem = styled.li`
   padding: 5px 0;
   cursor: pointer;
   letter-spacing: 2px;
-  font-size: 16px;
+  font-size: 1rem;
   ${tabletBig({
     justifyContent: "center",
   })}
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
   span {
     margin-left: 5px;

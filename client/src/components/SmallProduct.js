@@ -47,7 +47,7 @@ const Image = styled.img`
   align-self: center;
 `;
 const Title = styled.p`
-  font-size: 10px;
+  font-size: 0.625rem;
   display: block;
   grid-column: 1/5;
   align-self: center;
@@ -64,7 +64,7 @@ const Color = styled.div`
   justify-self: center;
 `;
 const Pattern = styled.span`
-  font-size: 10px;
+  font-size: 0.625rem;
   grid-column: 1/3;
   align-self: center;
   justify-self: center;
@@ -72,14 +72,14 @@ const Pattern = styled.span`
 `;
 
 const Quantity = styled.span`
-  font-size: 10px;
+  font-size: 0.625rem;
   grid-column: 3/4;
   align-self: center;
   justify-self: center;
 `;
 
 const Price = styled.span`
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: bold;
   color: teal;
   grid-column: 4/5;

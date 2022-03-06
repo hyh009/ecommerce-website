@@ -122,8 +122,6 @@ const AdminWedgeS = () => {
     };
     getUsers();
   }, [accessToken]);
-  const defaultUser =
-    "https://res.cloudinary.com/dh2splieo/image/upload/v1642260982/shop_website/user/defaultUser_z2hlsg.png";
 
   return (
     <Container>
@@ -132,7 +130,7 @@ const AdminWedgeS = () => {
       <ListContainer>
         {users?.map((user) => (
           <UserList key={user._id}>
-            <UserImg src={user.img || defaultUser} />
+            <UserImg src={user.img} alt={user.username} />
             <Info>
               <UserName>{user.username}</UserName>
               <CreatedDate>{format(user.createdAt)}</CreatedDate>
@@ -143,7 +141,7 @@ const AdminWedgeS = () => {
             >
               <Display>
                 <span>顯示用戶</span>
-                <Visibility style={{ fontSize: "14px" }} />
+                <Visibility style={{ fontSize: "0.875rem" }} />
               </Display>
             </Link>
           </UserList>

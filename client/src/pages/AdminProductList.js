@@ -27,7 +27,7 @@ const Product = styled.div`
   display: flex;
   align-items: center;
   span {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
 `;
 const ProductImg = styled.img`

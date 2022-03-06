@@ -87,7 +87,7 @@ const ListItem = styled.li`
   cursor: pointer;
   letter-spacing: 2px;
   svg {
-    font-size: 16px;
+    font-size: 1rem;
   }
   span {
     margin-left: 5px;

@@ -57,6 +57,7 @@ const ProfileOrders = () => {
   useEffect(() => {
     // get orders data
     let mounted = true;
+    setLoading(true);
     const getOrders = async () => {
       try {
         const res = await OrderService.getOrdersbyUser(user._id, accessToken);

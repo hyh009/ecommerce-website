@@ -23,12 +23,12 @@ const Header = styled.div`
 const Title = styled.h3`
   margin-left: 5px;
   letter-spacing: 2px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: normal;
   display: flex;
   align-items: center;
   svg {
-    font-size: 20px;
+    font-size: 1.25rem;
     color: teal;
   }
 `;
@@ -37,7 +37,7 @@ const ShowMoreBtn = styled(Link)`
   text-decoration: none;
   color: black;
   background-color: #ffa122;
-  font-size: 14px;
+  font-size: 0.875rem;
   letter-spacing: 1px;
   border-radius: 10px;
   padding: 2px 5px;
@@ -91,7 +91,7 @@ const Image = styled.img`
   width: 100%;
 `;
 const ProductTitle = styled.p`
-  font-size: 12px;
+  font-size: 0.75rem;
   display: block;
   align-self: center;
   color: white;
@@ -99,7 +99,7 @@ const ProductTitle = styled.p`
   text-align: center;
 `;
 const ProductDesc = styled.p`
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #ff9b3d;
   font-weight: bold;
   letter-spacing: 1px;

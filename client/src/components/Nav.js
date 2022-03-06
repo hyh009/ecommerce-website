@@ -128,7 +128,7 @@ const Menuitem = styled.div`
   position: relative;
   height: 35px;
   user-select: none;
-  ${mobile({ padding: "5px 0px", fontSize: "18px" })}
+  ${mobile({ padding: "5px 0px", fontSize: "1.125rem" })}
 
   .userinfo {
     visibility: hidden;
@@ -141,7 +141,7 @@ const Menuitem = styled.div`
     z-index: 10;
     display: flex;
     flex-direction: column;
-    font-size: 12px;
+    font-size: 0.75rem;
     padding: 5px;
     border-radius: 5px;
     user-select: none;
@@ -158,7 +158,7 @@ const Menuitem = styled.div`
 const MenuText = styled.p`
   font-size: 14px;
   padding: 5px 10px;
-  ${mobile({ fontSize: "16px" })}
+  ${mobile({ fontSize: "1rem" })}
 `;
 
 const MenuImg = styled.img`
@@ -239,11 +239,11 @@ const Nav = ({ position }) => {
             <Logo
               className="img"
               src="https://res.cloudinary.com/dh2splieo/image/upload/v1640706201/shop_website/imgs/logo/pad_logo_wkibae.png"
-              alt="logo"
+              alt="墊一店-Logo"
             />
             <Logo
               src="https://res.cloudinary.com/dh2splieo/image/upload/v1640706199/shop_website/imgs/logo/name_jzjdfr.jpg"
-              alt="name"
+              alt="墊一店"
             />
           </CustomLink>
         </Left>
